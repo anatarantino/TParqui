@@ -35,8 +35,8 @@ void * getStackBase()
 
 void * initializeKernelBinary()
 {
+/*
 	char buffer[10];
-
 	ncPrint("[x64BareBones]");
 	ncNewline();
 
@@ -78,10 +78,12 @@ void * initializeKernelBinary()
 	ncNewline();
 	ncNewline();
 	return getStackBase();
+*/
 }
 
 int main()
-{	
+{
+	/*	
 	ncPrint("[Kernel Main]");
 	ncNewline();
 	ncPrint("  Sample code module at 0x");
@@ -100,5 +102,6 @@ int main()
 	ncNewline();
 
 	ncPrint("[Finished]");
+*/
 	return 0;
 }
