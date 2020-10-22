@@ -3,6 +3,7 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
+#include <video_driver.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -105,5 +106,12 @@ int main()
 */
 	//HOLA ANITA ESTE ES MI COMENTARIO
 	//hola marti
+
+	for(int i=0 ; i<200 ; i++){
+		for(int j=0 ; j<200 ; j++){
+			draw_pixel(i,j,0xFFFFFF);
+		}
+	}
+	while(1);
 	return 0;
 }
