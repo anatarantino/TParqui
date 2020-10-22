@@ -45,9 +45,9 @@ struct vbe_mode_info_structure * screenData = 0x0000000000005C00; //definida en 
 void draw_pixel(int x,int y,int color){
     char * curpos = screenData->framebuffer + (y * screenData->width) + x;
         
-    int b = color & 0xFF0000; 
-    int g = (color << 2) & 0xFF0000;
-    int r =(color << 4) & 0xFF0000;
+    int b = color & 0x0000FF; 
+    int g = (color >> 8) & 0x0000FF;
+    int r =(color << 16) & 0x0000FF;
 
     *curpos = r; //Rojo
     curpos++;
