@@ -5,8 +5,12 @@
 //#define BLANCO 0xFFFFFF
 //#define NEGRO 0x000000
 
-void putChar(char c, int color){
+void putChar(char c){
+    syscallWrite(c,0xFFFFFF,0x000000);
+}
 
+void putCharColor(char c,uint64_t f_color){
+    syscallWrite(c,f_color,0x000000);
 }
 
 void syscallWrite(char* str, uint64_t f_color, uint64_t bg_color){
@@ -16,7 +20,7 @@ void syscallWrite(char* str, uint64_t f_color, uint64_t bg_color){
     }
 }
 
-void print(char* str){
+void printf(char* str){
     syscallWrite(str,0xFFFFFF,0x000000);
 }
 

@@ -107,7 +107,7 @@ int main()
 */
 
 	initializeVideo(0xFFFFFF,0x000000);
-	print("Hola Anita :)");
+	printf("Hola Anita :)");
 
 	while(1);
 	return 0;
