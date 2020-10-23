@@ -109,6 +109,8 @@ int main()
 	initializeVideo(0xFFFFFF,0x000000);
 	printf("Hola Anita :)");
 
+	printf(getChar());
+
 	while(1);
 	return 0;
 }

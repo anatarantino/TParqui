@@ -1,20 +1,28 @@
 #include <keyboard_driver.h>
 #include <keyboard.h>
+#include <stdint.h>
+#include <interrupts.h>
 
-/*
-void _hlt();
 
-char getChar(){
- 	char c=0;
+void keyboard_handler(uint64_t rsp){
     
-    _hlt();
 
-    return c;
+
+
+
 
 }
 
 
 
 
+char getChar(){
+ 	char c=0;
 
-*/
+    _hlt();
+
+    memset(&c, 0, 1);
+
+    return c;
+
+}
