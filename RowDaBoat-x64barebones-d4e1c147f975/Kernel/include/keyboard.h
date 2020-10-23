@@ -5,4 +5,6 @@
 
 uint8_t get_key();
 
+uint8_t pressed_key();
+
 #endif

@@ -2,6 +2,6 @@
 #define KEYBOARD_DRIVER_H
 
 //todas las funciones
-char getChar(); 
+//char getChar(); 
 
 #endif

@@ -1,5 +1,6 @@
 #include <stdint.h>
-#include "video_driver.h"
+#include <video_driver.h>
+#include <font.h>
 
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -39,12 +40,32 @@ struct vbe_mode_info_structure {
 	uint8_t reserved1[206];
 } __attribute__ ((packed));
 
-struct vbe_mode_info_structure * screenData = 0x0000000000005C00; //definida en sysvar.asm - Bootloader
+struct vbe_mode_info_structure * screenData = (void *)0x0000000000005C00; //definida en sysvar.asm - Bootloader
+
+typedef struct{
+	uint32_t current_x;
+	uint32_t current_y;
+	int default_bg_color;
+	int default_f_color;
+	uint32_t offset;
+}screen_t;
+
+screen_t *sc;
+
+void initializeVideo(int bg_color,int f_color){
+	sc->current_x = 0;
+	sc->current_y = 0;
+	sc->default_bg_color = bg_color;
+	sc->default_f_color = f_color;
+	sc->offset = 2 * CHAR_WIDTH; //este 2 podria variar
+
+}
 
 
-void draw_pixel(int x,int y,int color){
-    char * curpos = screenData->framebuffer + (y * screenData->width) + x;
-        
+void drawPixel(int x,int y,int color){
+    /*
+    char * curpos = (char *)((uint64_t)screenData->framebuffer + (y * screenData->width) + x);
+      
     int b = color & 0x0000FF; 
     int g = (color >> 8) & 0x0000FF;
     int r =(color >> 16) & 0x0000FF;
@@ -55,6 +76,35 @@ void draw_pixel(int x,int y,int color){
     curpos++;
     *curpos = b; // azul
     curpos++;
-    //los primeros tres en 255 -> primer pixel pintado de blanco;
-    
+    //los primeros tres en 255 -> primer pixel pintado de blanco;    
+    */
+    char * curpos = (char *)((uint64_t)screenData->framebuffer); 
+    int offset = 3 * (x + y * screenData->width);
+    curpos[offset] = (char)((color >> 16) & 0xFF);     //BLUE
+    curpos[offset + 1] = (char)((color >> 8) & 0xFF);  //GREEN
+    curpos[offset + 2] = (char)(color & 0xFF);         //RED
 }
+
+void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
+
+	unsigned char * char_map = charMap(c);
+	uint32_t x = sc->current_x + sc->offset;
+	uint32_t y = sc->current_y;
+
+	for(int i=0 ; i<CHAR_HEIGHT ; i++){
+		for(int j=0 ; j<CHAR_WIDTH ; j++){
+			int8_t isMarked = (char_map[i] >> (CHAR_WIDTH - j - 1)) & 0x01;
+			if(isMarked){
+				drawPixel(x,y,f_color);
+			}else{
+				drawPixel(x,y,bg_color); 	
+			}
+			x++;
+		}
+		x = sc->current_x + sc->offset;
+		y++;
+	}
+}
+
+
+

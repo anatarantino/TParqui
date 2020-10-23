@@ -105,12 +105,11 @@ int main()
 	ncPrint("[Finished]");
 */
 
+	initializeVideo(0x000000,0xFFFFFF);
 
-	for(int i=0 ; i<200 ; i++){
-		for(int j=0 ; j<200 ; j++){
-			draw_pixel(i,j,0xFFFFFF);
-		}
-	}
+
+
+
 	while(1);
 	return 0;
 }

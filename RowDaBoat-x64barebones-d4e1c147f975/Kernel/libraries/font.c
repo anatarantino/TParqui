@@ -1719,7 +1719,7 @@ static unsigned char __font_bitmap__[] = {
 	________
 };
 
-unsigned char * charBitmap(int c) {
+unsigned char * charMap(int c) {
 	return (__font_bitmap__+(c-' ')*CHAR_HEIGHT);
 }
 
