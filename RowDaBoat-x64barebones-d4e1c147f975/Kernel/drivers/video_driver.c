@@ -104,7 +104,7 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
 		x = sc->current_x + sc->offset;
 		y++;
 	}
-	sc->current_x = sc->current_x + sc->offset;
+	sc->current_x += CHAR_WIDTH;
 }
 
 
