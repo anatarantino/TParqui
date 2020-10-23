@@ -4,6 +4,7 @@
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 #include <video_driver.h>
+#include <prints.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -106,6 +107,7 @@ int main()
 */
 
 	initializeVideo(0xFFFFFF,0x000000);
+	print("Hola Anita :)");
 
 	while(1);
 	return 0;
