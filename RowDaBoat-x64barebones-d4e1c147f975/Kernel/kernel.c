@@ -105,10 +105,7 @@ int main()
 	ncPrint("[Finished]");
 */
 
-	initializeVideo(0x000000,0xFFFFFF);
-
-
-
+	initializeVideo(0xFFFFFF,0x000000);
 
 	while(1);
 	return 0;
