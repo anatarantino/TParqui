@@ -27,3 +27,23 @@ void printf(char* str){
 void printColor(char* str, uint64_t f_color, uint64_t bg_color){
     syscallWrite(str,f_color,bg_color);
 }
+
+/*
+void specialChar(char key){
+    if(key==0x0E){ //backspace
+        if(index!=0){
+            index-=1;
+            buffer[index]=' ';
+        }      
+    }
+    else if(key==0x0F){ //tab
+        for (int i = 0; i < 3; i++)
+        {
+            buffer[index++]=' ';
+        }
+    }
+    else if(key==0x1C){ //enter
+        buffer[index++]='\n';       println();
+    }
+}
+*/

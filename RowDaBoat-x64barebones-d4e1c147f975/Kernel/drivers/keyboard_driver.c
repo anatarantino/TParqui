@@ -26,17 +26,18 @@ void keyboard_handler(uint64_t rsp){
         switch (flag){
             case SHIFT:{
                 key = get_key();
-                putChar(pressedKeys[key][1]);
+                buffer[index++]=pressedKeys[key][1];
+                putChar(buffer[index-1]);
                 break;
             }
             case NOTSHIFT:{
-                putChar(pressedKeys[key][0]);
+                buffer[index++]=pressedKeys[key][0];
+                putChar(buffer[index-1]);
                 break;
-            }
-            
+            }   
         }
-
     }
+
 }
 
 char getChar(){
@@ -44,27 +45,6 @@ char getChar(){
     return buffer[index];
 
 }
-
-void specialChar(char key,int pos){
-    if(key==0x0E){ //backspace
-        if(index!=0){
-            index-=1;
-            buffer[index]=' ';
-        }      
-    }
-    else if(key==0x0F){ //tab
-        for (int i = 0; i < 3; i++)
-        {
-            buffer[index++]=' ';
-        }
-    }
-    else if(key==0x1C){ //enter
-        buffer[index++]='\n';
-    }else{
-        buffer[index++]=pressedKeys[key][pos];
-    }
-}
-
 
 int shiftPressed(char key){
     if(key==0x2A || key==0x36 || key==0x3A){
