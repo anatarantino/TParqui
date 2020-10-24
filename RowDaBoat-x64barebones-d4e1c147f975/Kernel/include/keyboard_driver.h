@@ -5,6 +5,7 @@
 
 void keyboard_handler(uint64_t rsp);
 char getChar();
-int shiftPressed(char key);
+int shiftPressed(uint8_t key);
+int pressed(uint8_t key );
 
 #endif

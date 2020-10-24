@@ -7,8 +7,9 @@
 
 #define SHIFT 1
 #define NOTSHIFT 0
-#define TRUE 1
-#define FALSE 0
+#define PRESSED 1
+#define RELEASED 0
+#define ERROR -1
 #define TOTALKEYS 60
 #define MAX 10
 
@@ -17,25 +18,40 @@ static char pressedKeys[TOTALKEYS][2] =
 
 static char buffer[MAX]={0};
 int index=0;
-char key;
+uint8_t key;
 
 void keyboard_handler(uint64_t rsp){
     if(pressed_key()){
         key = get_key();
-        int flag = shiftPressed(key);
+        if (pressed(key)==PRESSED){
+            int flag = shiftPressed(key);
+            putChar(pressedKeys[(char)key][flag]);
+        }
+    //    putChar(pressedKeys[(char)key][flag]);
+
+        
+    
+        /*
         switch (flag){
-            case SHIFT:{
-                key = get_key();
-                buffer[index++]=pressedKeys[key][1];
-                putChar(buffer[index-1]);
-                break;
-            }
             case NOTSHIFT:{
-                buffer[index++]=pressedKeys[key][0];
-                putChar(buffer[index-1]);
+//                buffer[index++]=pressedKeys[key][0];
+//                putChar(buffer[index-1]);
+                printf("NOSHIFT");
+                putChar(pressedKeys[(char)key][0]);
                 break;
             }   
+            case SHIFT:{
+                printf("SHIFT");
+
+                key = get_key();
+//                buffer[index++]=pressedKeys[key][1];
+//                putChar(buffer[index-1]);
+                putChar(pressedKeys[(char)key][1]);
+                break;
+            }
         }
+        */
+
     }
 
 }
@@ -46,9 +62,20 @@ char getChar(){
 
 }
 
-int shiftPressed(char key){
+int pressed(uint8_t key ){
+    if(key > 0x00 && key < 0x58){
+        return PRESSED;
+    }else if(key >= 0x81 && key <= 0xD8){
+        return RELEASED;
+    }
+
+    return ERROR; //scan codes not used
+}
+
+int shiftPressed(uint8_t key){
     if(key==0x2A || key==0x36 || key==0x3A){
         return SHIFT;
     }
+
     return NOTSHIFT;
 }
