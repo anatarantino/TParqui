@@ -5,7 +5,10 @@
 #include <prints.h>
 #include <video_driver.h>
 
-
+#define SHIFT 1
+#define NOTSHIFT 0
+#define TRUE 1
+#define FALSE 0
 #define TOTALKEYS 60
 #define MAX 10
 
@@ -19,14 +22,19 @@ char key;
 void keyboard_handler(uint64_t rsp){
     if(pressed_key()){
         key = get_key();
-         = function(key);
-        switch (case){
-            case SHIFT:
-
-            case NOTSHIFT:
+        int flag = shiftPressed(key);
+        switch (flag){
+            case SHIFT:{
+                key = get_key();
+                putChar(pressedKeys[key][1]);
+                break;
+            }
+            case NOTSHIFT:{
+                putChar(pressedKeys[key][0]);
+                break;
+            }
             
         }
-        putChar(pressedKeys[key][0]);
 
     }
 }
@@ -37,6 +45,30 @@ char getChar(){
 
 }
 
-int shiftPressed(char key){
+void specialChar(char key,int pos){
+    if(key==0x0E){ //backspace
+        if(index!=0){
+            index-=1;
+            buffer[index]=' ';
+        }      
+    }
+    else if(key==0x0F){ //tab
+        for (int i = 0; i < 3; i++)
+        {
+            buffer[index++]=' ';
+        }
+    }
+    else if(key==0x1C){ //enter
+        buffer[index++]='\n';
+    }else{
+        buffer[index++]=pressedKeys[key][pos];
+    }
+}
 
+
+int shiftPressed(char key){
+    if(key==0x2A || key==0x36 || key==0x3A){
+        return SHIFT;
+    }
+    return NOTSHIFT;
 }
