@@ -15,7 +15,7 @@ get_key:
 
 	ret
 
-pressed_key:
+pressed_key: ;hasKey
 	push rbp
 	mov rbp,rsp
 

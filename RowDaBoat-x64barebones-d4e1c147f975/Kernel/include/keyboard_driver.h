@@ -1,7 +1,9 @@
 #ifndef KEYBOARD_DRIVER_H
 #define KEYBOARD_DRIVER_H
 
-//todas las funciones
-//char getChar(); 
+#include <stdint.h>
+
+void keyboard_handler(uint64_t rsp);
+char getChar();
 
 #endif
