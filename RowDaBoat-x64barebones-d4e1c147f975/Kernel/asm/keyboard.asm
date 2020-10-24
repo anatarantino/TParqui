@@ -21,7 +21,7 @@ pressed_key: ;hasKey
 
 	mov rax,0
 	in al,64h ;64 es el teclado
-	and al,1h
+	and al,0x01
 
 	mov rsp,rbp
 	pop rbp

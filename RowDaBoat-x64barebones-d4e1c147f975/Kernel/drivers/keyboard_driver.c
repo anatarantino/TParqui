@@ -5,6 +5,7 @@
 #include <prints.h>
 #include <video_driver.h>
 
+
 #define TOTALKEYS 60
 #define MAX 10
 
@@ -13,20 +14,29 @@ static char pressedKeys[TOTALKEYS][2] =
 
 static char buffer[MAX]={0};
 int index=0;
-uint8_t key;
+char key;
+
 void keyboard_handler(uint64_t rsp){
     if(pressed_key()){
         key = get_key();
-        
-        buffer[index++] = pressedKeys[key][0];
-        //printf(buffer[index-1]);
-    }
-        
+         = function(key);
+        switch (case){
+            case SHIFT:
 
+            case NOTSHIFT:
+            
+        }
+        putChar(pressedKeys[key][0]);
+
+    }
 }
 
 char getChar(){
     _hlt();
     return buffer[index];
+
+}
+
+int shiftPressed(char key){
 
 }

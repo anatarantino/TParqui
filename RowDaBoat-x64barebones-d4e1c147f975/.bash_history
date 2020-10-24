@@ -9,3 +9,11 @@ cd ..
 make all
 exit
 exit
+compile
+compile.sh
+ls
+cd root/
+ls
+compile.sh
+compile
+exit
