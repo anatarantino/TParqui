@@ -27,7 +27,11 @@ void printf(char* str){
 void printColor(char* str, uint64_t f_color, uint64_t bg_color){
     syscallWrite(str,f_color,bg_color);
 }
-
+/*
+void printInt(int num){
+    syscallWrite(&num+'0',0xFFFFFF,0x000000);
+}
+*/
 /*
 void specialChar(char key){
     if(key==0x0E){ //backspace

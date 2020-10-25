@@ -18,20 +18,74 @@ static char pressedKeys[TOTALKEYS][2] =
 
 static char buffer[MAX]={0};
 int index=0;
+//static char flag;
+//char caps;
+
 char key;
-int flag =0;
+static char shift = 0;
+static char caps = 0;
 
 void keyboard_handler(uint64_t rsp){ // 0 0 0 0 80
     if(pressed_key()){
         key = get_key();
-        if (pressed(key)==PRESSED){
-            flag = shiftPressed(key);
-            putChar(pressedKeys[key][flag]);
+        char p = pressed(key);
+        if (p==PRESSED){
+            shift = shiftPressed(key);
+            putChar(pressedKeys[key][shift]);
         }
-        else if(pressed(key)==RELEASED){
-            putChar(pressedKeys[key][flag]);
+        else if(p==RELEASED){
+            shift = 0;
         }
     }
+}
+/*
+void keyboard_handler(uint64_t rsp){
+    char keyPress;
+    if(pressed_key()){
+        char key = get_key();
+        flag = shiftPressed(key);
+        caps=capsLockPressed(key);
+        switch (flag){
+            case SHIFT:{
+//                buffer[index++]=pressedKeys[key][0];
+//                putChar(buffer[index-1]);
+                if(caps==0){
+                    keyPress=pressedKeys[key][1];
+                }else{
+                    keyPress=pressedKeys[key][0];
+                }
+               // printf("NOSHIFT");
+               // putChar(pressedKeys[(char)key][0]);
+               printf("SI SHIFT");
+                break;
+            }   
+            case NOTSHIFT:{
+                if(caps==0){
+                    keyPress=pressedKeys[key][0];
+                }else{
+                    keyPress=pressedKeys[key][1];
+                }
+//                buffer[index++]=pressedKeys[key][1];
+//                putChar(buffer[index-1]);
+               printf("NO SHIFT");
+                break;
+            }
+        }
+            putChar(keyPress);
+    }
+}*/
+/*
+        int p=pressed(key);
+        if (p==PRESSED){
+            putChar(flag+'0');
+            putChar(pressedKeys[key][flag]);
+        }
+
+*/        /*
+        else if(p==RELEASED){
+            flag=0;
+        }
+    */
     //    putChar(pressedKeys[(char)key][flag]);
 
         
@@ -59,7 +113,6 @@ void keyboard_handler(uint64_t rsp){ // 0 0 0 0 80
 
     //}
 
-}
 
 char getChar(){
     _hlt();
@@ -67,20 +120,25 @@ char getChar(){
 
 }
 
-int pressed(char key ){
+char pressed(char key ){
     if(key > 0x00 && key < 0x58){
         return PRESSED;
     }else if(key >= 0x81 && key <= 0xD8){
         return RELEASED;
     }
-
     return ERROR; //scan codes not used
 }
 
-int shiftPressed(char key){
-    if(key==0x2A || key==0x36 || key==0x3A){
+char shiftPressed(char key){
+    if(key==0x2A || key==0x36 ){
         return SHIFT;
     }
-
     return NOTSHIFT;
+}
+
+char capsLockPressed(char key){
+    if(key==0x3A){
+        return PRESSED;
+    }
+    return RELEASED;
 }

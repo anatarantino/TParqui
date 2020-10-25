@@ -5,7 +5,8 @@
 
 void keyboard_handler(uint64_t rsp);
 char getChar();
-int shiftPressed(char key);
-int pressed(char key );
+char shiftPressed(char key);
+char pressed(char key );
+char capsLockPressed(char key);
 
 #endif
