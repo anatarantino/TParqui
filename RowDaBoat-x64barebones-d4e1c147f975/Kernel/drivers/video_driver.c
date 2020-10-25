@@ -48,6 +48,7 @@ typedef struct{
 	int default_bg_color;
 	int default_f_color;
 	uint32_t offset;
+	//uint32_t lastX;
 }screen_t;
 
 screen_t *sc;
@@ -57,8 +58,8 @@ void initializeVideo(int f_color,int bg_color){
 	sc->current_y = 0;
 	sc->default_bg_color = bg_color;
 	sc->default_f_color = f_color;
-	sc->offset = 2 * CHAR_WIDTH; //este 2 podria variar
-
+	sc->offset = CHAR_WIDTH; 
+	//sc->lastX = screenData->width - sc->offset;
 }
 
 
@@ -86,6 +87,10 @@ void drawPixel(int x,int y,int color){
 }
 
 void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
+	if( sc->current_x + sc->offset == screenData->width){
+		sc->current_x = 0;
+		sc->current_y += CHAR_HEIGHT;
+	}
 
 	unsigned char * char_map = charMap(c);
 	uint32_t x = sc->current_x + sc->offset;
@@ -107,5 +112,27 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
 	sc->current_x += CHAR_WIDTH;
 }
 
+void deleteChar(uint64_t f_color, uint64_t bg_color){  //falta corregir que si hay un '\n' y se borra que vuelva a la ultima pos
+	if(sc->current_x == 0 && sc->current_y == 0){
+		return;
+	}
+	if(sc->current_x == 0){
+		// if(sc->lastX != screenData->width - sc->offset){
+		// 	sc->current_x = sc->lastX;
+		// }else{
+		sc->current_x = screenData->width - sc->offset;	
+		// }
+		sc->current_y -= CHAR_HEIGHT;
+	}
+	sc->current_x -= CHAR_WIDTH;
+	printCharOnScreen(' ',0x000000,0x000000);
+	sc->current_x -= CHAR_WIDTH;
+	
 
+}
 
+void newLine(){
+//	sc->lastX = sc->current_x;
+	sc->current_y += CHAR_HEIGHT;
+	sc->current_x = 0;
+}

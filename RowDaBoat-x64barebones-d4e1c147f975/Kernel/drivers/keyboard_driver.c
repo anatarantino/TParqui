@@ -18,15 +18,15 @@ static unsigned char pressed(unsigned char key );
 static char pressedKeys[TOTALKEYS][2] =
     {{0, 0}, {0, 0}, {'1', '!'}, {'2', '@'}, {'3', '#'}, {'4', '$'}, {'5', '%'}, {'6', '^'}, {'7', '&'}, {'8', '*'}, {'9', '('}, {'0', ')'}, {'-', '_'}, {'=', '+'}, {'\b', '\b'}, {'\t', '\t'}, {'q', 'Q'}, {'w', 'W'}, {'e', 'E'}, {'r', 'R'}, {'t', 'T'}, {'y', 'Y'}, {'u', 'U'}, {'i', 'I'}, {'o', 'O'}, {'p', 'P'}, {'[', '{'}, {']', '}'}, {'\n', '\n'}, {0, 0}, {'a', 'A'}, {'s', 'S'}, {'d', 'D'}, {'f', 'F'}, {'g', 'G'}, {'h', 'H'}, {'j', 'J'}, {'k', 'K'}, {'l', 'L'}, {';', ':'}, {'\'', '\"'}, {'`', '~'}, {0, 0}, {'\\', '|'}, {'z', 'Z'}, {'x', 'X'}, {'c', 'C'}, {'v', 'V'}, {'b', 'B'}, {'n', 'N'}, {'m', 'M'}, {',', '<'}, {'.', '>'}, {'/', '?'}, {0, 0}, {0, 0}, {0, 0}, {' ', ' '}, {0, 0}};
 
-static unsigned char buffer[MAX]={0};
-int index=0;
+static char buffer[MAX]={0};
+static int index=0;
 //static char flag;
 //char caps;
 
-unsigned char key;
+static unsigned char key;
 static char shift = 0;
 static char caps = 0;
-unsigned char keyToAdd;
+char keyToAdd;
 static char is_pressed;
 
 void keyboard_handler(){ // 0 0 0 0 80
@@ -65,7 +65,6 @@ void keyboard_handler(){ // 0 0 0 0 80
                             }
                         }
                         buffer[index++] = keyToAdd;
-                        putChar(keyToAdd);
                     }
                     break;
             }
@@ -80,10 +79,17 @@ void keyboard_handler(){ // 0 0 0 0 80
     }
 }
 
-
 char getChar(){
-    _hlt();
-    return buffer[index];
+    char c = 0;
+    while (c==0){
+        _hlt();
+        c = buffer[--index];
+    }
+    return c;
+
+}
+
+int scanf(char * format,...){
 
 }
 
@@ -96,16 +102,3 @@ static unsigned char pressed(unsigned char key ){
     return ERROR; //scan codes not used
 }
 
-// char shiftPressed(char key){
-//     if(key==0x2A || key==0x36 ){
-//         return SHIFT;
-//     }
-//     return NOTSHIFT;
-// }
-
-// char capsLockPressed(char key){
-//     if(key==0x3A){
-//         return PRESSED;
-//     }
-//     return RELEASED;
-// }

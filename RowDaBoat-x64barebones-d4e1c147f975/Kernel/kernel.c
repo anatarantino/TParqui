@@ -52,8 +52,7 @@ int main()
 {
 	load_idt();
 	initializeVideo(0xFFFFFF,0x000000);
-
-//	((EntryPoint)sampleCodeModuleAddress)();
+	((EntryPoint)sampleCodeModuleAddress)();
 	
 	while(1);
 	return 0;
