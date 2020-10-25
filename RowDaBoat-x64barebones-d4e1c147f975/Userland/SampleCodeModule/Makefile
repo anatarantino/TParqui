@@ -10,7 +10,7 @@ OBJECTS_LIBRARIES=$(SOURCES_LIBRARIES:.c=.o)
 
 all: $(MODULE)
 
-$(MODULE): $(SOURCES) $(OBJECTS_ASM) $OBJECTS_LIBRARIES
+$(MODULE): $(OBJECTS) $(OBJECTS_ASM) $(OBJECTS_LIBRARIES)
 	$(LD) $(LDFLAGS) -T sampleCodeModule.ld -o ../$(MODULE) $^
 %.o: %.c
 	$(GCC) $(GCCFLAGS) -I./include -c $< -o $@
@@ -18,6 +18,6 @@ $(MODULE): $(SOURCES) $(OBJECTS_ASM) $OBJECTS_LIBRARIES
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 clean:
-	rm -rf *.o asm/*.o libraries/*.o
+	rm -rf *.o asm/*.o libraries/*.o *.bin
 
 .PHONY: all clean print

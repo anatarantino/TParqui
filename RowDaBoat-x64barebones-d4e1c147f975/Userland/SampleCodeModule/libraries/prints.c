@@ -1,5 +1,6 @@
 #include <prints.h>
 #include <syscall.h>
+#include <strings.h>
 
 #define BLANCO 0xFFFFFF
 #define NEGRO 0x000000
@@ -22,3 +23,6 @@ void printf(char* str){
 void printColor(char* str, uint64_t f_color, uint64_t bg_color){
      syscalls(WRITE, (uint64_t)str, strlen(str), f_color, bg_color, 0, 0);
 }
+
+
+
