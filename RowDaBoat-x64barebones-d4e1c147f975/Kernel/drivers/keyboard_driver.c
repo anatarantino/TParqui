@@ -18,15 +18,20 @@ static char pressedKeys[TOTALKEYS][2] =
 
 static char buffer[MAX]={0};
 int index=0;
-uint8_t key;
+char key;
+int flag =0;
 
-void keyboard_handler(uint64_t rsp){
+void keyboard_handler(uint64_t rsp){ // 0 0 0 0 80
     if(pressed_key()){
         key = get_key();
         if (pressed(key)==PRESSED){
-            int flag = shiftPressed(key);
-            putChar(pressedKeys[(char)key][flag]);
+            flag = shiftPressed(key);
+            putChar(pressedKeys[key][flag]);
         }
+        else if(pressed(key)==RELEASED){
+            putChar(pressedKeys[key][flag]);
+        }
+    }
     //    putChar(pressedKeys[(char)key][flag]);
 
         
@@ -52,7 +57,7 @@ void keyboard_handler(uint64_t rsp){
         }
         */
 
-    }
+    //}
 
 }
 
@@ -62,7 +67,7 @@ char getChar(){
 
 }
 
-int pressed(uint8_t key ){
+int pressed(char key ){
     if(key > 0x00 && key < 0x58){
         return PRESSED;
     }else if(key >= 0x81 && key <= 0xD8){
@@ -72,7 +77,7 @@ int pressed(uint8_t key ){
     return ERROR; //scan codes not used
 }
 
-int shiftPressed(uint8_t key){
+int shiftPressed(char key){
     if(key==0x2A || key==0x36 || key==0x3A){
         return SHIFT;
     }
