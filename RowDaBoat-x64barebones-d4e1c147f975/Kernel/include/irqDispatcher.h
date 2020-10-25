@@ -4,6 +4,6 @@
 #include <stdint.h>
 
 static void int_20();
-void int_21(uint64_t rsp);
+void int_21();
 
 #endif

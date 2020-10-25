@@ -3,10 +3,8 @@
 
 #include <stdint.h>
 
-void keyboard_handler(uint64_t rsp);
+void keyboard_handler();
 char getChar();
-char shiftPressed(char key);
-char pressed(char key );
-char capsLockPressed(char key);
+
 
 #endif
