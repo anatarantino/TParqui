@@ -39,3 +39,31 @@ void printf(char* str){
 void printColor(char* str, uint64_t f_color, uint64_t bg_color){
     syscallWrite(str,strlen(str),f_color,bg_color);
 }
+
+void printNewLine(){
+    putChar('\n');
+}
+
+void printHex(uint64_t num){
+    char buff[10];
+    uintToBase(num,buff,16);
+    printf(buff);
+}
+
+void printHexColor(uint64_t num, uint64_t f_color, uint64_t bg_color){
+    char buff[10];
+    uintToBase(num,buff,16);
+    printColor(buff,f_color,bg_color);
+}
+
+void printInt(uint64_t num){
+    char buff[10];
+    uintToBase(num,buff,10);
+    printf(buff);
+}
+
+void printIntColor(uint64_t num, uint64_t f_color, uint64_t bg_color){
+    char buff[10];
+    uintToBase(num,buff,10);
+    printColor(buff,f_color,bg_color);
+}

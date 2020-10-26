@@ -63,27 +63,14 @@ void initializeVideo(int f_color,int bg_color){
 }
 
 
-void drawPixel(int x,int y,int color){
-    /*
-    char * curpos = (char *)((uint64_t)screenData->framebuffer + (y * screenData->width) + x);
-      
-    int b = color & 0x0000FF; 
-    int g = (color >> 8) & 0x0000FF;
-    int r =(color >> 16) & 0x0000FF;
-
-    *curpos = r; //Rojo
-    curpos++;
-    *curpos = g; //Verde
-    curpos++;
-    *curpos = b; // azul
-    curpos++;
-    //los primeros tres en 255 -> primer pixel pintado de blanco;    
-    */
+void drawPixel(int x,int y,int color){ //RGB
+    
     char * curpos = (char *)((uint64_t)screenData->framebuffer); 
     int offset = 3 * (x + y * screenData->width);
-    curpos[offset] = (char)((color >> 16) & 0xFF);     //BLUE
-    curpos[offset + 1] = (char)((color >> 8) & 0xFF);  //GREEN
-    curpos[offset + 2] = (char)(color & 0xFF);         //RED
+    curpos[offset] = (char)(color & 0xFF); //RED    
+    curpos[offset + 1] = (char)((color >> 8) & 0xFF); //GREEN
+    curpos[offset + 2] = (char)((color >> 16) & 0xFF); //BLUE        
+	
 }
 
 void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
