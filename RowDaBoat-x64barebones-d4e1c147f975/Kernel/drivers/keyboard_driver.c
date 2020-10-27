@@ -89,10 +89,6 @@ char getChar(){
 
 }
 
-int scanf(char * format,...){
-
-}
-
 static unsigned char pressed(unsigned char key ){
     if(key > 0x00 && key < 0x58){
         return PRESSED;

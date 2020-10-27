@@ -1,8 +1,14 @@
 #include <strings.h>
 #include <stdarg.h>
+#include <syscall.h>
 
 #define SIZE 100
 #define EOF -1
+#define READ 0
+
+char getchar(){
+      return syscall(READ, 0, 0, 0, 0, 0, 0);
+}
 
 int strlen(char * str){
     int i = 0;
@@ -58,10 +64,11 @@ int scanf(const char* format,...){     //scanf("%d %d %f",&num1, &num2, &num3);
 
 
 char * read(){
-    int index = 0, c;
+    int index = 0;
+    char c;
     char buffer[SIZE] = {0};
 
-    while ((c = getc()) != '\n') {   // llama a getChar
+    while ((c = getChar()) != '\n') {   // llama a getChar
         if(c == '\b'){
             if (index != 0) {
                 index--;
