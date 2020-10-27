@@ -15,7 +15,6 @@ void putCharColor(char c,uint64_t f_color,uint64_t bg_color){
     syscalls(WRITE, (uint64_t)&c, 1, f_color, bg_color, 0, 0);
 }
 
-
 void printf(char* str){
      syscalls(WRITE, (uint64_t)str, strlen(str), BLANCO, NEGRO, 0, 0);
 }
