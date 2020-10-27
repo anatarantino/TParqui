@@ -18,7 +18,7 @@ int strlen(char * str){
     return i;
 }
 
-int scanf(const char* format,...){     //scanf("%d %d %f",&num1, &num2, &num3);
+int scanf(const char* format,...){     //scanf("%d %d %f",&num1, &num2, &num3);             CHEQUEARLO 
     va_list args;
     int i = 0, j=0, count = 0;
     char *buff = read();
@@ -68,7 +68,7 @@ char * read(){
     char c;
     char buffer[SIZE] = {0};
 
-    while ((c = getChar()) != '\n') {   // llama a getChar
+    while ((c = getChar()) != '\n') {
         if(c == '\b'){
             if (index != 0) {
                 index--;
