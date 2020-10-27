@@ -1,6 +1,9 @@
 #include <strings.h>
 #include <stdarg.h>
 
+#define SIZE 100
+#define EOF -1
+
 int strlen(char * str){
     int i = 0;
     while(str[i]!= 0){
@@ -11,51 +14,89 @@ int strlen(char * str){
 
 int scanf(const char* format,...){     //scanf("%d %d %f",&num1, &num2, &num3);
     va_list args;
-    int i = 0, j=0, ret = 0;
-    char buff[100] = {0}, c;
-    char *out_loc;
-    while(c != '\n') {
-        if (fread(&c, 1, 1, stdin)) {
-            buff[i] = c;
-            i++;
-        }
-    }
-
+    int i = 0, j=0, count = 0;
+    char *buff = read();
+    char *character;
     va_start(args,format);
-    i = 0;
     while (format && format[i]) {
-    if (format[i] == '%') {
-      i++;
-    switch (format[i]) {
-        case 'c': {
-          * (char *)va_arg( args, char* ) = buff[j];
-          j++;
-          ret ++;
-          break;
+      if (format[i] == '%') {
+        i++;
+        switch (format[i]) {
+          case 'c': {
+            character = va_arg(args, char*);
+            *character = buff[j];
+            j++;
+            count++;
+            break;
+          }
+          case 'd': {
+            buff = strToInt(buff, va_arg(args,int *));
+            count++;
+            break;
+          }
+          case 's': {
+            character = va_arg(args,char*);
+            char temp;
+            while( (temp = buff[j]) != '\0'){ 
+                *character = buff[j];
+                character++;
+                j++;
+            }
+            count++;
+            break;
+          }
         }
-        case 'd': {
-          * (int *)va_arg( args, int* ) = \
-          strtol(&buff[j], &out_loc, 10);
-          j += out_loc -&buff[j];
-          ret++;
-          break;
-        }
-        case 's': {
-          out_loc = (char *)va_arg( args, char* );
-          strcpy(out_loc, &buff[j]);
-          j += strlen(&buff[j]);
-          ret++;
-          break;
-        }
+      } else {
+        buff[j] =format[i];
+        j++;
       }
-    } else {
-      buff[j] =format[i];
-      j++;
+      i++;
     }
-    i++;
-  }
-  va_end(args);
-   return ret;
+    va_end(args);
+    return count;
 }
-    
+
+
+char * read(){
+    int index = 0, c;
+    char buffer[SIZE] = {0};
+
+    while ((c = getc()) != '\n') {   // llama a getChar
+        if(c == '\b'){
+            if (index != 0) {
+                index--;
+            }
+        }
+        else if(c != EOF){
+            if (index <= SIZE) {
+                buffer[index++] = c;
+            }
+        }
+    }
+    buffer[index] = '\0';
+    return buffer;
+}
+
+
+char* strToInt(char* string, int* num){
+    *num = 0;
+	  int signo = 1;
+    char character;
+
+    if(*string == '-'){
+      character = *(string + 1);
+      if (character >= '0' && character <= '9') {
+        signo = -1;
+        *num = (character - '0') * signo;
+        string+=2;
+      } else {
+        return string;
+      }
+	  }
+    character = *string;
+    while (character >= '0' && character <= '9'){
+        *num = (*num)*10+(character-'0')*signo;
+        string++;
+    }
+    return string;
 }
