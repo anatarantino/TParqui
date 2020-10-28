@@ -5,5 +5,6 @@ int strlen(char * str);
 int scanf(const char* format,...);
 char * read();
 char* strToInt(char* string, int* num);
+char getChar();
 
 #endif

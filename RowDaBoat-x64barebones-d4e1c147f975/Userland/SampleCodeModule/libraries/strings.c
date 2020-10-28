@@ -6,8 +6,8 @@
 #define EOF -1
 #define READ 0
 
-char getchar(){
-      return syscall(READ, 0, 0, 0, 0, 0, 0);
+char getChar(){
+      return syscalls(READ, 0, 0, 0, 0, 0, 0);
 }
 
 int strlen(char * str){
