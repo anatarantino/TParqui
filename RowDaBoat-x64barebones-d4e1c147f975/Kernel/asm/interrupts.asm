@@ -161,6 +161,7 @@ _irq05Handler:
 _exception0Handler:
 	exceptionHandler 0
 
+
 haltcpu:
 	cli
 	hlt

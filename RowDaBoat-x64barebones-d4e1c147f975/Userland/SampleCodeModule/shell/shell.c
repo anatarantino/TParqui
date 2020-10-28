@@ -13,7 +13,8 @@ static void printMessage();
 void startShell(){
 
     startScreen();
-    printMessage();
+    //printMessage();
+    printf("hola");
     while(1){
         printColor("hola genteeeee",0xFFFF00,0xFF0000);
     }
