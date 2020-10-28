@@ -52,8 +52,6 @@ int main()
 {
 	load_idt();
 	initializeVideo(0xFFFFFF,0x000000);
-	printColor("mira anita asi quedaria",0xFFFF00,0xFF0000);
 	((EntryPoint)sampleCodeModuleAddress)();
-	while(1);
 	return 0;
 }

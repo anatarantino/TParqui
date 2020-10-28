@@ -3,6 +3,10 @@
         "*.tcc": "c",
         "cstdlib": "c",
         "memory": "c",
-        "sstream": "c"
+        "sstream": "c",
+        "iosfwd": "c",
+        "istream": "c",
+        "limits": "c",
+        "streambuf": "c"
     }
 }

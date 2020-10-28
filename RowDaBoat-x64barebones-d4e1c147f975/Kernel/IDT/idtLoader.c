@@ -2,6 +2,7 @@
 #include <idtLoader.h>
 #include <defs.h>
 #include <interrupts.h>
+#include <lib.h>
 
 #pragma pack(push)		/* Push de la alineación actual */
 #pragma pack (1) 		/* Alinear las siguiente estructuras a 1 byte */
@@ -29,6 +30,7 @@ void load_idt() {
   setup_IDT_entry (0x20, (uint64_t)&_irq00Handler);
   setup_IDT_entry (0x21, (uint64_t)&_irq01Handler);
   setup_IDT_entry (0x00, (uint64_t)&_exception0Handler);
+  setup_IDT_entry (0x80, (uint64_t)&_syscallHandler);
 
 	//interrupciones habilitadas
 	picMasterMask(0xFC); 
@@ -46,3 +48,4 @@ static void setup_IDT_entry (int index, uint64_t offset) {
   idt[index].cero = 0;
   idt[index].other_cero = (uint64_t) 0;
 }
+

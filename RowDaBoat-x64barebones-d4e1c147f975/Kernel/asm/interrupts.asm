@@ -12,10 +12,13 @@ GLOBAL _irq03Handler
 GLOBAL _irq04Handler
 GLOBAL _irq05Handler
 
+GLOBAL _syscallHandler
+
 GLOBAL _exception0Handler
 
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
+EXTERN syscallDispatcher
 
 SECTION .text
 
@@ -81,6 +84,22 @@ SECTION .text
 	iretq
 %endmacro
 
+_syscallHandler:
+	push rdi
+	mov [registers+8*0],rax
+	mov [registers+8*1],rdi
+	mov [registers+8*2],rsi
+	mov [registers+8*3],rdx
+	mov [registers+8*4],r10
+	mov [registers+8*5],r8
+	mov [registers+8*6],r9
+
+	mov rdi,registers
+	call syscallDispatcher
+
+	pop rdi
+
+	iretq
 
 _hlt:
 	sti
@@ -151,3 +170,11 @@ haltcpu:
 
 SECTION .bss
 	aux resq 1
+	registers:
+		rsrax resq 1
+		rsrdi resq 1
+		rsrsi resq 1
+		rsrdx resq 1
+		rsr10 resq 1
+		rsr8 resq 1
+		rsr9 resq 1

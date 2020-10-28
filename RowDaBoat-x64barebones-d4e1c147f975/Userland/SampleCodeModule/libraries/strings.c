@@ -66,7 +66,7 @@ int scanf(const char* format,...){     //scanf("%d %d %f",&num1, &num2, &num3); 
 char * read(){
     int index = 0;
     char c;
-    char buffer[SIZE] = {0};
+    char buffer[SIZE];
 
     while ((c = getChar()) != '\n') {
         if(c == '\b'){
