@@ -4,7 +4,7 @@
 
 #define SIZE 100
 #define EOF -1
-#define READ 0
+
 
 char getChar(){
       return syscalls(READ, 0, 0, 0, 0, 0, 0);

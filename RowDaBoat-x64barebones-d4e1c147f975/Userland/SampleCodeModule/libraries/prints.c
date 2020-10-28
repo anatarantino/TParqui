@@ -4,7 +4,6 @@
 
 #define BLANCO 0xFFFFFF
 #define NEGRO 0x000000
-#define WRITE 1
 
 
 void putChar(char c){
