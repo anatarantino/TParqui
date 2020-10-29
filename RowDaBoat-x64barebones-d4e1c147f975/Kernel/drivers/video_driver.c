@@ -121,3 +121,15 @@ void newLine(){
 	sc->current_y += CHAR_HEIGHT;
 	sc->current_x = 0;
 }
+
+void clearScreen(){
+	sc->current_x = 0;
+	sc->current_y = 0;
+	for(int i=0 ; i<=screenData->height ;i++){
+		for(int j=0 ; j<=screenData->width ; j++){
+			drawPixel(i,j,sc->default_bg_color);
+		}
+	}
+	sc->current_x = 0;
+	sc->current_y = 0;
+}

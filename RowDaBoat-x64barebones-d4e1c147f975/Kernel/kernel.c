@@ -53,6 +53,10 @@ int main()
 {
 	load_idt();
 	initializeVideo(0xFFFFFF,0x000000);
-	((EntryPoint)sampleCodeModuleAddress)();
+	printf("holaaaa");
+	printNewLine();
+	printf("chau");
+	clearScreen();
+//	((EntryPoint)sampleCodeModuleAddress)();
 	return 0;
 }
