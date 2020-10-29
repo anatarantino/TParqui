@@ -3,7 +3,6 @@ GLOBAL syscalls:
 section .text
 
 %macro push_registers 0
-	push rax
 	push rbx
 	push rcx
 	push rdx
@@ -17,14 +16,10 @@ section .text
 	push r12
 	push r13
 	push r14
-	push r15
-	push fs
-	push gs
+	push r15		
 %endmacro
 
 %macro	pop_registers 0
-	pop gs
-	pop fs
 	pop r15
 	pop r14
 	pop r13
@@ -39,7 +34,6 @@ section .text
 	pop rdx
 	pop rcx
 	pop rbx
-	pop rax
 %endmacro
 
 syscalls:

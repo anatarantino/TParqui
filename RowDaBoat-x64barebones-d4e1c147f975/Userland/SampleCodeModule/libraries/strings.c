@@ -2,12 +2,8 @@
 #include <stdarg.h>
 #include <syscall.h>
 
-#define SIZE 100
-#define EOF -1
-
-
 char getChar(){
-      return syscalls(READ, 0, 0, 0, 0, 0, 0);
+    return syscalls(READ, 0, 0, 0, 0, 0, 0);
 }
 
 int strlen(char * str){
@@ -16,6 +12,21 @@ int strlen(char * str){
         i++;
     }
     return i;
+}
+
+int stringcmp(char * str1, char * str2){ //holaa  hola
+    int index=0;
+    while (str1[index]!=0 && str2[index]!=0)
+    {
+      if(str1[index]!=str2[index]){
+        return FALSE;
+      }
+      index++;
+    }
+    if(str1[index]==0 && str2[index]==0){
+        return TRUE;
+    }
+    return FALSE;
 }
 
 int scanf(const char* format,...){     //scanf("%d %d %f",&num1, &num2, &num3);             CHEQUEARLO 
@@ -106,4 +117,15 @@ char* strToInt(char* string, int* num){
         string++;
     }
     return string;
+}
+
+void * memset(void * destination, int32_t c, uint64_t length)
+{
+	uint8_t chr = (uint8_t)c;
+	char * dst = (char*)destination;
+
+	while(length--)
+		dst[length] = chr;
+
+	return destination;
 }

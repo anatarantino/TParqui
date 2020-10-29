@@ -114,8 +114,6 @@ void deleteChar(uint64_t f_color, uint64_t bg_color){  //falta corregir que si h
 	sc->current_x -= CHAR_WIDTH;
 	printCharOnScreen(' ',0x000000,0x000000);
 	sc->current_x -= CHAR_WIDTH;
-	
-
 }
 
 void newLine(){

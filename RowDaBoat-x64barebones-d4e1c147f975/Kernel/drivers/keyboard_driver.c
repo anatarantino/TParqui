@@ -11,7 +11,7 @@
 #define RELEASED 0
 #define ERROR -1
 #define TOTALKEYS 60
-#define MAX 100
+#define MAX 2000
 
 static unsigned char pressed(unsigned char key );
 
@@ -86,7 +86,6 @@ char getChar(){
         c = buffer[--index];
     }
     return c;
-
 }
 
 static unsigned char pressed(unsigned char key ){

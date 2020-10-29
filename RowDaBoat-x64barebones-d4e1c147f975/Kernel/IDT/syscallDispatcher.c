@@ -15,6 +15,7 @@ uint64_t syscallDispatcher(t_registers * r){
         switch (r->rax)
         {
             case READ:
+                //printf("Entre al read");
                 return getChar();
                 break;
             case WRITE:
@@ -23,7 +24,6 @@ uint64_t syscallDispatcher(t_registers * r){
             case SCREEN:
                 initializeVideo((uint64_t) r->rdx, (uint64_t) r->r10);
                 break;
-                
         }    
     }
     return 0;
