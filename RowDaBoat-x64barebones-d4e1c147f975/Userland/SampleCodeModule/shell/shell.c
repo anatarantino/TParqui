@@ -1,5 +1,6 @@
 #include <syscall.h>
 #include <prints.h>
+#include <strings.h>
 
 #define BLANCO 0xFFFFFF
 #define NEGRO 0x000000
@@ -10,19 +11,20 @@ static char * user = "user >> ";
 static void startScreen();
 static void printMessage();
 
-void startShell(){
+static int c;
 
-    startScreen();
-    //printMessage();
-    printf("hola");
+void startShell(){
     while(1){
-        printColor("hola genteeeee",0xFFFF00,0xFF0000);
+        printf(user);
+        while((c=getChar())!='\n'){
+            
+        }
     }
 
 }
 
 static void startScreen(){
-    syscalls(SCREEN, 0, 0,BLANCO, NEGRO, 0,0);
+//    syscalls(SCREEN, 0, 0,BLANCO, NEGRO, 0,0);
 }
 
 static void printMessage(){

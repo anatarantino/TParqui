@@ -9,23 +9,19 @@
 
 #define CANT_SYS 3
 //                          codigo        puntero       length          f_color     bg_color       extra         extra
-uint64_t syscallDispatcher(uint64_t rax, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9){
-    if(rax >= 0 && rax <= CANT_SYS){
-        printf("rax es:");
-        printInt(rax);
-        printNewLine();
-        switch (rax)
+//                          uint64_t rax, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9
+uint64_t syscallDispatcher(t_registers * r){
+    if(r->rax >= 0 && r->rax <= CANT_SYS){
+        switch (r->rax)
         {
-            printf("hola chicas entre al switch");
             case READ:
                 return getChar();
                 break;
             case WRITE:
-                printf("estoy en el write");
-                syscallWrite((char *) rdi,(uint64_t) rsi, (uint64_t) rdx, (uint64_t) r10);
+                syscallWrite((char *) r->rdi,(uint64_t) r->rsi, (uint64_t) r->rdx, (uint64_t) r->r10);
                 break;
             case SCREEN:
-                initializeVideo((uint64_t) rdx, (uint64_t) r10);
+                initializeVideo((uint64_t) r->rdx, (uint64_t) r->r10);
                 break;
                 
         }    
