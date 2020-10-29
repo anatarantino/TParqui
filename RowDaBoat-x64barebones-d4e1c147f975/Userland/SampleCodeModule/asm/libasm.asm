@@ -43,7 +43,6 @@ section .text
 %endmacro
 
 syscalls:
-    syscall:
     push rbp
     mov rbp, rsp
 	push_registers
