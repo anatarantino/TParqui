@@ -83,7 +83,9 @@ char getChar(){
     char c = 0;
     while (c==0){
         _hlt();
-        c = buffer[--index];
+        if(index>0){
+            c = buffer[--index];
+        }
     }
     return c;
 }
