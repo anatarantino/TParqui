@@ -60,7 +60,7 @@ SECTION .text
 
 %macro irqHandlerMaster 1
 	pushState
-
+	mov rsi,rsp
 	mov rdi, %1 ; pasaje de parametro
 	call irqDispatcher
 
@@ -76,7 +76,6 @@ SECTION .text
 
 %macro exceptionHandler 1
 	pushState
-
 	mov rdi, %1 ; pasaje de parametro
 	call exceptionDispatcher
 

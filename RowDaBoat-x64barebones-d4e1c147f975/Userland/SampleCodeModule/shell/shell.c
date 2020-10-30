@@ -15,6 +15,8 @@ enum comm_num{INFOREG=0,PRINTMEM,TIME,CHESS,HELP,CLEARSC};
 static char * commands[] = {"inforeg","printmem","time","chess","help","clear"};
 static char * user = "user >> ";
 
+static char * registers[] = {"rax", "rdi", "rsi", "rdx", "r10", "r8", "r9"};
+
 
 static char buff[TOTAL_SIZE]={0};
 static int index=0;
@@ -117,6 +119,8 @@ static void removeChar(){
 }
 
 static void inforeg(){
+    putChar('\n');
+    printRegisters();
 
 }
 
@@ -125,6 +129,7 @@ static void printmem(){
 }
 
 static void time(){
+    
 
 }
 
@@ -134,12 +139,11 @@ static void chess(){
 
 static void help(){
     putChar('\n');
-    printf("HELP");
-    putChar('\n');
+    printf("HELP\n");
     printf("DESCRIPTION: this is a list of the commands available.\n");
     printf("inforeg -> prints registers values\n");
-    printf("printmem -> receives an hexadecimal direction and makes a memory dump of 32 bytes on screen.\n"); //igual al de fran cambiar!!!
-    printf("time -> prints system time on screen.\n"); //preguntar si tiene que decir Buenos Aires porque tecnicamente dice que imprimamos la hora
+    printf("printmem -> receives a pointer and makes a memory dump of 32 bytes on screen starting on the direction introduced.\n"); //igual al de fran cambiar!!!
+    printf("time -> prints system time on screen.\n"); 
     printf("clear -> clears the screen.\n");
     printf("chess -> this command starts a chess game.\n");
 }
