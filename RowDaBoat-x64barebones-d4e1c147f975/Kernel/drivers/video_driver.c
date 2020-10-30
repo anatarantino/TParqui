@@ -97,6 +97,7 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
 		y++;
 	}
 	sc->current_x += CHAR_WIDTH;
+	
 }
 
 void deleteChar(uint64_t f_color, uint64_t bg_color){  //falta corregir que si hay un '\n' y se borra que vuelva a la ultima pos
@@ -122,12 +123,13 @@ void newLine(){
 	sc->current_x = 0;
 }
 
-void clearScreen(){
+//borrar solo lo que se escribio hasta el momento (el resto va a estar con el background color ya)
+void clearScreen(uint64_t bg_color){
 	sc->current_x = 0;
 	sc->current_y = 0;
-	for(int i=0 ; i<=screenData->height ;i++){
-		for(int j=0 ; j<=screenData->width ; j++){
-			drawPixel(i,j,sc->default_bg_color);
+	for(int i=0 ; i<=screenData->height ;i+=CHAR_WIDTH){
+		for(int j=0 ; j<=screenData->width ; j+=CHAR_HEIGHT){
+			printCharOnScreen(' ',bg_color,bg_color);
 		}
 	}
 	sc->current_x = 0;

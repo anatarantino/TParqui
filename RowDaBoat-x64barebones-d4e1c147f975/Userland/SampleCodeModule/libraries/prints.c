@@ -27,6 +27,9 @@ void printInt(uint64_t num){
     printf(buff);
 }
 
+void clearScreen(){
+	syscalls(CLEAR,0,0,0,0,0,0);
+}
 uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 {
 	char *p = buffer;

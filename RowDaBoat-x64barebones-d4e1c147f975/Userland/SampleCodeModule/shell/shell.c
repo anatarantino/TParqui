@@ -10,7 +10,7 @@
 #define TOTAL_SIZE 2000
 #define TOTAL_COMMANDS 6
 
-enum comm_num{INFOREG=0,PRINTMEM,TIME,CHESS,HELP,CLEAR};
+enum comm_num{INFOREG=0,PRINTMEM,TIME,CHESS,HELP,CLEARSC};
 
 static char * commands[] = {"inforeg","printmem","time","chess","help","clear"};
 static char * user = "user >> ";
@@ -49,7 +49,6 @@ static void analizeChar(char c){
         findCommand();
         memset(buff,0,TOTAL_SIZE);
         index=0;
-        putChar('\n');
         printf(user);
         break;
     case '\b':
@@ -65,17 +64,24 @@ static void analizeChar(char c){
 static void findCommand(){
     int result;
     int flag=FALSE;
+    int comm = -1;
     for (int i = 0; i < TOTAL_COMMANDS; i++){
         result=stringcmp(buff,commands[i]);
         if(result==TRUE){
             applyCommand(i);    
             flag=TRUE;
+            comm = i;
         }
     }
-    if(flag==FALSE){
+    if(comm != CLEARSC){
         putChar('\n');
-        printColor("Invalid command",RED,BLACK);
+        if(flag == FALSE){
+            printColor("Invalid command",RED,BLACK);
+            putChar('\n');
+        }
+
     }
+    
 }
 
 static void applyCommand(int command_num){
@@ -96,7 +102,7 @@ static void applyCommand(int command_num){
     case HELP:
         help();
         break;
-    case CLEAR:
+    case CLEARSC:
         clear();
         break;
     }
@@ -127,11 +133,19 @@ static void chess(){
 }
 
 static void help(){
-    printf("ENTRASTE A HELP");
+    putChar('\n');
+    printf("HELP");
+    putChar('\n');
+    printf("DESCRIPTION: this is a list of the commands available.\n");
+    printf("inforeg -> prints registers values\n");
+    printf("printmem -> receives an hexadecimal direction and makes a memory dump of 32 bytes on screen.\n"); //igual al de fran cambiar!!!
+    printf("time -> prints system time on screen.\n"); //preguntar si tiene que decir Buenos Aires porque tecnicamente dice que imprimamos la hora
+    printf("clear -> clears the screen.\n");
+    printf("chess -> this command starts a chess game.\n");
 }
 
 static void clear(){
-    
+    clearScreen();
 
 }
 
