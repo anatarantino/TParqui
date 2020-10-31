@@ -84,7 +84,7 @@ static void findCommand(){
             comm = i;
         }
     }
-    if(comm != CLEARSC){
+    if(comm != CLEARSC && comm !=CHESS){
         putChar('\n');
         if(flag == FALSE){
             printColor("Invalid command",RED,BLACK);
@@ -223,6 +223,5 @@ static void printMessage(){
 
 static void chess(){
     clearScreen();
-    drawBoard(0xFF0000,0xFF0000);
-
+    drawBoard(0xB17C54,0xEED09D);
 }

@@ -79,10 +79,11 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
 	if( sc->current_x + sc->offset == screenData->width){
 		sc->current_x = 0;
 		sc->current_y += CHAR_HEIGHT;
-		if (sc->height - sc->current_y < CHAR_HEIGHT) {
+		/*if (sc->height - sc->current_y < CHAR_HEIGHT) {
                   sc->current_y -= CHAR_HEIGHT;
                   scrollScreen();
             }
+			*/
 	}
 
 	unsigned char * char_map = charMap(c);
@@ -144,5 +145,4 @@ void clearScreen(uint64_t bg_color){
 
 void scrollScreen(){
 	printf("HOLAAAAAAA");
-	newLine();
 }

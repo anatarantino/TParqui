@@ -17,11 +17,15 @@ void drawPixel(int x, int y, int color){
 
 
 void drawBoard(uint64_t color1, uint64_t color2){
+    int cant_sq=0;
     for(int h=0 ; h<SCREENHEIGHT ; h++){
-        for(int w=0 ; w<SCREENWIDTH ; w++){
-            if((h>=STARTY && h<= ENDY) && (w>=STARTX && w<=ENDX)){
-                putChar('a');
-                drawPixel(h,w,color1);
+        for(int w=0 ; w<SCREENWIDTH; w++){
+            if((w>=STARTX && w<=ENDX) && (h>=STARTY && h<= ENDY)){
+                if((w>=STARTX && w<=STARTX+SQUARESIZE) && (h>=STARTY && h<=STARTY+SQUARESIZE)){
+                    drawPixel(w,h,color2);
+                }else{
+                    drawPixel(w,h,color1);
+                }
             }
         }
     }
