@@ -3,6 +3,7 @@
 #include <strings.h>
 #include <shell.h>
 #include <timeRTC.h>
+#include <graphics.h>
 
 #define WHITE 0xFFFFFF
 #define BLACK 0x000000
@@ -199,9 +200,6 @@ static void printTime(time_type desc){
     printf(buff);
 }
 
-static void chess(){
-
-}
 
 static void help(){
     putChar('\n');
@@ -221,4 +219,10 @@ static void clear(){
 
 static void printMessage(){
     printColor("Hola aca va un mensaje super hermo diciendo que arranca el programa",0xFFFF00,0xF0FF0F);
+}
+
+static void chess(){
+    clearScreen();
+    drawBoard(0xFF0000,0xFF0000);
+
 }

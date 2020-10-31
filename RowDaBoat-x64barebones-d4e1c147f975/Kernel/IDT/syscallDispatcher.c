@@ -10,6 +10,7 @@
 #define CLEAR 3
 #define REGISTERS 4
 #define TIMERTC 5
+#define DRAW 6
 
 //modificar con lo de esceptions
 #define TOTALREGS 16 //hay 17 en el vector, chequear
@@ -49,6 +50,9 @@ uint64_t syscallDispatcher(t_registers * r){
             case TIMERTC:
                 printf("entre a timertc en syscallDispatcher\n");
                 return getTime((time_type)(r->rdi));
+            case DRAW:
+                drawPixel((uint64_t)r->r8,(uint64_t)r->r9,(uint64_t)r->rdx);
+                //r8->x r9->y rdx->color
         }    
     }
     return 0;
