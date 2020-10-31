@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-void keyboard_handler();
+void keyboard_handler(uint64_t* rsp);
 char getChar();
 uint64_t * returnReg();
 

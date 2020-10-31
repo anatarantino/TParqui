@@ -9,13 +9,16 @@
 
 #define TOTAL_SIZE 2000
 #define TOTAL_COMMANDS 6
+#define TOTAL_REG 7
 
 enum comm_num{INFOREG=0,PRINTMEM,TIME,CHESS,HELP,CLEARSC};
 
 static char * commands[] = {"inforeg","printmem","time","chess","help","clear"};
 static char * user = "user >> ";
 
-static char * registers[] = {"rax", "rdi", "rsi", "rdx", "r10", "r8", "r9"};
+static char * registers[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9: ",
+                           "R8: ", "RSI: ", "RDI: ", "RBP: ", "RDX: ", "RCX: ", "RBX: ",
+                           "RAX: ", "RIP: ", "RSP: "};
 
 
 static char buff[TOTAL_SIZE]={0};
@@ -119,8 +122,13 @@ static void removeChar(){
 }
 
 static void inforeg(){
-    
-
+    uint64_t* regs=getRegisters();
+    for(int i=0; i< TOTAL_REG; i++){
+        printf(registers[i]);
+        printHex(regs[i]);
+        putChar('\n');
+    }
+    putChar('\n');
 }
 
 static void printmem(){

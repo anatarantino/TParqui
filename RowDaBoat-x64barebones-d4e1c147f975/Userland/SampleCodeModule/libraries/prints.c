@@ -17,6 +17,12 @@ void printf(char* str){
     syscalls(WRITE, (uint64_t)str, strlen(str), BLANCO, NEGRO, 0, 0);
 }
 
+void printHex(uint64_t num){
+    char buff[10];
+    uintToBase(num,buff,16);
+    printf(buff);
+}
+
 void printColor(char* str, uint64_t f_color, uint64_t bg_color){
     syscalls(WRITE, (uint64_t)str, strlen(str), f_color, bg_color, 0, 0);
 }
@@ -31,8 +37,8 @@ void clearScreen(){
 	syscalls(CLEAR,0,0,0,0,0,0);
 }
 
-void printRegisters(){
-	syscalls(REGISTERS,0,0,0,0,0,0);
+uint64_t* getRegisters(){
+	return syscalls(REGISTERS,0,0,0,0,0,0);
 }
 
 uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
