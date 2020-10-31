@@ -14,7 +14,7 @@ int strlen(char * str){
     return i;
 }
 
-int stringcmp(char * str1, char * str2){ //holaa  hola
+int stringcmp(char * str1, char * str2){ 
     int index=0;
     while (str1[index]!=0 && str2[index]!=0)
     {

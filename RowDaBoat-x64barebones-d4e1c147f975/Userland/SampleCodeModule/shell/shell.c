@@ -2,6 +2,8 @@
 #include <prints.h>
 #include <strings.h>
 #include <shell.h>
+#include <timeRTC.h>
+#include <graphics.h>
 
 #define WHITE 0xFFFFFF
 #define BLACK 0x000000
@@ -34,6 +36,7 @@ static void removeChar();
 static void inforeg();
 static void printmem(int args, char *arguments[]);
 static void time();
+static void printTime(time_type desc);
 static void chess();
 static void help();
 static void clear();
@@ -164,13 +167,39 @@ static void printmem(int args, char *arguments[]){
 }
 
 static void time(){
-
+    putChar('\n');
+    printTime(HOURS);
+    putChar(':');
+    printTime(MINUTES);
+    putChar(':');
+    printTime(SECONDS);
 
 }
 
-static void chess(){
-
+static void printTime(time_type desc){
+    char buff[3];
+    int aux;
+    switch(desc){
+        case HOURS:
+            aux = getTime(HOURS);
+            if(aux < 3)
+                aux = 24 - 3 + aux;
+            else
+                aux -= 3;
+            uintToBase(aux,buff,10);
+            break;
+        case MINUTES:
+            uintToBase(getTime(MINUTES),buff,10);
+            break;
+        case SECONDS:
+            uintToBase(getTime(SECONDS),buff,10);
+            break;
+        default:
+            return;
+    }
+    printf(buff);
 }
+
 
 static void help(){
     putChar('\n');
@@ -190,4 +219,10 @@ static void clear(){
 
 static void printMessage(){
     printColor("Hola aca va un mensaje super hermo diciendo que arranca el programa",0xFFFF00,0xF0FF0F);
+}
+
+static void chess(){
+    clearScreen();
+    drawBoard(0xFF0000,0xFF0000);
+
 }
