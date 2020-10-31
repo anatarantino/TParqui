@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include <video_driver.h>
 #include <font.h>
+#include <lib.h>
+#include <prints.h>
 
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -48,6 +50,7 @@ typedef struct{
 	int default_bg_color;
 	int default_f_color;
 	uint32_t offset;
+	uint32_t height;
 	//uint32_t lastX;
 }screen_t;
 
@@ -58,25 +61,28 @@ void initializeVideo(int f_color,int bg_color){
 	sc->current_y = 0;
 	sc->default_bg_color = bg_color;
 	sc->default_f_color = f_color;
-	sc->offset = CHAR_WIDTH; 
+	sc->offset = CHAR_WIDTH;
+	sc->height= SCREEN_HEIGHT;
 	//sc->lastX = screenData->width - sc->offset;
 }
 
 
 void drawPixel(int x,int y,int color){ //RGB
-    
     char * curpos = (char *)((uint64_t)screenData->framebuffer); 
     int offset = 3 * (x + y * screenData->width);
     curpos[offset] = (char)(color & 0xFF); //RED    
     curpos[offset + 1] = (char)((color >> 8) & 0xFF); //GREEN
     curpos[offset + 2] = (char)((color >> 16) & 0xFF); //BLUE        
-	
 }
 
 void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
 	if( sc->current_x + sc->offset == screenData->width){
 		sc->current_x = 0;
 		sc->current_y += CHAR_HEIGHT;
+		if (sc->height - sc->current_y < CHAR_HEIGHT) {
+                  sc->current_y -= CHAR_HEIGHT;
+                  scrollScreen();
+            }
 	}
 
 	unsigned char * char_map = charMap(c);
@@ -134,4 +140,9 @@ void clearScreen(uint64_t bg_color){
 	}
 	sc->current_x = 0;
 	sc->current_y = 0;
+}
+
+void scrollScreen(){
+	printf("HOLAAAAAAA");
+	newLine();
 }
