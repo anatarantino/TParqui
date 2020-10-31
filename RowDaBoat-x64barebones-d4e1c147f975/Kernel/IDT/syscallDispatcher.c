@@ -2,12 +2,14 @@
 #include <keyboard_driver.h>
 #include <video_driver.h>
 #include <prints.h>
+#include <RTCtime.h>
 
 #define READ 0
 #define WRITE 1
 #define SCREEN 2
 #define CLEAR 3
 #define REGISTERS 4
+#define TIMERTC 5
 
 //modificar con lo de esceptions
 #define TOTALREGS 16 //hay 17 en el vector, chequear
@@ -44,6 +46,9 @@ uint64_t syscallDispatcher(t_registers * r){
             case REGISTERS:
                 return (uint64_t) returnReg();
                 break;
+            case TIMERTC:
+                printf("entre a timertc en syscallDispatcher\n");
+                return getTime((time_type)(r->rdi));
         }    
     }
     return 0;
