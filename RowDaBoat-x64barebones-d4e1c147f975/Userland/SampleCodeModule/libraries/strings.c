@@ -73,8 +73,19 @@ int scanf(const char* format,...){     //scanf("%d %d %f",&num1, &num2, &num3); 
     return count;
 }
 
+uint64_t hexastrToInt(char *str){
+    uint64_t res = 0;
+    char c;
 
-char * read(){
+    while ((c = *str++)) {
+        char v = ((c & 0xF) + (c >> 6)) | (((c >> 3) & 0x8));
+        res = (res << 4) | (uint64_t) v;
+    }
+    return res;
+
+}
+
+char* read(){
     int index = 0;
     char c;
     char buffer[SIZE];
@@ -129,3 +140,23 @@ void * memset(void * destination, int32_t c, uint64_t length)
 
 	return destination;
 }
+
+int strtok(char * str, const char delim, char * array[], int arraySize){
+	int index = 0;
+	if(*str != delim && *str != 0){
+		array[index++] = str;
+    }
+	while( *str != 0 ){
+		if(*str == delim){
+			*str = 0;
+			if( *(str+1) != delim &&  (*(str+1) != 0)){
+				if(index >= arraySize){
+					return index;
+                }
+				array[index++] = str + 1;
+			}
+		}
+		str++;
+	}
+	return index;
+} 

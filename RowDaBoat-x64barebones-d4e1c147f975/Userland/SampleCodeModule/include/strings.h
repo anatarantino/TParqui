@@ -15,5 +15,7 @@ char* strToInt(char* string, int* num);
 char getChar();
 int stringcmp(char * str1, char * str2);
 void * memset(void * destination, int32_t c, uint64_t length);
+int strtok(char * str, const char delim, char * array[], int arraySize);
+uint64_t hexastrToInt(char *str);
 
 #endif

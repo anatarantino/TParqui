@@ -10,6 +10,7 @@
 #define TOTAL_SIZE 2000
 #define TOTAL_COMMANDS 6
 #define TOTAL_REG 17
+#define TOTAL_ARGUMENTS 5
 
 enum comm_num{INFOREG=0,PRINTMEM,TIME,CHESS,HELP,CLEARSC};
 
@@ -28,10 +29,10 @@ static int index=0;
 static void printMessage();
 static void analizeChar(char c);
 static void findCommand();
-static void applyCommand(int command_num);
+static void applyCommand(int command_num,char*arguments[],int totArgs);
 static void removeChar();
 static void inforeg();
-static void printmem();
+static void printmem(int args, char *arguments[]);
 static void time();
 static void chess();
 static void help();
@@ -67,13 +68,15 @@ static void analizeChar(char c){
 }
 
 static void findCommand(){
+    char * arguments[TOTAL_ARGUMENTS];
+    int totArgs = strtok(buff,' ', arguments, 10);
     int result;
     int flag=FALSE;
     int comm = -1;
     for (int i = 0; i < TOTAL_COMMANDS; i++){
-        result=stringcmp(buff,commands[i]);
+        result=stringcmp(arguments[0],commands[i]);
         if(result==TRUE){
-            applyCommand(i);    
+            applyCommand(i,arguments+1,totArgs);    
             flag=TRUE;
             comm = i;
         }
@@ -89,14 +92,14 @@ static void findCommand(){
     
 }
 
-static void applyCommand(int command_num){
+static void applyCommand(int command_num,char *arguments[],int totArgs){
     switch (command_num)
     {
     case INFOREG:
         inforeg();
         break;
     case PRINTMEM:
-        printmem();
+        printmem(totArgs,arguments);
         break;
     case TIME:
         time();
@@ -132,7 +135,31 @@ static void inforeg(){
     putChar('\n');
 }
 
-static void printmem(){
+static void printmem(int args, char *arguments[]){
+   uint64_t num=hexastrToInt(arguments[0]);
+    char buffer[200];
+    if(args!=2){
+        putChar('\n');
+        printf("Invalid ammount of arguments");
+        putChar('\n');
+        return;
+    }
+    if(num==0){
+        putChar('\n');
+        printf("Invalid argument");
+        putChar('\n');
+        return;
+    }
+    putChar('\n');
+    uint8_t *rsp=(uint8_t *) num;
+      for (int i = 0; i < 4; i++){
+        for (int j = 0; j < 8; j++){
+            uintToBase(rsp[8*i + j], buffer, 16);
+            printf(buffer);
+            putChar(' ');
+        }
+        putChar('\n'); 
+    }
 
 }
 
