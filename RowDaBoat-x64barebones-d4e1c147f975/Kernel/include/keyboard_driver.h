@@ -5,6 +5,6 @@
 
 void keyboard_handler();
 char getChar();
-
+uint64_t * returnReg();
 
 #endif

@@ -119,8 +119,7 @@ static void removeChar(){
 }
 
 static void inforeg(){
-    putChar('\n');
-    printRegisters();
+    
 
 }
 
@@ -129,7 +128,7 @@ static void printmem(){
 }
 
 static void time(){
-    
+
 
 }
 

@@ -30,6 +30,7 @@ static char shift = 0;
 static char caps = 0;
 char keyToAdd;
 static char is_pressed;
+static char control = 0;
 
 void keyboard_handler(uint64_t * rsp){ // 0 0 0 0 80
     if(pressed_key()){
@@ -49,32 +50,40 @@ void keyboard_handler(uint64_t * rsp){ // 0 0 0 0 80
                     }else{
                         caps = 1;
                     }
-                break;
-                case 
+                    break;
+                case 0x1D:
+                    control = 1;
+                    break;
             
                 default:
                     if(pressedKeys[key][0]!=0){
-                        if(shift == 1){
-                            if(caps == 1){
-                                keyToAdd = pressedKeys[key][0];
-                            }else{
-                                keyToAdd = pressedKeys[key][1];
-                            }
+                        if(control == 1 && pressedKeys[key][0] == 'r'){
+                            updateRegisters(rsp);
                         }else{
-                            if(caps == 1){
-                                keyToAdd = pressedKeys[key][1];
+                            if(shift == 1){
+                                if(caps == 1){
+                                    keyToAdd = pressedKeys[key][0];
+                                }else{
+                                    keyToAdd = pressedKeys[key][1];
+                                }
                             }else{
-                                keyToAdd = pressedKeys[key][0];
+                                if(caps == 1){
+                                    keyToAdd = pressedKeys[key][1];
+                                }else{
+                                    keyToAdd = pressedKeys[key][0];
+                                }
                             }
+                            buffer[index++] = keyToAdd;
                         }
-                        buffer[index++] = keyToAdd;
                     }
-                    break;
+                break;
             }
         }else if(is_pressed == RELEASED){
             //shift released
             if(key == 0xAA || key == 0xB6){
                 shift = 0;
+            }else if(key == 0x9D){
+                control = 0;
             }
     
         }   
@@ -102,3 +111,12 @@ static unsigned char pressed(unsigned char key ){
     return ERROR; //scan codes not used
 }
 
+static void updateRegisters(uint64_t * rsp){
+    for(int i=0 ; i<TOTALREGS ; i++){
+        registers[i]=rsp[i];
+    }
+}
+
+uint64_t * returnReg(){
+    return registers;
+}

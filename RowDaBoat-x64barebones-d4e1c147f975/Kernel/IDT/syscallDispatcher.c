@@ -43,24 +43,10 @@ uint64_t syscallDispatcher(t_registers * r){
                 clearScreen(BLACK);
                 break;
             case REGISTERS:
-                printRegisters(r);
+                return (uint64_t) returnReg();
                 break;
         }    
     }
     return 0;
 }
 
-static char* dataRegisters[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9: ", 
-						"R8: ", "RSI: ", "RDI: ", "RBP: ", "RDX: ", "RCX: ", "RBX: ",
-                        "RAX: ", "RIP: ", "RSP: "};
-
-static void printRegisters(uint64_t * registers){ //despues modularizar porque se usa en exceptions
-	for(int i=0 ; i < TOTALREGS ; i++){
-		printColor(dataRegisters[i],VIOLET,BLACK);
-		printHexColor(registers[i],VIOLET,BLACK); 
-		printNewLine();
-	}
-	//fran imprime el rsp aparte
-	printColor(dataRegisters[TOTALREGS],VIOLET,BLACK);
-	printHexColor(registers[15 + 3],VIOLET,BLACK);
-}
