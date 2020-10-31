@@ -8,4 +8,6 @@ void * memcpy(void * destination, const void * source, uint64_t length);
 
 char *cpu_vendor(char *result);
 
+uint8_t getRTC(uint8_t local_time_info);
+
 #endif

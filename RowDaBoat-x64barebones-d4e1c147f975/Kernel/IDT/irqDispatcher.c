@@ -4,7 +4,7 @@
 #include <keyboard_driver.h>
 #include <prints.h>
 
-void irqDispatcher(uint64_t irq, uint64_t * rsp) {
+void irqDispatcher(uint64_t irq, uint64_t rsp) {
 	switch (irq) {
 		case 0:
 			int_20();
@@ -20,7 +20,7 @@ void int_20() {
 	timer_handler();
 }
 
-void int_21(uint64_t * rsp) {
+void int_21(uint64_t rsp) {
 	keyboard_handler(rsp);
 }
 

@@ -1,7 +1,8 @@
 GLOBAL cpu_vendor
+GLOBAL getRTC
 
 section .text
-	
+
 cpu_vendor:
 	push rbp
 	mov rbp, rsp
@@ -25,6 +26,19 @@ cpu_vendor:
 	mov rsp, rbp
 	pop rbp
 	ret
+
+getRTC:
+	push rbp
+    mov rbp, rsp
+
+    mov rax, rdi
+ 
+    out 70h, al
+    in al, 71h
+ 
+    mov rsp, rbp
+    pop rbp
+    ret
 
 %macro push_registers 0
 	push rax

@@ -12,14 +12,14 @@
 #define ERROR -1
 #define TOTALKEYS 60
 #define MAX 2000
-#define TOTALREGS 7
+#define TOTALREGS 15
 static unsigned char pressed(unsigned char key );
 static void updateRegisters(uint64_t * rsp);
 
 static char pressedKeys[TOTALKEYS][2] =
     {{0, 0}, {0, 0}, {'1', '!'}, {'2', '@'}, {'3', '#'}, {'4', '$'}, {'5', '%'}, {'6', '^'}, {'7', '&'}, {'8', '*'}, {'9', '('}, {'0', ')'}, {'-', '_'}, {'=', '+'}, {'\b', '\b'}, {'\t', '\t'}, {'q', 'Q'}, {'w', 'W'}, {'e', 'E'}, {'r', 'R'}, {'t', 'T'}, {'y', 'Y'}, {'u', 'U'}, {'i', 'I'}, {'o', 'O'}, {'p', 'P'}, {'[', '{'}, {']', '}'}, {'\n', '\n'}, {0, 0}, {'a', 'A'}, {'s', 'S'}, {'d', 'D'}, {'f', 'F'}, {'g', 'G'}, {'h', 'H'}, {'j', 'J'}, {'k', 'K'}, {'l', 'L'}, {';', ':'}, {'\'', '\"'}, {'`', '~'}, {0, 0}, {'\\', '|'}, {'z', 'Z'}, {'x', 'X'}, {'c', 'C'}, {'v', 'V'}, {'b', 'B'}, {'n', 'N'}, {'m', 'M'}, {',', '<'}, {'.', '>'}, {'/', '?'}, {0, 0}, {0, 0}, {0, 0}, {' ', ' '}, {0, 0}};
 
-static uint64_t registers[TOTALREGS] = {0};
+static uint64_t registers[TOTALREGS+2] = {0};
 
 static char buffer[MAX]={0};
 static int index=0;
@@ -33,7 +33,7 @@ char keyToAdd;
 static char is_pressed;
 static char control = 0;
 
-void keyboard_handler(uint64_t * rsp){ // 0 0 0 0 80
+void keyboard_handler(uint64_t rsp){ // 0 0 0 0 80
     if(pressed_key()){
         key = get_key();
         is_pressed = pressed(key);
@@ -59,7 +59,8 @@ void keyboard_handler(uint64_t * rsp){ // 0 0 0 0 80
                 default:
                     if(pressedKeys[key][0]!=0){
                         if(control == 1 && pressedKeys[key][0] == 'r'){
-                            updateRegisters(rsp);
+                            updateRegisters((uint64_t *)rsp);
+                            control=0;
                         }else{
                             if(shift == 1){
                                 if(caps == 1){
@@ -113,11 +114,15 @@ static unsigned char pressed(unsigned char key ){
 }
 
 static void updateRegisters(uint64_t * rsp){
-    for(int i=0 ; i<TOTALREGS ; i++){
+    int i;
+    for(i=0 ; i<TOTALREGS ; i++){
         registers[i]=rsp[i];
     }
+    registers[i] = rsp[i];
+    registers[i+1] = rsp[i+3];
 }
 
 uint64_t * returnReg(){
     return registers;
 }
+

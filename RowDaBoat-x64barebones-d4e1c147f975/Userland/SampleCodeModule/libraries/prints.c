@@ -38,7 +38,7 @@ void clearScreen(){
 }
 
 uint64_t* getRegisters(){
-	return syscalls(REGISTERS,0,0,0,0,0,0);
+	return (uint64_t *)syscalls(REGISTERS,0,0,0,0,0,0);
 }
 
 uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
