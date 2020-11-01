@@ -223,5 +223,6 @@ static void printMessage(){
 
 static void chess(){
     clearScreen();
-    drawBoard(0xB17C54,0xEED09D);
+    //drawBoard(0xB17C54,0xEED09D);
+    drawPiece();
 }

@@ -5,6 +5,8 @@
 
 void drawPixel(int x, int y, int color);
 
+void drawPiece();
+
 void drawBoard(uint64_t color1, uint64_t color2);
 
 #endif

@@ -1,6 +1,7 @@
 #include <graphics.h>
 #include <prints.h>
 #include <syscall.h>
+#include <chess_piece.h>
 
 #define SCREENWIDTH 1024
 #define SCREENHEIGHT 768
@@ -56,37 +57,20 @@ void drawBoard(uint64_t color1, uint64_t color2){
     }
 }
 
-/*
-void drawBoard(uint64_t color1, uint64_t color2){
-    uint64_t aux_color1=color1,aux_color2=color2;
-    for(int y=STARTY ; y<ENDY ; y++){
-        if(y%87 == 0){
-            if(aux_color1==color1){
-                aux_color1=color2;
-                aux_color2=color1;
-            }else{
-                aux_color1=color1;
-                aux_color2=color2;
-            }
-        }
-        for(int x=STARTX ; x<ENDX ; x++){
-            if(x%87 == 0){
-                if(aux_color1==color1){
-                        aux_color1=color2;
-                        aux_color2=color1;
-                    }else{
-                        aux_color1=color1;
-                        aux_color2=color2;
-                    }
-            }
+void drawPiece(){
 
-            if(y>=0 && y<87){
-                drawPixel(x,y,aux_color2);
-            }else{
-                drawPixel(x,y,aux_color1);
-            }
-        }
+    unsigned long * char_map = charMap('0');
+    for(int i=0 ; i<CHAR_WIDTH * 2 ; i++ ){
+        for(int j=0 ; j<CHAR_HEIGHT * 2 ; j++){
+            int8_t isMarked = (char_map[i] >> (CHAR_WIDTH - j - 1)) & 0x01;
+            if(isMarked){
+				drawPixel(i,j,0xFF0000);
 
+                
+			}else{
+				drawPixel(i,j,0x000000); 	
+			}
+
+        }
     }
 }
-*/
