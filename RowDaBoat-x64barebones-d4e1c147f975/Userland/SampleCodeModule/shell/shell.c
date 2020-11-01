@@ -180,6 +180,14 @@ static void time(int args, char *arguments[]){
         return;
     }
     putChar('\n');
+    printTime(DAYOFWEEK);
+    putChar('\n');
+    printTime(DAY);
+    putChar('/');
+    printTime(MONTH);
+    putChar('/');
+    printTime(YEAR);
+    putChar('\n');
     printTime(HOURS);
     putChar(':');
     printTime(MINUTES);
@@ -192,6 +200,43 @@ static void printTime(time_type desc){
     char buff[3];
     int aux;
     switch(desc){
+        case YEAR:
+            uintToBase(getTime(YEAR),buff,10);
+            printf(buff);
+            break;
+        case MONTH:
+            uintToBase(getTime(MONTH),buff,10);
+            printf(buff);
+            break;
+        case DAY:
+            uintToBase(getTime(DAY),buff,10);
+            printf(buff);
+            break;
+        case DAYOFWEEK:
+            switch(getTime(DAYOFWEEK)){
+                case 1: 
+                    printf("Sunday");
+                    break;
+                case 2:
+                    printf("Monday");
+                    break;
+                case 3: 
+                    printf("Tuesday");
+                    break;
+                case 4:
+                    printf("Wednesday");
+                    break;
+                case 5:
+                    printf("Thursday");
+                    break;
+                case 6:
+                    printf("Friday");
+                    break;
+                case 7:
+                    printf("Saturday");
+                    break;
+            }
+            break;
         case HOURS:
             aux = getTime(HOURS);
             if(aux < 3)
@@ -199,17 +244,19 @@ static void printTime(time_type desc){
             else
                 aux -= 3;
             uintToBase(aux,buff,10);
+            printf(buff);
             break;
         case MINUTES:
             uintToBase(getTime(MINUTES),buff,10);
+            printf(buff);
             break;
         case SECONDS:
             uintToBase(getTime(SECONDS),buff,10);
+            printf(buff);
             break;
         default:
             return;
     }
-    printf(buff);
 }
 
 

@@ -3,6 +3,7 @@
 #include <font.h>
 #include <lib.h>
 #include <prints.h>
+#include <lib.h>
 
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -51,7 +52,6 @@ typedef struct{
 	int default_f_color;
 	uint32_t offset;
 	uint32_t height;
-	//uint32_t lastX;
 }screen_t;
 
 screen_t *sc;
@@ -63,7 +63,6 @@ void initializeVideo(int f_color,int bg_color){
 	sc->default_f_color = f_color;
 	sc->offset = CHAR_WIDTH;
 	sc->height= SCREEN_HEIGHT;
-	//sc->lastX = screenData->width - sc->offset;
 }
 
 
@@ -79,11 +78,12 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
 	if( sc->current_x + sc->offset == screenData->width){
 		sc->current_x = 0;
 		sc->current_y += CHAR_HEIGHT;
-		/*if (sc->height - sc->current_y < CHAR_HEIGHT) {
+		if (screenData->height - sc->current_y < CHAR_HEIGHT) {
                   sc->current_y -= CHAR_HEIGHT;
+				  printf("BASTA");
                   scrollScreen();
-            }
-			*/
+        }
+			
 	}
 
 	unsigned char * char_map = charMap(c);
@@ -112,11 +112,8 @@ void deleteChar(uint64_t f_color, uint64_t bg_color){  //falta corregir que si h
 		return;
 	}
 	if(sc->current_x == 0){
-		// if(sc->lastX != screenData->width - sc->offset){
-		// 	sc->current_x = sc->lastX;
-		// }else{
 		sc->current_x = screenData->width - sc->offset;	
-		// }
+		
 		sc->current_y -= CHAR_HEIGHT;
 	}
 	sc->current_x -= CHAR_WIDTH;
@@ -125,12 +122,10 @@ void deleteChar(uint64_t f_color, uint64_t bg_color){  //falta corregir que si h
 }
 
 void newLine(){
-//	sc->lastX = sc->current_x;
 	sc->current_y += CHAR_HEIGHT;
 	sc->current_x = 0;
 }
 
-//borrar solo lo que se escribio hasta el momento (el resto va a estar con el background color ya)
 void clearScreen(uint64_t bg_color){
 	sc->current_x = 0;
 	sc->current_y = 0;
@@ -144,5 +139,10 @@ void clearScreen(uint64_t bg_color){
 }
 
 void scrollScreen(){
-	printf("HOLAAAAAAA");
+	for(int i = 0; i < CHAR_HEIGHT; i++) {
+      for (int j = 0; j < SCREEN_HEIGHT; j++) {
+		  
+        }
+    }
 }
+

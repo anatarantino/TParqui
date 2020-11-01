@@ -1,0 +1,533 @@
+// Compile : 	gcc chess.c -o chess -Wall -pedantic -std=c99		Execute :	./chess
+/*
+#include <stdio.h>
+
+#define DIM 8
+
+int board[DIM][DIM+1] = { {2,3,4,6,5,4,3,2},
+					{1,1,1,1,1,1,1,1},
+					{0,0,0,0,0,0,0,0},
+					{0,0,0,0,0,0,0,0},
+					{0,0,0,0,0,0,0,0},
+					{0,0,0,0,0,0,0,0},
+					{-1,-1,-1,-1,-1,-1,-1,-1},
+					{-2,-3,-4,-6,-5,-4,-3,-2}};		// Positivos son blancos
+
+
+// Piezas con sus posiciones iniciales y finales
+int rook(int x0, int y0, int xf, int yf);		// 2 o -2
+int horse(int x0, int y0, int xf, int yf);		// 3 o -3
+int bishop(int x0, int y0, int xf, int yf);		// 4 o -4
+int queen(int x0, int y0, int xf, int yf);		// 5 o -5
+int king(int x0, int y0, int xf, int yf);		// 6 o -6
+int pawn(int x0, int y0, int xf, int yf);		// 1 o -1
+
+int gameover();
+void printBoard();
+void noPiece();
+void initBoard();
+void changePiece(int x, int y);
+int checkFinalPos(int xf,int yf);
+void check();
+
+int whoseTurn = 0;		// 0 es el turno de las blancas, 1 es el turno de las negras
+int error;
+int init = 0;
+
+
+// Movimientos para validar el enroque
+int kingMoves[] = {0,0};
+int leftRooks[] = {0,0};
+int rightRooks[] = {0,0};
+
+int main(){
+	int x0, y0, xf, yf;
+	initBoard();        // dibuja el board
+	while(1){
+		if(gameover() == 0){
+			break;
+		}
+		error = 0;
+		printf("\n");
+		printf("Turn %d\n", whoseTurn);     // aca puede marcar si juegan las blancas o las negras
+		printf("\n");
+		printBoard();       // dibuja las piezas donde van
+		printf("\n");
+		//Poisicion Inicial
+		if(init == 1){
+			getchar();
+		}
+		int letra = getchar();
+		int nro = getchar();
+
+		if(((letra >='A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
+			if(letra >='A' && letra <= 'H'){
+				y0 = letra - 'A';
+			}
+			else{
+				y0 = letra - 'a';
+			}
+			x0 = nro - '1';
+			if(board[x0][y0] == 0){		// no selecciono ninguna pieza
+				noPiece();
+				x0 = -1;
+				y0 = -1;
+			}
+			else{
+				if(whoseTurn == 0){
+					if(board[x0][y0] <0){	// selecciono una pieza negra
+						noPiece();
+						x0 = -1;
+						y0 = -1;
+					}
+				}
+				else{
+					if(board[x0][y0] > 0){	// selecciono una pieza blanca
+						noPiece();
+						x0 = -1;
+						y0 = -1;
+					}
+				
+				}
+			}
+		}
+		else{
+			error = 1;
+		}
+		if(x0 != -1 && y0 != -1){		//selecciono una pieza valida
+			getchar();
+			int letraF = getchar();
+			int nroF = getchar();
+
+			if(((letraF >='A' && letraF <= 'H') || (letraF >= 'a' && letraF <= 'h')) && (nroF >= '1' && nroF <= '8')){
+				if(letraF >='A' && letraF <= 'H'){
+					yf = letraF - 'A';
+				}
+				else{
+					yf = letraF - 'a';
+				}
+				xf = nroF-'1';
+			}
+			else{
+				error = 1;
+			}
+			int move = 0;
+			switch(board[x0][y0]){
+				case 1:
+				case -1:
+					move = pawn(x0,y0,xf,yf);
+					break;
+				case 2:
+				case -2:
+					move = rook(x0,y0,xf,yf);
+					break;
+				case 3:
+				case -3:
+					move = horse(x0,y0,xf,yf);
+					break;
+				case 4:
+				case -4:
+					move = bishop(x0,y0,xf,yf);
+					break;
+				case 5:
+				case -5:
+					move = queen(x0,y0,xf,yf);
+					break;
+				case 6:
+				case -6:
+					move = king(x0,y0,xf,yf);
+					break;
+			}
+			printf("move: %d\n", move);         // si move ==0 que indique que lo que ingreso es incorrecto que pruebe escribir de nuevo
+			if(move > 0){
+				board[xf][yf] = board[x0][y0];
+				board[x0][y0] = 0;
+				if(move == 2){
+					changePiece(xf,yf);
+				}
+				check();
+			}
+			else{
+				error = 1;
+			}
+		}
+		
+		if(error == 0){
+			whoseTurn = (whoseTurn == 0)? 1:0;
+		}
+		init =1;
+	}
+	
+}
+
+void noPiece(){	
+	printf("No hay una pieza en esa ubicacion, ingrese una nueva ubicacion\n");
+	error = 1;
+}
+
+void changePiece(int x, int y){
+	int wrongChar = 1;
+	int c = getchar();
+	while(wrongChar){
+		printf("Que pieza elige? q,b,h,r\n"); // q: queen, b: bishop, h: horse, r: rook
+		c = getchar();
+		switch(c){
+			case 'q':
+				board[x][y]= (whoseTurn==0)? 5:-5;
+				wrongChar = 0;
+				break;
+			case 'b':
+				board[x][y]= (whoseTurn==0)? 4:-4;
+				wrongChar = 0;
+				break;
+			case 'h':
+				board[x][y]= (whoseTurn==0)? 3:-3;
+				wrongChar = 0;
+				break;
+			case 'r':
+				board[x][y]= (whoseTurn==0)? 2:-2;
+				wrongChar = 0;
+				break;
+			default:
+				printf("Pieza invalida\n");
+		}
+	}
+	
+}
+
+int checkFinalPos(int xf, int yf){
+	if(board[xf][yf] == 0 || (whoseTurn == 0 && board[xf][yf] < 0) || (whoseTurn == 1 && board[xf][yf] > 0)){
+		return 1;
+	}
+	return 0;
+}
+
+
+// Movimientos	-> move = 1 si es un movimiento valido
+
+// ROOK
+int rook(int x0, int y0, int xf, int yf){
+	int move=0;
+	int i;
+
+	if(y0==0){
+		leftRooks[whoseTurn]=1;
+	}else if(y0==7){
+		rightRooks[whoseTurn]=1;
+	}
+	
+	if(x0 == xf){
+		move = checkFinalPos(xf,yf);
+		if(y0<yf){						//empieza a chequear que no se choca con otras piezas
+			for(i=y0+1; i<yf;i++){
+				if(board[x0][i] != 0){
+					move = 0;
+				}
+			}
+		}
+		else{
+			for(i=y0-1; i>yf;i--){
+				if(board[x0][i] != 0){
+					move = 0;
+				}
+			}
+		}
+	}
+	else if(y0 == yf){
+		move = checkFinalPos(xf,yf);
+		if(x0<xf){						//empieza a chequear que no se choca con otras piezas
+			for(i=x0+1; i<xf;i++){
+				if(board[i][y0] != 0){
+					move = 0;
+				}
+			}
+		}
+		else{
+			for(i=x0-1; i>xf;i--){
+				if(board[i][y0] != 0){
+					move = 0;
+				}
+			}
+		}
+	}
+	return move;
+}
+	
+// HORSE
+int horse(int x0, int y0, int xf, int yf){
+	int move=0;
+	if((xf==x0+2 && (yf==y0+1 || yf == y0-1)) 	||	(xf==x0-2 && (yf==y0+1 || yf == y0-1)) 
+		||	(yf==y0+2 && (xf==x0+1 || xf == x0-1))	||	(yf==y0+2 && (xf==x0+1 || xf == x0-1))){
+		move = checkFinalPos(xf,yf);
+	}
+	return move;
+}
+
+// BISHOP
+int bishop(int x0, int y0, int xf, int yf){
+	int move=0;
+	int constant = xf - x0;
+	int i;
+	if(yf==y0+constant || yf==y0-constant){	
+		move = checkFinalPos(xf,yf);
+		if(x0<xf && y0<yf){						//empieza a chequear que no se choca con otras piezas
+			for(i=1; (x0+i)<xf;i++){
+				if(board[x0+i][y0+i] != 0){
+					move =0;
+				}
+			}
+		}
+		else if(x0<xf && y0>yf){
+			for(i=1; (x0+i)<xf;i++){
+				if(board[x0+i][y0-i] != 0){
+					move =0;
+				}
+			}
+		}
+		else if(x0>xf && y0>yf){
+			for(i=1; (x0-i)>xf;i++){
+				if(board[x0-i][y0-i] != 0){
+					move =0;
+				}
+			}
+		}
+		else{
+			for(i=1; (x0-i)<xf;i++){
+				if(board[x0-i][y0+i] != 0){
+					move =0;
+				}
+			}
+		}
+
+	}
+
+	return move;
+}
+
+// QUEEN
+int queen(int x0, int y0, int xf, int yf){
+	int move =0;
+	move = rook(x0,y0,xf,yf);			// si la reina se mueve en linea recta
+	move += bishop(x0,y0,xf,yf);			// si la reina se mueve en diagonal
+	return move;
+}
+
+// KING
+int king(int x0, int y0, int xf, int yf){
+	int move=0;
+	if((xf==x0 &&(yf==y0+1 || yf==y0-1)) || (yf==y0 && (xf==x0+1 || xf == x0-1))){ //rook moves
+		move = checkFinalPos(xf,yf);
+	}
+	else if((xf==x0+1 && yf==y0+1) || (xf==x0+1 && yf==y0-1) || (xf==x0-1 && yf==y0+1) || (xf==x0-1 && yf==y0-1)){	// bishop moves
+		move = checkFinalPos(xf,yf);
+	}
+
+	//	enroque
+	if(xf==x0 && kingMoves[whoseTurn]==0){
+		if(yf==y0-2 && leftRooks[whoseTurn] == 0){					//HAY QUE VER QUE NO HAYA NADA "ATACANDO" EL MEDIO O LAS FIGURAS
+			if(rook(x0,0,x0,y0-1) == 1 && board[x0][y0-1] == 0){	//no hay nada en el medio
+				move = checkFinalPos(xf,yf);
+				if(move == 1){
+					board[x0][y0-1] = board[x0][0];
+					board[x0][0] = 0;
+				}
+			}
+			
+		}
+		else if(yf==y0+2 && rightRooks[whoseTurn] == 0){
+			if(rook(x0,7,x0,y0+1) == 1 && board[x0][y0+1] == 0){	//no hay nada en el medio
+				move = checkFinalPos(xf,yf);
+				if(move == 1){
+					board[x0][y0+1] = board[x0][7];
+				board[x0][7] = 0;
+				}				
+			}
+		}
+	}
+
+	if(move == 1){
+		kingMoves[whoseTurn] = 1;
+	}
+	return move;
+}
+
+// PAWN
+int pawn(int x0, int y0, int xf, int yf){
+	int move=0;
+	if(whoseTurn==0){		// blancas
+		if(x0 == 1  && yf==y0 && xf == x0+2){
+			if(board[x0+1][y0] == 0){
+				move = checkFinalPos(xf,yf);
+			}		
+		}
+		if(yf==y0 && xf == x0+1){
+			move = checkFinalPos(xf,yf);
+		}
+		if((yf==y0+1 || yf==y0-1) && xf == x0+1){
+			if(board[xf][yf]<0){
+				move = 1;
+			}
+			else if(x0==4 && board[x0][yf]<0){	// peon al paso
+				board[x0][yf] = 0;
+				move =1;
+			}
+		}
+
+		// para el cambio de pieza
+		if(move == 1 && xf==7){
+			move = 2;
+		}
+	}
+	else{		// negras
+		if(x0 == 6  && yf==y0 && xf == x0-2){
+			if(board[x0-1][y0] == 0){
+				move = checkFinalPos(xf,yf);
+			}
+		}
+		if(yf==y0 && xf == x0-1){
+			move = checkFinalPos(xf,yf);
+		}
+		if((yf==y0+1 || yf==y0-1) && xf == x0-1){
+			if(board[xf][yf]>0){
+				move = 1;
+			}
+			else if(x0==3 && board[x0][yf]>0){	// peon al paso
+				board[x0][yf] = 0;
+				move = 1;
+			}
+		}
+
+		// para el cambio de pieza
+		if(move == 1 && xf==0){
+			move = 2;
+		}
+	}
+
+	return move;
+}
+
+void initBoard(){				// Arranca la parte grafica, los cuadros, las letras a los costados y los nros abajo
+
+	// printf("A");	// cambia y, x se mantiene
+	// printf("1");	// cambia x, y se mantiene
+
+	//Esto se maneja con coordenadas de pixeles
+
+}
+
+void printBoard(){						// TO ERASE  (lo uso yo para imprimir y ver que funciona)
+	printf("A\tB\tC\tD\tE\tF\tG\tH\n");
+	for(int i=0; i<DIM; i++){
+		for(int j=0; j<DIM; j++){
+			printf("%d\t", board[i][j]);// switch case si es ==2 => que imprima torre blanca y asi
+
+		}
+	}
+}
+
+int gameover(){
+	int player1 = 0;
+	int player2 = 0;
+	for(int i=0; i<DIM; i++){
+		for(int j=0; j<DIM; j++){
+			if(board[i][j] == 6){
+				player2 =1;
+			}
+			else if(board[i][j] == -6){
+				player1 =1;
+			}
+		}
+	}
+
+	if(player2 == 0){
+		printf("Player 2 wins\n");
+		return 0;
+	}
+
+	if(player1 == 0){
+		printf("Player 1 wins\n");
+		return 0;
+	}
+
+	return 1;
+
+}
+
+void check(){
+	int x,y;	// coordenadas del rey
+	int i,j;	// contadores
+	int check=0;
+	if(whoseTurn==0){
+		for(i=0; i<DIM; i++){
+			for(j=0;j<DIM; j++){
+				if(board[i][j]==-6){
+					x=i;
+					y=j;
+					break;
+				}
+			}
+		}
+		for(i=0; i<DIM; i++){
+			for(j=0; j<DIM; j++){
+				switch(board[i][j]){
+					case 1:
+						check=pawn(i,j,x,y);
+						break;
+					case 2:
+						check=rook(i,j,x,y);
+						break;
+					case 3:
+						check=horse(i,j,x,y);
+						break;
+					case 4:
+						check=bishop(i,j,x,y);
+						break;
+					case 5:
+						check=queen(i,j,x,y);
+						break;
+				}
+				
+			}
+		}
+	}
+	else{
+		for(i=0; i<DIM; i++){
+			for(j=0;j<DIM; j++){
+				if(board[i][j]==6){
+					x=i;
+					y=j;
+					break;
+				}
+			}
+		}
+		for(i=0; i<DIM; i++){
+			for(j=0; j<DIM; j++){
+				switch(board[i][j]){
+					case -1:
+						check=pawn(i,j,x,y);
+						break;
+					case -2:
+						check=rook(i,j,x,y);
+						break;
+					case -3:
+						check=horse(i,j,x,y);
+						break;
+					case -4:
+						check=bishop(i,j,x,y);
+						break;
+					case -5:
+						check=queen(i,j,x,y);
+						break;
+				}
+			}
+		}
+		
+	}
+	if(check==1){
+		printf("CHECK\n");
+	}
+}
+
+*/
+
+
