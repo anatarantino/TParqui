@@ -49,7 +49,7 @@ int main(){
 		}
 		error = 0;
 		printf("\n");
-		printf("Turn %d\n", whoseTurn);
+		printf("Turn %d\n", whoseTurn);     // aca puede marcar si juegan las blancas o las negras
 		printf("\n");
 		printBoard();
 		printf("\n");
@@ -59,20 +59,15 @@ int main(){
 		}
 		int letra = getchar();
 		int nro = getchar();
-		printf("letra %d\n", letra);
-		printf("nro %d\n", nro);
+
 		if(((letra >='A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
 			if(letra >='A' && letra <= 'H'){
 				y0 = letra - 'A';
-				printf("y0 : %d\n", y0);
 			}
 			else{
 				y0 = letra - 'a';
-				printf("y0 : %d\n", y0);
 			}
 			x0 = nro - '1';
-			printf("x0 : %d\n", x0);
-			printf("board[x0][y0]: %d\n", board[x0][y0]);
 			if(board[x0][y0] == 0){		// no selecciono ninguna pieza
 				noPiece();
 				x0 = -1;
@@ -103,20 +98,15 @@ int main(){
 			getchar();
 			int letraF = getchar();
 			int nroF = getchar();
-			printf("letraF %d\n", letraF);
-			printf("nroF %d\n", nroF);
+
 			if(((letraF >='A' && letraF <= 'H') || (letraF >= 'a' && letraF <= 'h')) && (nroF >= '1' && nroF <= '8')){
 				if(letraF >='A' && letraF <= 'H'){
 					yf = letraF - 'A';
-					printf("yf : %d\n", yf);
 				}
 				else{
 					yf = letraF - 'a';
-					printf("yf : %d\n", yf);
 				}
 				xf = nroF-'1';
-				printf("xf : %d\n", xf);
-				printf("board[xf][yf]: %d\n", board[xf][yf]);
 			}
 			else{
 				error = 1;
@@ -148,7 +138,7 @@ int main(){
 					move = king(x0,y0,xf,yf);
 					break;
 			}
-			printf("move: %d\n", move);
+			printf("move: %d\n", move);         // si move ==0 que indique que lo que ingreso es incorrecto que pruebe escribir de nuevo
 			if(move > 0){
 				board[xf][yf] = board[x0][y0];
 				board[x0][y0] = 0;
