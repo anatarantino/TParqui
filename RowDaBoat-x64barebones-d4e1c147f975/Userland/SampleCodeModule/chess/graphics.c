@@ -74,7 +74,7 @@ void drawPiece(){
                 drawPixel(x,y,0xFFFFFF);
                 x++;
                 break;
-            case 'X': 
+            default: 
                 drawPixel(x,y,0xFF0000);
                 x++;
                 break;

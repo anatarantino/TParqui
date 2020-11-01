@@ -253,6 +253,7 @@ static void chess(int args, char *arguments[]){
         return;
     }
     clearScreen();
-    //drawBoard(0xB17C54,0xEED09D);
+    drawBoard(0xB17C54,0xEED09D);
+    printf("\n\n\n\n\n\n\n\n\n");
     drawPiece();
 }
