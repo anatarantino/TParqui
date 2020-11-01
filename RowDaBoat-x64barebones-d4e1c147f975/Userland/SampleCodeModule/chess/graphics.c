@@ -58,19 +58,30 @@ void drawBoard(uint64_t color1, uint64_t color2){
 }
 
 void drawPiece(){
+    putChar('\n');
+    unsigned char * char_map = chess_bitMap(0);
+    int8_t isMarked;
+    int x=0;
+    int y=0;
+    for(int i=0 ; i<CHAR_WIDTH * CHAR_HEIGHT  ; i++ ){
+            switch (char_map[i])
+            {
+            case ',':
+                y++;
+                x=0;
+                break;
+            case '_': //fondo
+                drawPixel(x,y,0xFFFFFF);
+                x++;
+                break;
 
-    unsigned long * char_map = charMap('0');
-    for(int i=0 ; i<CHAR_WIDTH * 2 ; i++ ){
-        for(int j=0 ; j<CHAR_HEIGHT * 2 ; j++){
-            int8_t isMarked = (char_map[i] >> (CHAR_WIDTH - j - 1)) & 0x01;
-            if(isMarked){
-				drawPixel(i,j,0xFF0000);
+            case 'x': 
+                drawPixel(x,y,0xFF0000);
+                x++;
+                break;
+            }
+            
+        
 
-                
-			}else{
-				drawPixel(i,j,0x000000); 	
-			}
-
-        }
     }
 }
