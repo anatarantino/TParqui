@@ -4,14 +4,14 @@
 
 #define DIM 8
 
-int board[DIM][DIM+1] = { {2,3,4,6,5,4,3,2,1},
-					{1,1,1,1,1,1,1,1, 2},
-					{0,0,0,0,0,0,0,0, 3},
-					{0,0,0,0,0,0,0,0, 4},
-					{0,0,0,0,0,0,0,0, 5},
-					{0,0,0,0,0,0,0,0, 6},
-					{-1,-1,-1,-1,-1,-1,-1,-1, 7},
-					{-2,-3,-4,-6,-5,-4,-3,-2, 8}};		// Positivos son blancos
+int board[DIM][DIM+1] = { {2,3,4,6,5,4,3,2},
+					{1,1,1,1,1,1,1,1},
+					{0,0,0,0,0,0,0,0},
+					{0,0,0,0,0,0,0,0},
+					{0,0,0,0,0,0,0,0},
+					{0,0,0,0,0,0,0,0},
+					{-1,-1,-1,-1,-1,-1,-1,-1},
+					{-2,-3,-4,-6,-5,-4,-3,-2}};		// Positivos son blancos
 
 
 // Piezas con sus posiciones iniciales y finales
@@ -42,7 +42,7 @@ int rightRooks[] = {0,0};
 
 int main(){
 	int x0, y0, xf, yf;
-	initBoard();
+	initBoard();        // dibuja el board
 	while(1){
 		if(gameover() == 0){
 			break;
@@ -51,7 +51,7 @@ int main(){
 		printf("\n");
 		printf("Turn %d\n", whoseTurn);     // aca puede marcar si juegan las blancas o las negras
 		printf("\n");
-		printBoard();
+		printBoard();       // dibuja las piezas donde van
 		printf("\n");
 		//Poisicion Inicial
 		if(init == 1){
@@ -418,15 +418,10 @@ void initBoard(){				// Arranca la parte grafica, los cuadros, las letras a los 
 void printBoard(){						// TO ERASE  (lo uso yo para imprimir y ver que funciona)
 	printf("A\tB\tC\tD\tE\tF\tG\tH\n");
 	for(int i=0; i<DIM; i++){
-		for(int j=0; j<DIM+1; j++){
-			// if(j==DIM){
-			// 	printf("\t%d", board[i][j]);
-			// }
-			// else{
-				printf("%d\t", board[i][j]);
-			//}
+		for(int j=0; j<DIM; j++){
+			printf("%d\t", board[i][j]);// switch case si es ==2 => que imprima torre blanca y asi
+
 		}
-		printf("\n");
 	}
 }
 
