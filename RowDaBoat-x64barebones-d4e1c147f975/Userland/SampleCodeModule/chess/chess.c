@@ -1,5 +1,5 @@
 // Compile : 	gcc chess.c -o chess -Wall -pedantic -std=c99		Execute :	./chess
-
+/*
 #include <stdio.h>
 
 #define DIM 8
@@ -528,5 +528,6 @@ void check(){
 	}
 }
 
+*/
 
 

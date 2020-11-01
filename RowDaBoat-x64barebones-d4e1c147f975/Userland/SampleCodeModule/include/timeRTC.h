@@ -4,6 +4,10 @@
 #include <stdint.h>
 
 typedef enum{
+    YEAR = 9,
+    MONTH = 8,
+    DAY = 7,
+    DAYOFWEEK = 6,
     HOURS = 4,
     MINUTES = 2,
     SECONDS = 0

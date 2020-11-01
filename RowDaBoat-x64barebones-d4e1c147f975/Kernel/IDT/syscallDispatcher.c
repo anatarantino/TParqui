@@ -48,7 +48,6 @@ uint64_t syscallDispatcher(t_registers * r){
                 return (uint64_t) returnReg();
                 break;
             case TIMERTC:
-                printf("entre a timertc en syscallDispatcher\n");
                 return getTime((time_type)(r->rdi));
             case DRAW:
                 drawPixel((int)r->r8,(int)r->r9,(int)r->rdx);
