@@ -33,13 +33,13 @@ static void analizeChar(char c);
 static void findCommand();
 static void applyCommand(int command_num,char*arguments[],int totArgs);
 static void removeChar();
-static void inforeg();
+static void inforeg(int args, char *arguments[]);
 static void printmem(int args, char *arguments[]);
-static void time();
+static void time(int args, char *arguments[]);
 static void printTime(time_type desc);
-static void chess();
-static void help();
-static void clear();
+static void chess(int args, char *arguments[]);
+static void help(int args, char *arguments[]);
+static void clear(int args, char *arguments[]);
 
 void startShell(){
     char c;
@@ -99,22 +99,22 @@ static void applyCommand(int command_num,char *arguments[],int totArgs){
     switch (command_num)
     {
     case INFOREG:
-        inforeg();
+        inforeg(totArgs,arguments);
         break;
     case PRINTMEM:
         printmem(totArgs,arguments);
         break;
     case TIME:
-        time();
+        time(totArgs,arguments);
         break;
     case CHESS:
-        chess();
+        chess(totArgs,arguments);
         break;
     case HELP:
-        help();
+        help(totArgs,arguments);
         break;
     case CLEARSC:
-        clear();
+        clear(totArgs,arguments);
         break;
     }
 }
@@ -127,7 +127,13 @@ static void removeChar(){
     }
 }
 
-static void inforeg(){
+static void inforeg(int args, char *arguments[]){
+    if(args!=1){
+        putChar('\n');
+        printf("Invalid ammount of arguments");
+        putChar('\n');
+        return;
+    }
     putChar('\n');
     uint64_t* regs=(uint64_t *)getRegisters();
     for(int i=0; i< TOTAL_REG; i++){
@@ -166,7 +172,13 @@ static void printmem(int args, char *arguments[]){
 
 }
 
-static void time(){
+static void time(int args, char *arguments[]){
+    if(args!=1){
+        putChar('\n');
+        printf("Invalid ammount of arguments");
+        putChar('\n');
+        return;
+    }
     putChar('\n');
     printTime(HOURS);
     putChar(':');
@@ -201,7 +213,13 @@ static void printTime(time_type desc){
 }
 
 
-static void help(){
+static void help(int args, char *arguments[]){
+    if(args!=1){
+        putChar('\n');
+        printf("Invalid ammount of arguments");
+        putChar('\n');
+        return;
+    }
     putChar('\n');
     printf("HELP\n");
     printf("DESCRIPTION: this is a list of the commands available.\n");
@@ -212,7 +230,13 @@ static void help(){
     printf("chess -> this command starts a chess game.\n");
 }
 
-static void clear(){
+static void clear(int args, char *arguments[]){
+    if(args!=1){
+        putChar('\n');
+        printf("Invalid ammount of arguments");
+        putChar('\n');
+        return;
+    }
     clearScreen();
 
 }
@@ -221,7 +245,13 @@ static void printMessage(){
     printColor("Hola aca va un mensaje super hermo diciendo que arranca el programa",0xFFFF00,0xF0FF0F);
 }
 
-static void chess(){
+static void chess(int args, char *arguments[]){
+    if(args!=1){
+        putChar('\n');
+        printf("Invalid ammount of arguments");
+        putChar('\n');
+        return;
+    }
     clearScreen();
     drawBoard(0xB17C54,0xEED09D);
 }
