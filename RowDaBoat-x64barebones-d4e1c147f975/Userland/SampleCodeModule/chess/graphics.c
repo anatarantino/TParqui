@@ -28,20 +28,23 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
     int numCount = 14;
     int ficha;
     int actualColor;
+    int aux;
     
-    uint64_t aux_color1=color1,aux_color2=color2;
     for(int h=0 ; h<SCREENHEIGHT ; h++){
         
         for(int w=0 ; w<SCREENWIDTH; w++){
 
             if((w>=STARTX && w<=ENDX) && (h>=STARTY && h<= ENDY)){
                 if(cantY>=0 && cantY<87){
-                    actualColor = aux_color1;
+                    actualColor = color1;
                     cantY++;
                 }else{
-                    actualColor = aux_color2;
+                    actualColor = color2;
                 }
                 if(((w-STARTX)%87==0) && (w<ENDX)){
+                    aux = color1;
+                    color1 = color2;
+                    color2 = aux;
                     
                     if((h-STARTY)%87==0 && h < ENDY){
                         ficha = matrix[(h-STARTY)/87][(w-STARTX)/87];
@@ -86,22 +89,8 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
                                 drawPiece(SQUARE,w,h,BLACK,actualColor);
                         }
                     }
-                    if(aux_color1==color1){
-                        aux_color1=color2;
-                        aux_color2=color1;
-                    }else{
-                        aux_color1=color1;
-                        aux_color2=color2;
-                    }
                 }
-                /*
-                if(cantY>=0 && cantY<87){
-                    drawPixel(w,h,aux_color2);
-                    cantY++;
-                }else{
-                    drawPixel(w,h,aux_color1);
-                }
-                */
+                
             }
             if(w==(STARTX - 87) && h%87==0 && h<=ENDY){  
                 if(numCount <= 21){
@@ -120,13 +109,9 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
             
         }
         if((h-STARTY)%87 == 0){
-            if(aux_color1==color1){
-                aux_color1=color2;
-                aux_color2=color1;
-            }else{
-                aux_color1=color1;
-                aux_color2=color2;
-            }
+            aux = color1;
+            color1 = color2;
+            color2 = aux;
         }
     }
 }
