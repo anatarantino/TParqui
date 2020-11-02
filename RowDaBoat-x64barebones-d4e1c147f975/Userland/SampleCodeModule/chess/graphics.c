@@ -21,6 +21,8 @@ void drawBoard(uint64_t color1, uint64_t color2){
     int paint=0;
     int noPaint=0;
     int cantX=0,cantY=0;
+    int currentLetter = 6;
+    int numCount = 0;
 
     uint64_t aux_color1=color1,aux_color2=color2;
     for(int h=0 ; h<SCREENHEIGHT ; h++){
@@ -50,37 +52,39 @@ void drawBoard(uint64_t color1, uint64_t color2){
                 }else{
                     drawPixel(w,h,aux_color1);
                 }
-
             }
+            if(w==70 && h%87==0 && h<=ENDY){  
+                if(currentLetter <= 13){
+                    drawPiece(currentLetter, w,h,0xFFFFFF,0x000000);
+                    currentLetter++;
+                }
+            }
+            
         }
         
     }
 }
 
-void drawPiece(){
-    putChar('\n');
-    unsigned char * char_map = chess_bitMap(0);
-    int8_t isMarked;
-    int x=0;
-    int y=0;
+void drawPiece(int piece, int  x, int  y, int pieceColor, int bgColor){
+    int auxX=x;
+    int auxY=y;
+    unsigned char * char_map = chess_bitMap(piece);
     for(int i=0 ; i<CHAR_WIDTH * CHAR_HEIGHT  ; i++ ){
             switch (char_map[i])
             {
             case ',':
-                y++;
-                x=0;
+                auxY++;
+                auxX=x;
                 break;
             case '_': //fondo
-                drawPixel(x,y,0xFFFFFF);
-                x++;
+                drawPixel(auxX,auxY,bgColor);
+                auxX++;
                 break;
             default: 
-                drawPixel(x,y,0xFF0000);
-                x++;
+                drawPixel(auxX,auxY,pieceColor);
+                auxX++;
                 break;
             }
-            
-        
-
     }
+    
 }

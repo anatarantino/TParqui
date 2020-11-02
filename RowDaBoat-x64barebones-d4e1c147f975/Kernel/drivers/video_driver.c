@@ -78,11 +78,10 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
 	if( sc->current_x + sc->offset == screenData->width){
 		sc->current_x = 0;
 		sc->current_y += CHAR_HEIGHT;
-		if (screenData->height - sc->current_y < CHAR_HEIGHT) {
-                  sc->current_y -= CHAR_HEIGHT;
-				  printf("BASTA");
-                  scrollScreen();
-        }
+		// if (screenData->height - sc->current_y < CHAR_HEIGHT) {
+        //           sc->current_y -= CHAR_HEIGHT;
+        //           scrollScreen();
+        // }
 			
 	}
 
@@ -138,11 +137,11 @@ void clearScreen(uint64_t bg_color){
 	sc->current_y = 0;
 }
 
-void scrollScreen(){
-	for(int i = 0; i < CHAR_HEIGHT; i++) {
-      for (int j = 0; j < SCREEN_HEIGHT; j++) {
+// void scrollScreen(){
+// 	for(int i = 0; i < CHAR_HEIGHT; i++) {
+//       for (int j = 0; j < SCREEN_HEIGHT; j++) {
 		  
-        }
-    }
-}
+//         }
+//     }
+// }
 
