@@ -27,7 +27,7 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
     int currentLetter = 6;
     int numCount = 14;
     int ficha;
-    int actualColor;
+    int actualColor = color2;
     int aux;
     
     for(int h=0 ; h<SCREENHEIGHT ; h++){
@@ -35,17 +35,8 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
         for(int w=0 ; w<SCREENWIDTH; w++){
 
             if((w>=STARTX && w<=ENDX) && (h>=STARTY && h<= ENDY)){
-                if(cantY>=0 && cantY<87){
-                    actualColor = color1;
-                    cantY++;
-                }else{
-                    actualColor = color2;
-                }
-                if(((w-STARTX)%87==0) && (w<ENDX)){
-                    aux = color1;
-                    color1 = color2;
-                    color2 = aux;
-                    
+                
+                if(((w-STARTX)%87==0) && (w<ENDX)){                    
                     if((h-STARTY)%87==0 && h < ENDY){
                         ficha = matrix[(h-STARTY)/87][(w-STARTX)/87];
                         switch(ficha){
@@ -90,7 +81,7 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
                         }
                     }
                 }
-                
+                actualColor = (actualColor == color2)? color1 :color2;
             }
             if(w==(STARTX - 87) && h%87==0 && h<=ENDY){  
                 if(numCount <= 21){
@@ -107,11 +98,6 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
             }
             
             
-        }
-        if((h-STARTY)%87 == 0){
-            aux = color1;
-            color1 = color2;
-            color2 = aux;
         }
     }
 }
