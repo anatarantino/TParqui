@@ -21,14 +21,11 @@ void drawPixel(int x, int y, int color){
 //(w>=STARTX && w<=STARTX+SQUARESIZE) && (h>=STARTY && h<=STARTY+SQUARESIZE) 
 
 void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
-    int paint=0;
-    int noPaint=0;
-    int cantX=0,cantY=0;
+    
     int currentLetter = 6;
     int numCount = 14;
     int ficha;
     int actualColor = color2;
-    int aux;
     
     for(int h=0 ; h<SCREENHEIGHT ; h++){
         

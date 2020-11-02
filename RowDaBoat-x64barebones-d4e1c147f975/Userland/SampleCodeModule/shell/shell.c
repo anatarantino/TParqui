@@ -4,6 +4,7 @@
 #include <shell.h>
 #include <timeRTC.h>
 #include <graphics.h>
+#include <chess.h>
 
 #define WHITE 0xFFFFFF
 #define BLACK 0x000000
@@ -292,14 +293,6 @@ static void printMessage(){
     printColor("Hola aca va un mensaje super hermo diciendo que arranca el programa",0xFFFF00,0xF0FF0F);
 }
 
-int board[8][8] = { {2,3,4,6,5,4,3,2},
-					{1,1,1,1,1,1,1,1},
-					{0,0,0,0,0,0,0,0},
-					{0,0,0,0,0,0,0,0},
-					{0,0,0,0,0,0,0,0},
-					{0,0,0,0,0,0,0,0},
-					{-1,-1,-1,-1,-1,-1,-1,-1},
-					{-2,-3,-4,-6,-5,-4,-3,-2}};	
 
 static void chess(int args, char *arguments[]){
     if(args!=1){
@@ -309,6 +302,7 @@ static void chess(int args, char *arguments[]){
         return;
     }
     clearScreen();
-    drawBoard(board,0xB17C54,0xEED09D);
+//    drawBoard(board,0xB17C54,0xEED09D);
+    playChess();
 }
 
