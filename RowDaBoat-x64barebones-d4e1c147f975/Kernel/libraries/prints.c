@@ -15,13 +15,31 @@ void syscallWrite(char* str, uint8_t length, uint64_t f_color, uint64_t bg_color
             deleteChar();
         }else if(str[i] == '\t'){
             for(int i =0 ; i<3 ; i++){
-                printCharOnScreen(' ',f_color,bg_color);
+                //printCharOnScreen(' ',f_color,bg_color);
+                printChar(' ',f_color,bg_color);
             }
         }else{
-            printCharOnScreen(str[i],f_color,bg_color);
+            //printCharOnScreen(str[i],f_color,bg_color);
+            printChar(str[i],f_color,bg_color);
         }
     }
 }
+
+// void syscallWriteOnCurrentPos(char *str,uint8_t length, uint64_t f_color, uint64_t bg_color,uint32_t posx, uint32_t posy ){
+//     for(int i=0; str[i]!= 0 && i < length; i++){
+//         if(str[i] == '\n'){
+//             newLine();
+//         }else if(str[i] == '\b'){
+//             deleteChar();
+//         }else if(str[i] == '\t'){
+//             for(int i =0 ; i<3 ; i++){
+//                 printCharOnScreen(' ',f_color,bg_color);
+//             }
+//         }else{
+//             printCharOnScreen(str[i],f_color,bg_color);
+//         }
+//     }
+// }
 
 void putChar(char c){
     syscallWrite(&c,1,0xFFFFFF,0x000000);

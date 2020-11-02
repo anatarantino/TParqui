@@ -277,7 +277,6 @@ static void help(int args, char *arguments[]){
     printf("clear -> clears the screen.\n");
     printf("chess -> this command starts a chess game.\n");
 
-    clearSpace(100,100,300,300,WHITE);
 }
 
 static void clear(int args, char *arguments[]){

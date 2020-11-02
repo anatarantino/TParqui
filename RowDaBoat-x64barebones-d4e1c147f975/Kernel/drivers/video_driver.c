@@ -74,6 +74,46 @@ void drawPixel(int x,int y,int color){ //RGB
     curpos[offset + 2] = (char)((color >> 16) & 0xFF); //BLUE        
 }
 
+void printChar(char c, uint64_t f_color, uint64_t bg_color){
+	printCharOnScreen(c,f_color,bg_color,sc->current_x,sc->current_y);
+}
+void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color,uint32_t posX,uint32_t posY){
+	if( posX + sc->offset == screenData->width){
+		posX = 0;
+		posY += CHAR_HEIGHT;
+		// if (screenData->height - posY < CHAR_HEIGHT) {
+        //           posY -= CHAR_HEIGHT;
+        //           scrollScreen();
+        // }
+			
+	}
+	int isCurrentPos = (posX == sc->current_x) && (posY == sc->current_y);
+	unsigned char * char_map = charMap(c);
+	uint32_t x = posX + sc->offset;
+	uint32_t y = posY;
+
+	for(int i=0 ; i<CHAR_HEIGHT ; i++){
+		for(int j=0 ; j<CHAR_WIDTH ; j++){
+			int8_t isMarked = (char_map[i] >> (CHAR_WIDTH - j - 1)) & 0x01;
+			if(isMarked){
+				drawPixel(x,y,f_color);
+			}else{
+				drawPixel(x,y,bg_color); 	
+			}
+			x++;
+		}
+		x = posX + sc->offset;
+		y++;
+	}
+	posX += CHAR_WIDTH;
+
+	if(isCurrentPos){
+		sc->current_x = posX;
+		sc->current_y = posY;
+	}
+	
+}
+/*
 void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
 	if( sc->current_x + sc->offset == screenData->width){
 		sc->current_x = 0;
@@ -105,6 +145,31 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
 	sc->current_x += CHAR_WIDTH;
 	
 }
+*/
+
+// void printOnCurrent(char c, uint32_t startx, uint32_t starty, uint64_t f_color, uint64_t bg_color){
+// 	//guardo donde estaba el cursor
+// 	uint32_t aux_currentx=sc->current_x;
+// 	uint32_t aux_currenty=sc->current_y;
+
+// 	unsigned char * char_map = charMap(c);
+
+// 	for(int i=0 ; i<CHAR_HEIGHT ; i++){
+// 		for(int j=0 ; j<CHAR_WIDTH ; j++){
+// 			int8_t isMarked = (char_map[i] >> (CHAR_WIDTH - j - 1)) & 0x01;
+// 			if(isMarked){
+// 				drawPixel(startx,starty,f_color);
+// 			}else{
+// 				drawPixel(startx,starty,bg_color); 	
+// 			}
+// 			startx++;
+// 		}
+// 		startx = sc->current_x + sc->offset;
+// 		starty++;
+// 	}
+// 	sc->current_x = aux_currentx;
+// 	sc->current_y = aux_currenty;
+// }
 
 void deleteChar(uint64_t f_color, uint64_t bg_color){  //falta corregir que si hay un '\n' y se borra que vuelva a la ultima pos
 	if(sc->current_x == 0 && sc->current_y == 0){
@@ -116,7 +181,8 @@ void deleteChar(uint64_t f_color, uint64_t bg_color){  //falta corregir que si h
 		sc->current_y -= CHAR_HEIGHT;
 	}
 	sc->current_x -= CHAR_WIDTH;
-	printCharOnScreen(' ',0x000000,0x000000);
+	//printCharOnScreen(' ',0x000000,0x000000);
+	printChar(' ',0x000000,0x000000);
 	sc->current_x -= CHAR_WIDTH;
 }
 
@@ -128,9 +194,11 @@ void newLine(){
 void clearScreen(uint64_t bg_color){
 	sc->current_x = 0;
 	sc->current_y = 0;
-	for(int i=0 ; i<=screenData->height ;i+=CHAR_WIDTH){
-		for(int j=0 ; j<=screenData->width ; j+=CHAR_HEIGHT){
-			printCharOnScreen(' ',bg_color,bg_color);
+	for(int i=0 ; i<=screenData->width ;i+=CHAR_WIDTH){
+		for(int j=0 ; j<=screenData->height ; j+=CHAR_HEIGHT){
+			//printChar(' ',bg_color,bg_color);
+			//printChar(' ',bg_color,bg_color);
+			printCharOnScreen(' ',bg_color,bg_color,i,j);
 		}
 	}
 	sc->current_x = 0;
@@ -142,9 +210,9 @@ void clearSpace(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, 
 	uint32_t aux_currenty=sc->current_y;
 	sc->current_x = startx;
 	sc->current_y = starty;
-	for(int i=0 ; i<=endy-starty ;i+=CHAR_WIDTH){
-		for(int j=0 ; j<=endx-startx ; j+=CHAR_HEIGHT){
-			printCharOnScreen(' ',bg_color,bg_color);
+	for(int i=0 ; i<=endy-starty ;i++){
+		for(int j=0 ; j<=endx-startx ; j++){
+			drawPixel(i,j,bg_color);
 		}
 	}
 	sc->current_x = aux_currentx;
@@ -159,3 +227,4 @@ void clearSpace(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, 
 //     }
 // }
 
+	

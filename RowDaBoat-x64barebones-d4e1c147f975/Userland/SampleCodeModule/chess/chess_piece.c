@@ -3,7 +3,7 @@
 
 #include <chess_piece.h>
 
-static unsigned char * __chess_bitmap__[]={
+static const char * __chess_bitmap__[]={
 
 "_______________________________________________________________________________________,"
 "_______________________________________________________________________________________,"
@@ -2044,7 +2044,7 @@ static unsigned char * __chess_bitmap__[]={
 
 };
 
-unsigned char * chess_bitMap(int c){
+const char * chess_bitMap(int c){
 	return (__chess_bitmap__[c]);
     
 }

@@ -53,7 +53,6 @@ int playChess(){
 			break;
 		}
 		error = 0;
-		timer(0,0,40,40,0xFF0000);
 		// printf("\n");
 		// printf("Turn %d\n", whoseTurn);     // aca puede marcar si juegan las blancas o las negras
 		// printf("\n");
@@ -63,6 +62,7 @@ int playChess(){
 		// if(init == 1){
 		// 	getChar();
 		// }
+		timer(0,0,40,40,0xFF0000);
 		int letra = getChar();
 		int nro = getChar();
 		if(((letra >='A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){

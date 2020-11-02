@@ -28,7 +28,7 @@
 #define NUMBER_8 21
 #define SQUARE 22
 
-unsigned char * chess_bitMap(int c);
+const char * chess_bitMap(int c);
 
 
 
