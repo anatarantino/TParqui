@@ -3,6 +3,8 @@
 #include <syscall.h>
 #include <chess_piece.h>
 #include <chess.h>
+#include <shell.h>
+
 
 #define WHITE 0xFFFFFF
 #define BLACK 0x000000
@@ -21,7 +23,6 @@ void drawPixel(int x, int y, int color){
 //(w>=STARTX && w<=STARTX+SQUARESIZE) && (h>=STARTY && h<=STARTY+SQUARESIZE) 
 
 void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
-    
     int currentLetter = 6;
     int numCount = 14;
     int ficha;
@@ -75,6 +76,7 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
                                 break;                            
                             default:
                                 drawPiece(SQUARE,w,h,BLACK,actualColor);
+                        
                         }
                     }
                 }

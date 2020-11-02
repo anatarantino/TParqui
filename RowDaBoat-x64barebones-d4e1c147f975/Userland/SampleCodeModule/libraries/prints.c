@@ -37,6 +37,10 @@ void clearScreen(){
 	syscalls(CLEAR,0,0,0,0,0,0);
 }
 
+void clearSpace(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color){
+	syscalls(CLEARSPACE,startx,starty,endx,bg_color,endy,0);
+}
+
 uint64_t* getRegisters(){
 	return (uint64_t *)syscalls(REGISTERS,0,0,0,0,0,0);
 }

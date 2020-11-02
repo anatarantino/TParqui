@@ -32,6 +32,8 @@ void initBoard();
 void changePiece(int x, int y);
 int checkFinalPos(int xf,int yf);
 void check();
+void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color);
+
 
 int whoseTurn = 0;		// 0 es el turno de las blancas, 1 es el turno de las negras
 int error;
@@ -51,6 +53,7 @@ int playChess(){
 			break;
 		}
 		error = 0;
+		timer(0,0,40,40,0xFF0000);
 		// printf("\n");
 		// printf("Turn %d\n", whoseTurn);     // aca puede marcar si juegan las blancas o las negras
 		// printf("\n");
@@ -62,7 +65,6 @@ int playChess(){
 		// }
 		int letra = getChar();
 		int nro = getChar();
-
 		if(((letra >='A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
 			if(letra >='A' && letra <= 'H'){
 				y0 = letra - 'A';

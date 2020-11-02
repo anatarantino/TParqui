@@ -13,5 +13,6 @@ uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 void clearScreen();
 uint64_t* getRegisters();
 void printHex(uint64_t num);
+void clearSpace(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color);
 
 #endif

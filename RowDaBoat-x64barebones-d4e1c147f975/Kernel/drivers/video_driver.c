@@ -137,6 +137,20 @@ void clearScreen(uint64_t bg_color){
 	sc->current_y = 0;
 }
 
+void clearSpace(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color){
+	uint32_t aux_currentx=sc->current_x;
+	uint32_t aux_currenty=sc->current_y;
+	sc->current_x = startx;
+	sc->current_y = starty;
+	for(int i=0 ; i<=endy-starty ;i+=CHAR_WIDTH){
+		for(int j=0 ; j<=endx-startx ; j+=CHAR_HEIGHT){
+			printCharOnScreen(' ',bg_color,bg_color);
+		}
+	}
+	sc->current_x = aux_currentx;
+	sc->current_y = aux_currenty;
+}
+
 // void scrollScreen(){
 // 	for(int i = 0; i < CHAR_HEIGHT; i++) {
 //       for (int j = 0; j < SCREEN_HEIGHT; j++) {

@@ -198,20 +198,20 @@ static void time(int args, char *arguments[]){
 }
 
 static void printTime(time_type desc){
-    char buff[3];
+    char buff_aux[3];
     int aux;
     switch(desc){
         case YEAR:
-            uintToBase(getTime(YEAR),buff,10);
-            printf(buff);
+            uintToBase(getTime(YEAR),buff_aux,10);
+            printf(buff_aux);
             break;
         case MONTH:
-            uintToBase(getTime(MONTH),buff,10);
-            printf(buff);
+            uintToBase(getTime(MONTH),buff_aux,10);
+            printf(buff_aux);
             break;
         case DAY:
-            uintToBase(getTime(DAY),buff,10);
-            printf(buff);
+            uintToBase(getTime(DAY),buff_aux,10);
+            printf(buff_aux);
             break;
         case DAYOFWEEK:
             switch(getTime(DAYOFWEEK)){
@@ -244,16 +244,16 @@ static void printTime(time_type desc){
                 aux = 24 - 3 + aux;
             else
                 aux -= 3;
-            uintToBase(aux,buff,10);
-            printf(buff);
+            uintToBase(aux,buff_aux,10);
+            printf(buff_aux);
             break;
         case MINUTES:
-            uintToBase(getTime(MINUTES),buff,10);
-            printf(buff);
+            uintToBase(getTime(MINUTES),buff_aux,10);
+            printf(buff_aux);
             break;
         case SECONDS:
-            uintToBase(getTime(SECONDS),buff,10);
-            printf(buff);
+            uintToBase(getTime(SECONDS),buff_aux,10);
+            printf(buff_aux);
             break;
         default:
             return;
@@ -261,7 +261,7 @@ static void printTime(time_type desc){
 }
 
 
-static void help(int args, char *arguments[]){
+static void help(int args, char *arguments[]){ 
     if(args!=1){
         putChar('\n');
         printf("Invalid ammount of arguments");
@@ -276,6 +276,8 @@ static void help(int args, char *arguments[]){
     printf("time -> prints system time on screen.\n"); 
     printf("clear -> clears the screen.\n");
     printf("chess -> this command starts a chess game.\n");
+
+    clearSpace(100,100,300,300,WHITE);
 }
 
 static void clear(int args, char *arguments[]){
@@ -287,6 +289,24 @@ static void clear(int args, char *arguments[]){
     }
     clearScreen();
 
+}
+
+void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color){
+    int segundos=0;
+    putChar('\n');
+    putChar('\n');
+    int buff_aux[2]; 
+    int aux=getTime(SECONDS);
+    int aux2;
+    while(segundos<=3600){
+        aux2=getTime(SECONDS);
+        if(aux!=aux2){
+            segundos++;
+            printInt(segundos);
+            clearSpace(startx,starty,endx,endy,bg_color);
+            aux=aux2;
+        }
+    }
 }
 
 static void printMessage(){
@@ -303,6 +323,7 @@ static void chess(int args, char *arguments[]){
     }
     clearScreen();
 //    drawBoard(board,0xB17C54,0xEED09D);
+
     playChess();
 }
 
