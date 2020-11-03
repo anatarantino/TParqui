@@ -45,7 +45,7 @@ int kingMoves[] = {0,0};
 int leftRooks[] = {0,0};
 int rightRooks[] = {0,0};
 
-int playChess(){
+void playChess(){
 	int x0, y0, xf, yf;
 //	initBoard();        // dibuja el board
 	while(1){

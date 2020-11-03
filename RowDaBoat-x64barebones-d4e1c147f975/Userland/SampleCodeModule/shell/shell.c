@@ -294,7 +294,7 @@ void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint6
     int segundos=0;
     putChar('\n');
     putChar('\n');
-    int buff_aux[2]; 
+     
     int aux=getTime(SECONDS);
     int aux2;
     while(segundos<=3600){

@@ -104,7 +104,7 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
 void drawPiece(int piece, int  x, int  y, int pieceColor, int bgColor){
     int auxX=x;
     int auxY=y;
-    unsigned char * char_map = chess_bitMap(piece);
+    const char * char_map = chess_bitMap(piece);
     for(int i=0 ; i<CHAR_WIDTH * CHAR_HEIGHT  ; i++ ){
             switch (char_map[i])
             {

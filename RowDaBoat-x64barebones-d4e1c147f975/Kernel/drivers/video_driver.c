@@ -171,7 +171,7 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
 // 	sc->current_y = aux_currenty;
 // }
 
-void deleteChar(uint64_t f_color, uint64_t bg_color){  //falta corregir que si hay un '\n' y se borra que vuelva a la ultima pos
+void deleteChar(uint64_t bg_color){  //falta corregir que si hay un '\n' y se borra que vuelva a la ultima pos
 	if(sc->current_x == 0 && sc->current_y == 0){
 		return;
 	}
@@ -182,9 +182,10 @@ void deleteChar(uint64_t f_color, uint64_t bg_color){  //falta corregir que si h
 	}
 	sc->current_x -= CHAR_WIDTH;
 	//printCharOnScreen(' ',0x000000,0x000000);
-	printChar(' ',0x000000,0x000000);
+	printChar(' ',bg_color,bg_color);
 	sc->current_x -= CHAR_WIDTH;
 }
+
 
 void newLine(){
 	sc->current_y += CHAR_HEIGHT;

@@ -56,6 +56,7 @@ uint64_t syscallDispatcher(t_registers * r){
             case CLEARSPACE:
                 clearSpace((uint32_t)r->rdi, (uint32_t) r->rsi,(uint32_t) r->rdx, (uint32_t) r->r8, (uint64_t)r->r10);
                 break;
+            case WRITEONSCREEN:
         }    
     }
     return 0;

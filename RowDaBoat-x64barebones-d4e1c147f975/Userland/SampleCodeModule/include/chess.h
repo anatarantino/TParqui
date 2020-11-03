@@ -16,6 +16,6 @@ typedef enum{
     BKING = -6
 }Pieces;
 
-int playChess();
+void playChess();
 
 #endif
