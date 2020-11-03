@@ -64,9 +64,12 @@ void playChess(){
 		// if(init == 1){
 		// 	getChar();
 		// }
-	//	timer(0,0,40,40,0xFF0000);
-
-		int letra = getChar();
+		int letra;
+		//while(whoseTurn==0){
+			timer(0,0,40,40,0xFF0000);	//timer 
+		//}
+		
+		//int letra = getChar();
 		int nro = getChar();
 		if(((letra >='A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
 			if(letra >='A' && letra <= 'H'){

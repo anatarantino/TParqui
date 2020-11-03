@@ -291,22 +291,6 @@ static void clear(int args, char *arguments[]){
 
 }
 
-void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color){
-    int segundos=0;
-    putChar('\n');
-    putChar('\n');
-     
-    int aux=getTime(SECONDS);
-    int aux2;
-    while(segundos<=3600){
-        aux2=getTime(SECONDS);
-        if(aux!=aux2){
-            segundos++;
-            printIntOnPosColor(segundos, WHITE,bg_color,startx,starty);
-            aux=aux2;
-        }
-    }
-}
 
 static void printMessage(){
     printColor("Hola aca va un mensaje super hermo diciendo que arranca el programa",0xFFFF00,0xF0FF0F);
