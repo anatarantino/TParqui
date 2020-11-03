@@ -133,7 +133,7 @@ void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint6
      
     int aux=getTime(SECONDS);
     int aux2;
-    while(getChar()){               // enter del jugador anterior
+    while(segundos<=3600){               // enter del jugador anterior
         aux2=getTime(SECONDS);
         if(aux!=aux2){
             segundos++;

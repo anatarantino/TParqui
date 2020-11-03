@@ -4,7 +4,7 @@
 #include <chess_piece.h>
 #include <prints.h>
 #include <strings.h>
-
+#include <timeRTC.h>
 #define DIM 8
 
 int board[DIM][DIM] = { {2,3,4,6,5,4,3,2},
@@ -37,23 +37,44 @@ void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint6
 
 int whoseTurn = 0;		// 0 es el turno de las blancas, 1 es el turno de las negras
 int error;
-int init = 0;
+
 static char log1[2000],log2[2000];
 static int index1=0,index2=0;
+int segundosW = 0;
+int segundosB = 0;
+int aux,aux2;
 
 // Movimientos para validar el enroque
 int kingMoves[] = {0,0};
 int leftRooks[] = {0,0};
 int rightRooks[] = {0,0};
 
+int playNotEnded = 1;
+
 void playChess(){
 	int x0, y0, xf, yf;
 //	initBoard();        // dibuja el board
 	printColorOnPos("Jugadas:",0xFFFF00,0x000000,856,4);
 	while(1){
+		aux = getTime(SECONDS);
 		if(gameover() == 0){
 			break;
 		}
+		while(playNotEnded){
+		if((aux2=getTime(SECONDS))!= aux){
+			if(whoseTurn==0){
+				segundosW++;
+				printIntOnPosColor(segundosW,0xFFFFFF,0x0F0F00,40,40);
+
+			}else{
+				segundosB++;
+				printIntOnPosColor(segundosB,0xFFFFFF,0x0F0F00,40,40);
+
+			}
+			aux = aux2;
+		}
+
+
 		error = 0;
 		// printf("\n");
 		// printf("Turn %d\n", whoseTurn);     // aca puede marcar si juegan las blancas o las negras
@@ -64,12 +85,12 @@ void playChess(){
 		// if(init == 1){
 		// 	getChar();
 		// }
-		int letra;
 		//while(whoseTurn==0){
-			timer(0,0,40,40,0xFF0000);	//timer 
+			//timer(0,0,40,40,0xFF0000);	//timer 
 		//}
 		
-		//int letra = getChar();
+		int letra = getChar();
+
 		int nro = getChar();
 		if(((letra >='A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
 			if(letra >='A' && letra <= 'H'){
@@ -191,9 +212,10 @@ void playChess(){
 			printColorOnPos(log1,0xFFFFFF,0x000000,856,20);
 			printColorOnPos(log2,0xDF02F1,0x000000,856,200);
 			whoseTurn = (whoseTurn == 0)? 1:0;
+			playNotEnded = 0;
 		}
-		init =1;
-
+		
+		}
 	}
 
 	
