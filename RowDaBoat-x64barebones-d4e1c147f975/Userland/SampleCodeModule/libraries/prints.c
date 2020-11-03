@@ -30,6 +30,12 @@ void printColorOnPos(char *str, uint64_t f_color, uint64_t bg_color, uint32_t po
 	syscalls(WRITEONSCREEN,(uint64_t)str, strlen(str), f_color, bg_color, posX, posY);
 }
 
+void printIntOnPosColor(uint64_t num,uint64_t f_color,uint64_t bg_color,uint32_t posX, uint32_t posY){
+    char buff[10];
+    uintToBase(num,buff,10);
+    printColorOnPos(buff, f_color, bg_color, posX, posY);
+}
+
 void printInt(uint64_t num){
     char buff[10];
     uintToBase(num,buff,10);

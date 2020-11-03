@@ -96,6 +96,7 @@ void printInt(uint64_t num){
     printf(buff);
 }
 
+
 void printIntColor(uint64_t num, uint64_t f_color, uint64_t bg_color){
     char buff[10];
     uintToBase(num,buff,10);

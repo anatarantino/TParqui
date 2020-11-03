@@ -61,6 +61,7 @@ uint64_t syscallDispatcher(t_registers * r){
                 syscallWriteOnCurrentPos((char *)r->rdi,(uint64_t)r->rsi,(uint64_t)r->rdx, (uint64_t) r->r10,(uint32_t)r->r8,(uint32_t)r->r9);
                 //no se si no es r9 y despues r8
                 break;
+            
         }    
     }
     return 0;

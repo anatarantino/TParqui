@@ -302,8 +302,7 @@ void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint6
         aux2=getTime(SECONDS);
         if(aux!=aux2){
             segundos++;
-            printInt(segundos);
-            clearSpace(startx,starty,endx,endy,bg_color);
+            printIntOnPosColor(segundos, WHITE,bg_color,startx,starty);
             aux=aux2;
         }
     }
