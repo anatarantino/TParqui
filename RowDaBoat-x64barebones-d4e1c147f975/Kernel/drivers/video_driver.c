@@ -88,6 +88,11 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color,uint32_t posX
 	if(( (screenData->width -(x + sc->offset)) < CHAR_WIDTH )){
         x = posX;
         posY += CHAR_HEIGHT;
+	//	if (screenData->height - posY < CHAR_HEIGHT) {
+    //          posY -= CHAR_HEIGHT;
+    //          scrollScreen();
+    // 	}
+			
 	}
 	
 	uint32_t y = posY;
@@ -223,12 +228,10 @@ void clearSpace(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, 
 	sc->current_y = aux_currenty;
 }
 
-// void scrollScreen(){
-// 	for(int i = 0; i < CHAR_HEIGHT; i++) {
-//       for (int j = 0; j < SCREEN_HEIGHT; j++) {
-		  
-//         }
-//     }
-// }
+void scrollScreen(){//3 tamaño pixel
+    printf("HOL");
+    memcpy((void *)((uint64_t)screenData->framebuffer), (void *) ((uint64_t)screenData->framebuffer+CHAR_HEIGHT*3*SCREEN_WIDTH),SCREEN_WIDTH*3*(SCREEN_HEIGHT-CHAR_HEIGHT));
+
+}
 
 	
