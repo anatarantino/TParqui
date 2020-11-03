@@ -44,6 +44,7 @@ static void clear(int args, char *arguments[]);
 
 void startShell(){
     char c;
+
     printf(user);
     while(1){
         c=getChar();
@@ -261,7 +262,7 @@ static void printTime(time_type desc){
 }
 
 
-static void help(int args, char *arguments[]){ 
+static void help(int args, char *arguments[]){
     if(args!=1){
         putChar('\n');
         printf("Invalid ammount of arguments");

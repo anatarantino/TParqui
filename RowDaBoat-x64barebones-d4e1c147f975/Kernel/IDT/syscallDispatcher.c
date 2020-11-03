@@ -13,6 +13,7 @@
 #define TIMERTC 5
 #define DRAW 6
 #define CLEARSPACE 7
+#define WRITEONSCREEN 8
 
 //modificar con lo de esceptions
 #define TOTALREGS 16 //hay 17 en el vector, chequear
@@ -23,7 +24,7 @@
 
 
 #define BLACK 0x000000
-#define CANT_SYS 8
+#define CANT_SYS 9
 
 //                          codigo        puntero       length          f_color     bg_color       extra         extra
 //                          uint64_t rax, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9
@@ -57,6 +58,9 @@ uint64_t syscallDispatcher(t_registers * r){
                 clearSpace((uint32_t)r->rdi, (uint32_t) r->rsi,(uint32_t) r->rdx, (uint32_t) r->r8, (uint64_t)r->r10);
                 break;
             case WRITEONSCREEN:
+                syscallWriteOnCurrentPos((char *)r->rdi,(uint64_t)r->rsi,(uint64_t)r->rdx, (uint64_t) r->r10,(uint32_t)r->r8,(uint32_t)r->r9);
+                //no se si no es r9 y despues r8
+                break;
         }    
     }
     return 0;

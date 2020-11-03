@@ -26,6 +26,9 @@ void printHex(uint64_t num){
 void printColor(char* str, uint64_t f_color, uint64_t bg_color){
     syscalls(WRITE, (uint64_t)str, strlen(str), f_color, bg_color, 0, 0);
 }
+void printColorOnPos(char *str, uint64_t f_color, uint64_t bg_color, uint32_t posX, uint32_t posY){
+	syscalls(WRITEONSCREEN,(uint64_t)str, strlen(str), f_color, bg_color, posX, posY);
+}
 
 void printInt(uint64_t num){
     char buff[10];

@@ -5,8 +5,6 @@
 
 //#define BLANCO 0xFFFFFF
 //#define NEGRO 0x000000
-#define CHAR_WIDTH 8
-#define CHAR_HEIGHT 16
 
 void syscallWrite(char* str, uint8_t length, uint64_t f_color, uint64_t bg_color){
     
@@ -14,7 +12,7 @@ void syscallWrite(char* str, uint8_t length, uint64_t f_color, uint64_t bg_color
         if(str[i] == '\n'){
             newLine();
         }else if(str[i] == '\b'){
-            deleteChar();
+            deleteChar(bg_color);
         }else if(str[i] == '\t'){
             for(int i =0 ; i<3 ; i++){
                 //printCharOnScreen(' ',f_color,bg_color);
@@ -30,6 +28,7 @@ void syscallWrite(char* str, uint8_t length, uint64_t f_color, uint64_t bg_color
 void syscallWriteOnCurrentPos(char *str,uint8_t length, uint64_t f_color, uint64_t bg_color,uint32_t posx, uint32_t posy ){
     uint32_t actualX = posx;
     uint32_t actualY = posy;
+   
     for(int i=0; str[i]!= 0 && i < length; i++){
         if(str[i] == '\n'){
             actualY +=CHAR_HEIGHT;
@@ -42,12 +41,14 @@ void syscallWriteOnCurrentPos(char *str,uint8_t length, uint64_t f_color, uint64
             for(int i =0 ; i<3 ; i++){
                 printCharOnScreen(' ',f_color,bg_color,actualX,actualY);
                 actualX+=CHAR_WIDTH;
-                actualY+=CHAR_HEIGHT;
             }
         }else{
+            if(actualX + CHAR_WIDTH == SCREEN_WIDTH){
+                actualX = posx;
+                actualY+=CHAR_HEIGHT;
+            }
             printCharOnScreen(str[i],f_color,bg_color,actualX,actualY);
             actualX+=CHAR_WIDTH;
-            actualY+=CHAR_HEIGHT;
         }
     }
 }

@@ -1,9 +1,5 @@
-#include <stdint.h>
+
 #include <video_driver.h>
-#include <font.h>
-#include <lib.h>
-#include <prints.h>
-#include <lib.h>
 
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -78,19 +74,26 @@ void printChar(char c, uint64_t f_color, uint64_t bg_color){
 	printCharOnScreen(c,f_color,bg_color,sc->current_x,sc->current_y);
 }
 void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color,uint32_t posX,uint32_t posY){
-	if( posX + sc->offset == screenData->width){
-		posX = 0;
-		posY += CHAR_HEIGHT;
-		// if (screenData->height - posY < CHAR_HEIGHT) {
-        //           posY -= CHAR_HEIGHT;
-        //           scrollScreen();
-        // }
+	int isCurrentPos =( (posX == sc->current_x) && (posY == sc->current_y)) ? 1:0;
+	// if((screenData->width -(x + sc->offset)) <= CHAR_WIDTH){
+	// 	x = posX;
+	// 	y += CHAR_HEIGHT;
+	// 	// if (screenData->height - posY < CHAR_HEIGHT) {
+    //     //           posY -= CHAR_HEIGHT;
+    //     //           //scrollScreen();
+    //     // }
 			
+	// }
+	uint32_t x = posX;
+	if(( (screenData->width -(x + sc->offset)) < CHAR_WIDTH )){
+        x = posX;
+        posY += CHAR_HEIGHT;
 	}
-	int isCurrentPos = (posX == sc->current_x) && (posY == sc->current_y);
-	unsigned char * char_map = charMap(c);
-	uint32_t x = posX + sc->offset;
+	
 	uint32_t y = posY;
+	x += sc->offset;
+	
+	unsigned char * char_map = charMap(c);
 
 	for(int i=0 ; i<CHAR_HEIGHT ; i++){
 		for(int j=0 ; j<CHAR_WIDTH ; j++){
