@@ -1,10 +1,10 @@
 // Compile : 	gcc chess.c -o chess -Wall -pedantic -std=c99		Execute :	./chess
-
 #include <graphics.h>
 #include <chess_piece.h>
 #include <prints.h>
 #include <strings.h>
 #include <timeRTC.h>
+#include <chess.h>
 
 #define DIM 8
 
@@ -17,32 +17,9 @@ static int board[DIM][DIM] = { {2,3,4,6,5,4,3,2},
 					{-1,-1,-1,-1,-1,-1,-1,-1},
 					{-2,-3,-4,-6,-5,-4,-3,-2}};		// Positivos son blancos
 
-
-
-
-// Piezas con sus posiciones iniciales y finales
-int rook(int x0, int y0, int xf, int yf);		// 2 o -2
-int horse(int x0, int y0, int xf, int yf);		// 3 o -3
-int bishop(int x0, int y0, int xf, int yf);		// 4 o -4
-int queen(int x0, int y0, int xf, int yf);		// 5 o -5
-int king(int x0, int y0, int xf, int yf);		// 6 o -6
-int pawn(int x0, int y0, int xf, int yf);		// 1 o -1
-
-int gameover();
-void printBoard();
-void noPiece();
-void initBoard();
-void changePiece(int x, int y);
-int checkFinalPos(int xf,int yf);
-void check();
-void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color);
-void makeMove();
-void rotateBoard();
-
-
-
 int whoseTurn = 0;		// 0 es el turno de las blancas, 1 es el turno de las negras
 int error;
+int ret[DIM][DIM];
 
 static char log1[2000],log2[2000];
 static int index1=0,index2=0;
@@ -63,13 +40,13 @@ int playNotEnded = 1;
 void playChess(){
 
 	//aux=getTime(SECONDS);
+	printColorOnPos("Player 1:",0xFFFFFF,0x000000,856,5);
+	printColorOnPos("Player 2:",0x108520,0x000000,940,5);
 	
 	while(!gameover()){
-	
-		drawBoard(board,0xB17C54,0xEED09D);
+		drawBoard(board,0xB17C54,0xEED09D,rotation);
 		//timer(40,40,100,100,0x000000);
-		makeMove();
-
+		makeMove();	
 	}
 	
 	
@@ -79,14 +56,15 @@ void makeMove(){
 	
 	int x0, y0, xf, yf;
 	int letra = getChar();
-	if(letra=='r' || letra=='R'){
-		rotateBoard();
+	if(letra=='s' || letra=='S'){ //spin (r reserved for rook)
 		rotation = (rotation + 1) % 4;
-		drawBoard(board,0xB17C54,0xEED09D);
-		letra=getChar();
+		drawBoard(board,0xB17C54,0xEED09D,rotation);
+		return;
 	}
 
 	int nro = getChar();
+	int aux4;
+	printInt(letra);
 	if(((letra >='A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
 		if(letra >='A' && letra <= 'H'){
 			y0 = letra - 'A';
@@ -95,7 +73,19 @@ void makeMove(){
 			y0 = letra - 'a';
 		}
 		x0 = nro - '1';
-		
+		if(rotation==1){
+			aux4=x0;
+			x0=DIM-y0-1;
+			y0=aux4;
+		}else if(rotation==2){
+			x0=DIM-1-x0;
+			y0=DIM-1-y0;
+		}else if(rotation==3){
+			aux4=x0;
+			x0=y0;
+			y0=DIM-1-aux4;
+		}
+
 		if(board[x0][y0] == 0){		// no selecciono ninguna pieza
 			noPiece();
 			x0 = -1;
@@ -118,22 +108,11 @@ void makeMove(){
 			
 			}
 		}
-		if(error!=1){
-			if(whoseTurn==0){
-				log1[index1++]=letra;
-				log1[index1++]=nro;
-				log1[index1++]=' ';
-			}else{
-				log2[index2++]=letra;
-				log2[index2++]=nro;
-				log2[index2++]=' ';
-			}
-		}
 	}
 	else{
 		error = 1;
 	}
-	int letraF,nroF;
+	int letraF,nroF, piece;
 	if(x0 != -1 && y0 != -1 && error!=1){		//selecciono una pieza valida
 		letraF = getChar();
 		nroF = getChar();
@@ -152,61 +131,47 @@ void makeMove(){
 		}
 		if(error!=1){
 			int move = 0;
-			int aux;
+			if(rotation==1){
+				aux4=xf;
+				xf=DIM-yf-1;
+				yf=aux4;
+			}else if(rotation==2){
+				xf=DIM-1-xf;
+				yf=DIM-1-yf;
+			}else if(rotation==3){
+				aux4=xf;
+				xf=yf;
+				yf=DIM-1-aux4;
+			}
+
 			switch(board[x0][y0]){
 				case 1:
 				case -1:
-					if (rotation == 0){
-						move = pawn(x0,y0,xf,yf);
-					}else{
-						move = pawn(y0,DIM-x0,yf,DIM-xf);
-					}
-					break;
-					
+					move = pawn(x0,y0,xf,yf);
+					break;			
 				case 2:
 				case -2:
-					if (rotation == 0){
-						move = rook(x0,y0,xf,yf);
-					}else{
-						move = rook(y0,DIM-x0,yf,DIM-xf);
-					}
+					move = rook(x0,y0,xf,yf);
 					break;
 				case 3:
 				case -3:
-					if (rotation == 0){
-						move = horse(x0,y0,xf,yf);
-					}else{
-						move = horse(y0,DIM-x0,yf,DIM-xf);
-					}
+					move = horse(x0,y0,xf,yf);
 					break;
 				case 4:
 				case -4:
-					if (rotation == 0){
-						move = bishop(x0,y0,xf,yf);
-					}else{
-						move = bishop(y0,DIM-x0,yf,DIM-xf);
-					}
+					move = bishop(x0,y0,xf,yf);
 					break;
 				case 5:
 				case -5:
-					if (rotation == 0){
-						move = queen(x0,y0,xf,yf);
-					}else{
-						move = queen(y0,DIM-x0,yf,DIM-xf);
-					}
+					move = queen(x0,y0,xf,yf);
 					break;
 				case 6:
 				case -6:
-					if (rotation == 0){
-						move = king(x0,y0,xf,yf);
-					}else{
-						move = king(y0,DIM-x0,yf,DIM-xf);
-					}
+					move = king(x0,y0,xf,yf);
 					break;
-					
 			}
-			//printf("move: %d\n", move);         // si move ==0 que indique que lo que ingreso es incorrecto que pruebe escribir de nuevo
 			if(move > 0){
+				piece=board[x0][y0];
 				board[xf][yf] = board[x0][y0];
 				board[x0][y0] = 0;
 				if(move == 2){
@@ -222,22 +187,61 @@ void makeMove(){
 	}
 	
 	if(error == 0){
+		addPieceChar(piece);
 		if(whoseTurn==0){
 				log1[index1++]=letraF;
 				log1[index1++]=nroF;
-				log1[index1++]=' ';
+				log1[index1++]='\n';
 		}else{
 				log2[index2++]=letraF;
 				log2[index2++]=nroF;
-				log2[index2++]=' ';
+				log2[index2++]='\n ';
 		}
 		printColorOnPos(log1,0xFFFFFF,0x000000,856,20);
-		printColorOnPos(log2,0xDF02F1,0x000000,856,200);
+		printColorOnPos(log2,0x108520,0x000000,940,20);
 		whoseTurn = (whoseTurn == 0)? 1:0;
 		playNotEnded = 0;
 	}
 	error = 0;
 	
+}
+
+void addPieceChar(int number){
+    switch (number)
+    {
+    case 2:
+        log1[index1++] = 'R';
+        break;
+    case -2:
+        log2[index2++] = 'R';
+        break;
+    case 3:
+        log1[index1++] = 'H';
+        break;
+    case -3:
+        log2[index2++] = 'H';
+        break;
+    case 4:
+        log1[index1++] = 'B';
+        break;
+    case -4:
+        log2[index2++] = 'B';
+        break;
+    case 5:
+        log1[index1++] = 'Q';
+        break;
+    case -5:
+        log2[index2++] = 'Q';
+        break;
+    case 6:
+        log1[index1++] = 'K';
+        break;
+    case -6:
+        log2[index2++] = 'K';
+        break;
+    default:
+        break;
+    }
 }
 
 void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color){
@@ -258,7 +262,6 @@ void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint6
 }
 
 void noPiece(){	
-	//printf("No hay una pieza en esa ubicacion, ingrese una nueva ubicacion\n");
 	error = 1;
 }
 
@@ -266,7 +269,6 @@ void changePiece(int x, int y){
 	int wrongChar = 1;
 	int c = getChar();
 	while(wrongChar){
-	//	//printf("Que pieza elige? q,b,h,r\n"); // q: queen, b: bishop, h: horse, r: rook
 		c = getChar();
 		switch(c){
 			case 'q':
@@ -287,7 +289,6 @@ void changePiece(int x, int y){
 				break;
 			default:
 				break;
-				//printf("Pieza invalida\n");
 		}
 	}
 	
@@ -300,8 +301,6 @@ int checkFinalPos(int xf, int yf){
 	return 0;
 }
 
-
-// Movimientos	-> move = 1 si es un movimiento valido
 
 // ROOK
 int rook(int x0, int y0, int xf, int yf){
@@ -504,25 +503,6 @@ int pawn(int x0, int y0, int xf, int yf){
 	return move;
 }
 
-void initBoard(){				// Arranca la parte grafica, los cuadros, las letras a los costados y los nros abajo
-
-	// printf("A");	// cambia y, x se mantiene
-	// printf("1");	// cambia x, y se mantiene
-
-	//Esto se maneja con coordenadas de pixeles
-
-}
-
-void printBoard(){						// TO ERASE  (lo uso yo para imprimir y ver que funciona)
-	//printf("A\tB\tC\tD\tE\tF\tG\tH\n");
-	for(int i=0; i<DIM; i++){
-		for(int j=0; j<DIM; j++){
-			//printf("%d\t", board[i][j]);// switch case si es ==2 => que imprima torre blanca y asi
-
-		}
-	}
-}
-
 int gameover(){
 	int player1 = 0;
 	int player2 = 0;
@@ -625,22 +605,4 @@ void check(){
 		//printf("CHECK\n");
 	}
 }
-
-void rotateBoard() {
-    int ret[DIM][DIM]={0};
-
-    for (int i = 0; i < DIM; ++i) {
-        for (int j = 0; j < DIM; ++j) {
-            ret[i][j] = board[DIM - j - 1][i];
-        }
-    }
-
-    for (int i = 0; i < DIM; ++i) {
-        for (int j = 0; j < DIM; ++j) {
-            board[i][j] = ret[i][j];
-        }
-    }
-}
-
-
 

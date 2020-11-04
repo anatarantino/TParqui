@@ -274,7 +274,7 @@ static void help(int args, char *arguments[]){
     putChar('\n');
     printf("HELP\n");
     printf("DESCRIPTION: this is a list of the commands available.\n");
-    printf("inforeg -> prints registers values\n");
+    printf("inforeg -> prints registers values, press ctrl + r to update values.\n");
     printf("printmem -> receives a pointer and makes a memory dump of 32 bytes on screen starting on the direction introduced.\n"); //igual al de fran cambiar!!!
     printf("time -> prints system time on screen.\n"); 
     printf("clear -> clears the screen.\n");

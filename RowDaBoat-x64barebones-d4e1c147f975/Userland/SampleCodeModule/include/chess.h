@@ -18,4 +18,21 @@ typedef enum{
 
 void playChess();
 
+// Piezas con sus posiciones iniciales y finales
+int rook(int x0, int y0, int xf, int yf);		// 2 o -2
+int horse(int x0, int y0, int xf, int yf);		// 3 o -3
+int bishop(int x0, int y0, int xf, int yf);		// 4 o -4
+int queen(int x0, int y0, int xf, int yf);		// 5 o -5
+int king(int x0, int y0, int xf, int yf);		// 6 o -6
+int pawn(int x0, int y0, int xf, int yf);		// 1 o -1
+
+int gameover();
+void noPiece();
+void changePiece(int x, int y);
+int checkFinalPos(int xf,int yf);
+void check();
+void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color);
+void makeMove();
+void addPieceChar(int number);
+
 #endif

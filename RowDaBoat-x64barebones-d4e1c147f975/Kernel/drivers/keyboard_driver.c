@@ -48,7 +48,6 @@ void keyboard_handler(uint64_t rsp){ // 0 0 0 0 80
                 case 0x3A: //caps locked pressed
                     if(caps == 1){
                         caps = 0;
-                        scrollScreen();
                     }else{
                         caps = 1;
                     }

@@ -23,7 +23,7 @@ void drawPixel(int x, int y, int color){
 }
 //(w>=STARTX && w<=STARTX+SQUARESIZE) && (h>=STARTY && h<=STARTY+SQUARESIZE) 
 
-void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
+void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2, int rotation){
     int currentLetter = 6;
     int numCount = 14;
     int ficha;
@@ -37,7 +37,15 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2){
                 
                 if(((w-STARTX)%87==0) && (w<ENDX)){                    
                     if((h-STARTY)%87==0 && h < ENDY){
-                        ficha = matrix[(h-STARTY)/87][(w-STARTX)/87];
+                        if(rotation == 0){
+                            ficha = matrix[(h-STARTY)/87][(w-STARTX)/87]; 
+                        }else if(rotation==1){
+                            ficha = matrix[8-1 -(w-STARTX)/87][(h-STARTY)/87];
+                        }else if(rotation==2){ 
+                            ficha = matrix[8-1-(h-STARTY)/87][8-1-(w-STARTX)/87]; 
+                        }else{
+                            ficha = matrix[(w-STARTX)/87][(h-STARTY)/87]; 
+                        }
                         switch(ficha){
                             case WPAWN:
                                 drawPiece(PAWN,w,h,WHITE,actualColor);
