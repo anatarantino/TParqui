@@ -64,8 +64,9 @@ void makeMove(){
 
 	int nro = getChar();
 	int aux4;
-	printInt(letra);
-	if(((letra >='A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
+	
+	if(((letra >= 'A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
+		
 		if(letra >='A' && letra <= 'H'){
 			y0 = letra - 'A';
 		}

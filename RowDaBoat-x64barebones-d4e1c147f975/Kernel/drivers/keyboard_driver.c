@@ -70,7 +70,11 @@ void keyboard_handler(uint64_t rsp){ // 0 0 0 0 80
                                 }
                             }else{
                                 if(caps == 1){
-                                    keyToAdd = pressedKeys[key][1];
+                                    if(pressedKeys[key][0]>= 'a' && pressedKeys[key][0]<= 'z' ){
+                                        keyToAdd = pressedKeys[key][1];
+                                    }else{
+                                        keyToAdd = pressedKeys[key][0];
+                                    }
                                 }else{
                                     keyToAdd = pressedKeys[key][0];
                                 }
