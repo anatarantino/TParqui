@@ -50,7 +50,7 @@ static int segundosW = 0;
 static int segundosB = 0;
 static int aux = -1;
 static int aux2;
-static int rotation=1;
+static int rotation=0;
 
 // Movimientos para validar el enroque
 int kingMoves[] = {0,0};
@@ -153,47 +153,57 @@ void makeMove(){
 		if(error!=1){
 			int move = 0;
 			int aux;
-			switch (rotation)
-			{
-			case 1:
-				break;
-			case 2:
-				aux=x0;
-				x0=y0;
-				y0=aux;
-
-				aux=xf;
-				xf=yf;
-				yf=aux;
-				break;
-			default:
-				break;
-			}
 			switch(board[x0][y0]){
 				case 1:
 				case -1:
-					move = pawn(x0,y0,xf,yf);
+					if (rotation == 0){
+						move = pawn(x0,y0,xf,yf);
+					}else{
+						move = pawn(y0,DIM-x0,yf,DIM-xf);
+					}
 					break;
+					
 				case 2:
 				case -2:
-					move = rook(x0,y0,xf,yf);
+					if (rotation == 0){
+						move = rook(x0,y0,xf,yf);
+					}else{
+						move = rook(y0,DIM-x0,yf,DIM-xf);
+					}
 					break;
 				case 3:
 				case -3:
-					move = horse(x0,y0,xf,yf);
+					if (rotation == 0){
+						move = horse(x0,y0,xf,yf);
+					}else{
+						move = horse(y0,DIM-x0,yf,DIM-xf);
+					}
 					break;
 				case 4:
 				case -4:
-					move = bishop(x0,y0,xf,yf);
+					if (rotation == 0){
+						move = bishop(x0,y0,xf,yf);
+					}else{
+						move = bishop(y0,DIM-x0,yf,DIM-xf);
+					}
 					break;
 				case 5:
 				case -5:
-					move = queen(x0,y0,xf,yf);
+					if (rotation == 0){
+						move = queen(x0,y0,xf,yf);
+					}else{
+						move = queen(y0,DIM-x0,yf,DIM-xf);
+					}
 					break;
 				case 6:
 				case -6:
-					move = king(x0,y0,xf,yf);
+					if (rotation == 0){
+						move = king(x0,y0,xf,yf);
+					}else{
+						move = king(y0,DIM-x0,yf,DIM-xf);
+					}
 					break;
+					
 			}
 			//printf("move: %d\n", move);         // si move ==0 que indique que lo que ingreso es incorrecto que pruebe escribir de nuevo
 			if(move > 0){
