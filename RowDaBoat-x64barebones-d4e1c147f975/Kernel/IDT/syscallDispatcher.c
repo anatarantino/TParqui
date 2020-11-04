@@ -14,6 +14,7 @@
 #define DRAW 6
 #define CLEARSPACE 7
 #define WRITEONSCREEN 8
+#define SECONDSELAPSED 9
 
 //modificar con lo de esceptions
 #define TOTALREGS 16 //hay 17 en el vector, chequear
@@ -61,6 +62,9 @@ uint64_t syscallDispatcher(t_registers * r){
                 syscallWriteOnCurrentPos((char *)r->rdi,(uint64_t)r->rsi,(uint64_t)r->rdx, (uint64_t) r->r10,(uint32_t)r->r8,(uint32_t)r->r9);
                 //no se si no es r9 y despues r8
                 break;
+            case SECONDSELAPSED:
+                return seconds_elapsed();
+
             
         }    
     }

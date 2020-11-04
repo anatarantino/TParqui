@@ -5,6 +5,7 @@
 #include <prints.h>
 #include <strings.h>
 #include <timeRTC.h>
+
 #define DIM 8
 
 int board[DIM][DIM] = { {2,3,4,6,5,4,3,2},
@@ -33,6 +34,7 @@ void changePiece(int x, int y);
 int checkFinalPos(int xf,int yf);
 void check();
 void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color);
+void makeMove();
 
 
 int whoseTurn = 0;		// 0 es el turno de las blancas, 1 es el turno de las negras
@@ -52,174 +54,190 @@ int rightRooks[] = {0,0};
 int playNotEnded = 1;
 
 void playChess(){
-	int x0, y0, xf, yf;
-//	initBoard();        // dibuja el board
-	printColorOnPos("Jugadas:",0xFFFF00,0x000000,856,4);
+	int secondsW=0;
+	int secondsB=0;
+	int last_seconds = -1;
 	while(1){
-		aux = getTime(SECONDS);
+		int current_seconds = seconds_elapsed();
+		printInt(current_seconds);
+		if(last_seconds != current_seconds){
+				//if(whoseTurn == 0){
+					secondsW++;
+					printIntOnPosColor(secondsW,0x00ff00,0x0000ff,40,40);
+				//}else{
+				//	secondsB++;
+				//	printIntOnPosColor(secondsB,0x00ff00,0x0000ff,40,40);
+				//}
+		last_seconds = current_seconds;
+		}
+
+	}
+	/*
+	int secondsW=0;
+	int secondsB=0;
+
+	int last_seconds = -1;
+
+	printColorOnPos("Jugadas:",0xFFFF00,0x000000,856,4);
+
+
+	while(1){ //el juego en si
 		if(gameover() == 0){
 			break;
 		}
-		while(playNotEnded){
-		if((aux2=getTime(SECONDS))!= aux){
-			if(whoseTurn==0){
-				segundosW++;
-				printIntOnPosColor(segundosW,0xFFFFFF,0x0F0F00,40,40);
-
-			}else{
-				segundosB++;
-				printIntOnPosColor(segundosB,0xFFFFFF,0x0F0F00,40,40);
-
-			}
-			aux = aux2;
-		}
-
-
-		error = 0;
-		// printf("\n");
-		// printf("Turn %d\n", whoseTurn);     // aca puede marcar si juegan las blancas o las negras
-		// printf("\n");
-		drawBoard(board,0xB17C54,0xEED09D);       // dibuja las piezas donde van
-		// printf("\n");
-		//Poisicion Inicial
-		// if(init == 1){
-		// 	getChar();
-		// }
-		//while(whoseTurn==0){
-			//timer(0,0,40,40,0xFF0000);	//timer 
-		//}
-		
-		int letra = getChar();
-
-		int nro = getChar();
-		if(((letra >='A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
-			if(letra >='A' && letra <= 'H'){
-				y0 = letra - 'A';
-			}
-			else{
-				y0 = letra - 'a';
-			}
-			x0 = nro - '1';
-			if(board[x0][y0] == 0){		// no selecciono ninguna pieza
-				noPiece();
-				x0 = -1;
-				y0 = -1;
-			}
-			else{
+		int current_seconds = seconds_elapsed();
+		while(last_seconds != current_seconds){
+			drawBoard(board,0xB17C54,0xEED09D);       // dibuja las piezas donde van
+			if(last_seconds != current_seconds){
 				if(whoseTurn == 0){
-					if(board[x0][y0] <0){	// selecciono una pieza negra
-						noPiece();
-						x0 = -1;
-						y0 = -1;
-					}
-				}
-				else{
-					if(board[x0][y0] > 0){	// selecciono una pieza blanca
-						noPiece();
-						x0 = -1;
-						y0 = -1;
-					}
-				
-				}
-			}
-			if(error!=1){
-				if(whoseTurn==0){
-					log1[index1++]=letra;
-					log1[index1++]=nro;
-					log1[index1++]=' ';
+					secondsW++;
+					printIntOnPosColor(secondsW,0x00ff00,0x0000ff,40,40);
 				}else{
-					log2[index2++]=letra;
-					log2[index2++]=nro;
-					log2[index2++]=' ';
+					secondsB++;
+					printIntOnPosColor(secondsB,0x00ff00,0x0000ff,40,40);
+				}
+				last_seconds = current_seconds;
+			}
+			makeMove();
+			
+		}
+	}
+	*/
+	
+}
+
+void makeMove(){
+	int x0, y0, xf, yf;
+	int letra = getChar();
+
+	int nro = getChar();
+	if(((letra >='A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
+		if(letra >='A' && letra <= 'H'){
+			y0 = letra - 'A';
+		}
+		else{
+			y0 = letra - 'a';
+		}
+		x0 = nro - '1';
+		if(board[x0][y0] == 0){		// no selecciono ninguna pieza
+			noPiece();
+			x0 = -1;
+			y0 = -1;
+		}
+		else{
+			if(whoseTurn == 0){
+				if(board[x0][y0] <0){	// selecciono una pieza negra
+					noPiece();
+					x0 = -1;
+					y0 = -1;
 				}
 			}
+			else{
+				if(board[x0][y0] > 0){	// selecciono una pieza blanca
+					noPiece();
+					x0 = -1;
+					y0 = -1;
+				}
+			
+			}
+		}
+		if(error!=1){
+			if(whoseTurn==0){
+				log1[index1++]=letra;
+				log1[index1++]=nro;
+				log1[index1++]=' ';
+			}else{
+				log2[index2++]=letra;
+				log2[index2++]=nro;
+				log2[index2++]=' ';
+			}
+		}
+	}
+	else{
+		error = 1;
+	}
+	int letraF,nroF;
+	if(x0 != -1 && y0 != -1 && error!=1){		//selecciono una pieza valida
+	//	getChar();
+		letraF = getChar();
+		nroF = getChar();
+
+		if(((letraF >='A' && letraF <= 'H') || (letraF >= 'a' && letraF <= 'h')) && (nroF >= '1' && nroF <= '8')){
+			if(letraF >='A' && letraF <= 'H'){
+				yf = letraF - 'A';
+			}
+			else{
+				yf = letraF - 'a';
+			}
+			xf = nroF-'1';
 		}
 		else{
 			error = 1;
 		}
-		int letraF,nroF;
-		if(x0 != -1 && y0 != -1 && error!=1){		//selecciono una pieza valida
-		//	getChar();
-			letraF = getChar();
-			nroF = getChar();
-
-			if(((letraF >='A' && letraF <= 'H') || (letraF >= 'a' && letraF <= 'h')) && (nroF >= '1' && nroF <= '8')){
-				if(letraF >='A' && letraF <= 'H'){
-					yf = letraF - 'A';
+		if(error!=1){
+			int move = 0;
+			switch(board[x0][y0]){
+				case 1:
+				case -1:
+					move = pawn(x0,y0,xf,yf);
+					break;
+				case 2:
+				case -2:
+					move = rook(x0,y0,xf,yf);
+					break;
+				case 3:
+				case -3:
+					move = horse(x0,y0,xf,yf);
+					break;
+				case 4:
+				case -4:
+					move = bishop(x0,y0,xf,yf);
+					break;
+				case 5:
+				case -5:
+					move = queen(x0,y0,xf,yf);
+					break;
+				case 6:
+				case -6:
+					move = king(x0,y0,xf,yf);
+					break;
+			}
+			//printf("move: %d\n", move);         // si move ==0 que indique que lo que ingreso es incorrecto que pruebe escribir de nuevo
+			if(move > 0){
+				board[xf][yf] = board[x0][y0];
+				board[x0][y0] = 0;
+				if(move == 2){
+					changePiece(xf,yf);
 				}
-				else{
-					yf = letraF - 'a';
-				}
-				xf = nroF-'1';
+				check();
 			}
 			else{
 				error = 1;
 			}
-			if(error!=1){
-				int move = 0;
-				switch(board[x0][y0]){
-					case 1:
-					case -1:
-						move = pawn(x0,y0,xf,yf);
-						break;
-					case 2:
-					case -2:
-						move = rook(x0,y0,xf,yf);
-						break;
-					case 3:
-					case -3:
-						move = horse(x0,y0,xf,yf);
-						break;
-					case 4:
-					case -4:
-						move = bishop(x0,y0,xf,yf);
-						break;
-					case 5:
-					case -5:
-						move = queen(x0,y0,xf,yf);
-						break;
-					case 6:
-					case -6:
-						move = king(x0,y0,xf,yf);
-						break;
-				}
-				//printf("move: %d\n", move);         // si move ==0 que indique que lo que ingreso es incorrecto que pruebe escribir de nuevo
-				if(move > 0){
-					board[xf][yf] = board[x0][y0];
-					board[x0][y0] = 0;
-					if(move == 2){
-						changePiece(xf,yf);
-					}
-					check();
-				}
-				else{
-					error = 1;
-				}
 
-			}
-		}
-		
-		if(error == 0){
-			if(whoseTurn==0){
-					log1[index1++]=letraF;
-					log1[index1++]=nroF;
-					log1[index1++]=' ';
-			}else{
-					log2[index2++]=letraF;
-					log2[index2++]=nroF;
-					log2[index2++]=' ';
-			}
-			printColorOnPos(log1,0xFFFFFF,0x000000,856,20);
-			printColorOnPos(log2,0xDF02F1,0x000000,856,200);
-			whoseTurn = (whoseTurn == 0)? 1:0;
-			playNotEnded = 0;
-		}
-		
 		}
 	}
-
+	
+	if(error == 0){
+		if(whoseTurn==0){
+				log1[index1++]=letraF;
+				log1[index1++]=nroF;
+				log1[index1++]=' ';
+		}else{
+				log2[index2++]=letraF;
+				log2[index2++]=nroF;
+				log2[index2++]=' ';
+		}
+		printColorOnPos(log1,0xFFFFFF,0x000000,856,20);
+		printColorOnPos(log2,0xDF02F1,0x000000,856,200);
+		whoseTurn = (whoseTurn == 0)? 1:0;
+		playNotEnded = 0;
+	}
+	error = 0;
 	
 }
+
+
 
 void noPiece(){	
 	//printf("No hay una pieza en esa ubicacion, ingrese una nueva ubicacion\n");
