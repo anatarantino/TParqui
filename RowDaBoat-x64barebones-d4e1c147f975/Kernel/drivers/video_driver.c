@@ -86,12 +86,13 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color,uint32_t posX
 	// }
 	uint32_t x = posX;
 	if(( (screenData->width -(x + sc->offset)) < CHAR_WIDTH )){
-        x = posX;
+        x = 0;
         posY += CHAR_HEIGHT;
-	//	if (screenData->height - posY < CHAR_HEIGHT) {
-    //          posY -= CHAR_HEIGHT;
-    //          scrollScreen();
-    // 	}
+		if (screenData->height - posY < CHAR_HEIGHT) {
+              posY -= CHAR_HEIGHT;
+              scrollScreen();
+			  clearSpace(x,posY,SCREEN_WIDTH,posY+CHAR_HEIGHT, 0x000000);
+     	}
 			
 	}
 	
@@ -197,7 +198,12 @@ void deleteChar(uint64_t bg_color){  //falta corregir que si hay un '\n' y se bo
 
 void newLine(){
 	sc->current_y += CHAR_HEIGHT;
-	sc->current_x = 0;
+	sc->current_x =0;
+	if (screenData->height - sc->current_y < CHAR_HEIGHT) {
+        sc->current_y -= CHAR_HEIGHT;
+        scrollScreen();
+		clearSpace(sc->current_x, sc->current_y,SCREEN_WIDTH,sc->current_y+CHAR_HEIGHT, 0x000000);
+    }
 }
 
 void clearScreen(uint64_t bg_color){
@@ -219,9 +225,9 @@ void clearSpace(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, 
 	uint32_t aux_currenty=sc->current_y;
 	sc->current_x = startx;
 	sc->current_y = starty;
-	for(int i=0 ; i<=endy-starty ;i++){
-		for(int j=0 ; j<=endx-startx ; j++){
-			drawPixel(i,j,bg_color);
+	for(int i=starty ; i<=endy ;i++){            
+		for(int j=startx ; j<=endx ; j++){
+			drawPixel(j,i,bg_color);
 		}
 	}
 	sc->current_x = aux_currentx;
@@ -229,9 +235,7 @@ void clearSpace(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, 
 }
 
 void scrollScreen(){//3 tamaño pixel
-    printf("HOL");
     memcpy((void *)((uint64_t)screenData->framebuffer), (void *) ((uint64_t)screenData->framebuffer+CHAR_HEIGHT*3*SCREEN_WIDTH),SCREEN_WIDTH*3*(SCREEN_HEIGHT-CHAR_HEIGHT));
-
 }
 
 	

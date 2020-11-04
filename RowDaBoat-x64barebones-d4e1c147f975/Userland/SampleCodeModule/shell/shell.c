@@ -10,7 +10,7 @@
 #define BLACK 0x000000
 #define RED 0xFF0000
 
-#define TOTAL_SIZE 2000
+#define TOTAL_SIZE 150
 #define TOTAL_COMMANDS 6
 #define TOTAL_REG 17
 #define TOTAL_ARGUMENTS 5
@@ -66,9 +66,11 @@ static void analizeChar(char c){
         removeChar();
         break;
     default:
+    if((index-2) < TOTAL_SIZE){
         buff[index++]=c;
         putChar(c);
-        break;
+    }
+     break;
     }
 }
 

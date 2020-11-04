@@ -11,7 +11,7 @@
 #define RELEASED 0
 #define ERROR -1
 #define TOTALKEYS 60
-#define MAX 2000
+#define MAX 150
 #define TOTALREGS 15
 static unsigned char pressed(unsigned char key );
 static void updateRegisters(uint64_t * rsp);
@@ -48,6 +48,7 @@ void keyboard_handler(uint64_t rsp){ // 0 0 0 0 80
                 case 0x3A: //caps locked pressed
                     if(caps == 1){
                         caps = 0;
+                        scrollScreen();
                     }else{
                         caps = 1;
                     }
@@ -96,7 +97,7 @@ void keyboard_handler(uint64_t rsp){ // 0 0 0 0 80
 char getChar(){
     char c = 0;
     while (c==0){
-        _hlt();
+        _hlt();//reduce la frecuencia con la que entra al while
         if(index>0){
             c = buffer[--index];
         }
