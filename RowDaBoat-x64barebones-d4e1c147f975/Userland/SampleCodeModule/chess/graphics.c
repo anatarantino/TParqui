@@ -126,19 +126,4 @@ void drawPiece(int piece, int  x, int  y, int pieceColor, int bgColor){
     
 }
 
-void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color){
-    int segundos=0;
-    putChar('\n');
-    putChar('\n');
-     
-    int aux=getTime(SECONDS);
-    int aux2;
-    while(segundos<=3600){               // enter del jugador anterior
-        aux2=getTime(SECONDS);
-        if(aux!=aux2){
-            segundos++;
-            printIntOnPosColor(segundos, WHITE,bg_color,startx,starty);
-            aux=aux2;
-        }
-    }
-}
+

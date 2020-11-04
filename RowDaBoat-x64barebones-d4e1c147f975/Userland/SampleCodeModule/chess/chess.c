@@ -8,7 +8,7 @@
 
 #define DIM 8
 
-int board[DIM][DIM] = { {2,3,4,6,5,4,3,2},
+static int board[DIM][DIM] = { {2,3,4,6,5,4,3,2},
 					{1,1,1,1,1,1,1,1},
 					{0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0},
@@ -16,6 +16,8 @@ int board[DIM][DIM] = { {2,3,4,6,5,4,3,2},
 					{0,0,0,0,0,0,0,0},
 					{-1,-1,-1,-1,-1,-1,-1,-1},
 					{-2,-3,-4,-6,-5,-4,-3,-2}};		// Positivos son blancos
+
+
 
 
 // Piezas con sus posiciones iniciales y finales
@@ -35,6 +37,8 @@ int checkFinalPos(int xf,int yf);
 void check();
 void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color);
 void makeMove();
+void rotateBoard();
+
 
 
 int whoseTurn = 0;		// 0 es el turno de las blancas, 1 es el turno de las negras
@@ -42,9 +46,11 @@ int error;
 
 static char log1[2000],log2[2000];
 static int index1=0,index2=0;
-int segundosW = 0;
-int segundosB = 0;
-int aux,aux2;
+static int segundosW = 0;
+static int segundosB = 0;
+static int aux = -1;
+static int aux2;
+static int rotation=1;
 
 // Movimientos para validar el enroque
 int kingMoves[] = {0,0};
@@ -53,62 +59,32 @@ int rightRooks[] = {0,0};
 
 int playNotEnded = 1;
 
+
 void playChess(){
-	int secondsW=0;
-	int secondsB=0;
-	int last_seconds = -1;
-	while(1){
-		int current_seconds = seconds_elapsed();
-		printInt(current_seconds);
-		if(last_seconds != current_seconds){
-				//if(whoseTurn == 0){
-					secondsW++;
-					printIntOnPosColor(secondsW,0x00ff00,0x0000ff,40,40);
-				//}else{
-				//	secondsB++;
-				//	printIntOnPosColor(secondsB,0x00ff00,0x0000ff,40,40);
-				//}
-		last_seconds = current_seconds;
-		}
+
+	//aux=getTime(SECONDS);
+	
+	while(!gameover()){
+	
+		drawBoard(board,0xB17C54,0xEED09D);
+		//timer(40,40,100,100,0x000000);
+		makeMove();
 
 	}
-	/*
-	int secondsW=0;
-	int secondsB=0;
-
-	int last_seconds = -1;
-
-	printColorOnPos("Jugadas:",0xFFFF00,0x000000,856,4);
-
-
-	while(1){ //el juego en si
-		if(gameover() == 0){
-			break;
-		}
-		int current_seconds = seconds_elapsed();
-		while(last_seconds != current_seconds){
-			drawBoard(board,0xB17C54,0xEED09D);       // dibuja las piezas donde van
-			if(last_seconds != current_seconds){
-				if(whoseTurn == 0){
-					secondsW++;
-					printIntOnPosColor(secondsW,0x00ff00,0x0000ff,40,40);
-				}else{
-					secondsB++;
-					printIntOnPosColor(secondsB,0x00ff00,0x0000ff,40,40);
-				}
-				last_seconds = current_seconds;
-			}
-			makeMove();
-			
-		}
-	}
-	*/
+	
 	
 }
 
 void makeMove(){
+	
 	int x0, y0, xf, yf;
 	int letra = getChar();
+	if(letra=='r' || letra=='R'){
+		rotateBoard();
+		rotation = (rotation + 1) % 4;
+		drawBoard(board,0xB17C54,0xEED09D);
+		letra=getChar();
+	}
 
 	int nro = getChar();
 	if(((letra >='A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
@@ -119,6 +95,7 @@ void makeMove(){
 			y0 = letra - 'a';
 		}
 		x0 = nro - '1';
+		
 		if(board[x0][y0] == 0){		// no selecciono ninguna pieza
 			noPiece();
 			x0 = -1;
@@ -158,7 +135,6 @@ void makeMove(){
 	}
 	int letraF,nroF;
 	if(x0 != -1 && y0 != -1 && error!=1){		//selecciono una pieza valida
-	//	getChar();
 		letraF = getChar();
 		nroF = getChar();
 
@@ -176,6 +152,23 @@ void makeMove(){
 		}
 		if(error!=1){
 			int move = 0;
+			int aux;
+			switch (rotation)
+			{
+			case 1:
+				break;
+			case 2:
+				aux=x0;
+				x0=y0;
+				y0=aux;
+
+				aux=xf;
+				xf=yf;
+				yf=aux;
+				break;
+			default:
+				break;
+			}
 			switch(board[x0][y0]){
 				case 1:
 				case -1:
@@ -237,7 +230,22 @@ void makeMove(){
 	
 }
 
-
+void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color){
+    int segundos=0;
+    putChar('\n');
+    putChar('\n');
+     
+    //int aux=getTime(SECONDS);
+    //int aux2;
+    //while(segundos<=3600){               // enter del jugador anterior
+        aux2=getTime(SECONDS);
+        if(aux!=aux2){
+            segundos++;
+            printIntOnPosColor(segundos, 0xFFFFFF,bg_color,startx,starty);
+            aux=aux2;
+        }
+    //}
+}
 
 void noPiece(){	
 	//printf("No hay una pieza en esa ubicacion, ingrese una nueva ubicacion\n");
@@ -521,15 +529,15 @@ int gameover(){
 
 	if(player2 == 0){
 		//printf("Player 2 wins\n");
-		return 0;
+		return 1;
 	}
 
 	if(player1 == 0){
 		//printf("Player 1 wins\n");
-		return 0;
+		return 1;
 	}
 
-	return 1;
+	return 0;
 
 }
 
@@ -608,6 +616,21 @@ void check(){
 	}
 }
 
+void rotateBoard() {
+    int ret[DIM][DIM]={0};
+
+    for (int i = 0; i < DIM; ++i) {
+        for (int j = 0; j < DIM; ++j) {
+            ret[i][j] = board[DIM - j - 1][i];
+        }
+    }
+
+    for (int i = 0; i < DIM; ++i) {
+        for (int j = 0; j < DIM; ++j) {
+            board[i][j] = ret[i][j];
+        }
+    }
+}
 
 
 
