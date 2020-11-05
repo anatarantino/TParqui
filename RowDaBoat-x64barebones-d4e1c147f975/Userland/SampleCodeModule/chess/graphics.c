@@ -44,7 +44,7 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2, int rotation){
                         }else if(rotation==2){ 
                             ficha = matrix[8-1-(h-STARTY)/87][8-1-(w-STARTX)/87]; 
                         }else{
-                            ficha = matrix[(w-STARTX)/87][(h-STARTY)/87]; 
+                            ficha = matrix[(w-STARTX)/87][8-1-(h-STARTY)/87]; 
                         }
                         switch(ficha){
                             case WPAWN:

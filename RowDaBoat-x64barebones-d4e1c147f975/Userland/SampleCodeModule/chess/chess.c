@@ -64,7 +64,7 @@ void makeMove(){
 
 	int nro = getChar();
 	int aux4;
-	
+
 	if(((letra >= 'A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
 		
 		if(letra >='A' && letra <= 'H'){
@@ -85,6 +85,12 @@ void makeMove(){
 			aux4=x0;
 			x0=y0;
 			y0=DIM-1-aux4;
+			printf("x0:");
+			printInt(x0);
+			printf("y0:");
+			printInt(y0);
+			putChar('\n');
+			
 		}
 
 		if(board[x0][y0] == 0){		// no selecciono ninguna pieza
@@ -143,6 +149,10 @@ void makeMove(){
 				aux4=xf;
 				xf=yf;
 				yf=DIM-1-aux4;
+				printf("xf:");
+				printInt(xf);
+				printf("yf:");
+				printInt(yf);
 			}
 
 			switch(board[x0][y0]){
@@ -189,6 +199,9 @@ void makeMove(){
 	
 	if(error == 0){
 		addPieceChar(piece);
+		if(letra>='a' && letra<='h'){
+			letra=letra - 'a'+'A';
+		}
 		if(whoseTurn==0){
 				log1[index1++]=letraF;
 				log1[index1++]=nroF;
