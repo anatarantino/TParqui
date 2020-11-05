@@ -33,7 +33,6 @@ void noPiece();
 void changePiece(int x, int y);
 int checkFinalPos(int xf,int yf);
 void check();
-void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color);
 void makeMove();
 void addPieceChar(int number);
 void initNewGame();

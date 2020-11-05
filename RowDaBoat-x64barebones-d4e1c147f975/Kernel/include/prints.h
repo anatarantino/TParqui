@@ -15,4 +15,6 @@ void printHex(uint64_t num);
 void printHexColor(uint64_t num, uint64_t f_color, uint64_t bg_color);
 void printInt(uint64_t num);
 void printIntColor(uint64_t num, uint64_t f_color, uint64_t bg_color);
+void printIntOnPos(int num, uint64_t f_color, uint64_t bg_color, uint32_t posX, uint32_t posY);
+void printTimer(uint64_t seconds,uint64_t posX, uint64_t posY, uint64_t f_color, uint64_t bg_color);
 #endif

@@ -14,21 +14,22 @@ int whoseTurn;		// 0 es el turno de las blancas, 1 es el turno de las negras
 int error;
 static char log1[2000],log2[2000];
 static int index1,index2;
-static int segundosW;
-static int segundosB;
+static uint64_t segundosW;
+static uint64_t segundosB;
 static int aux;
 static int aux2;
 static int rotation;
 static int init = 0;
 // Movimientos para validar el enroque
-int kingMoves[];
-int leftRooks[];
-int rightRooks[];
+int kingMoves[2];
+int leftRooks[2];
+int rightRooks[2];
 static int quit;
 
+static int last_time;
 
 void playChess(enum game_state state){
-
+	
 	if(state == new_game || (state == game_started && (init==0 ||gameover()))){
 		init=1;
 		initNewGame();
@@ -49,6 +50,8 @@ void playChess(enum game_state state){
 		printColorOnPos(log2,0x108520,0x000000,940,20);
 		//timer(40,40,100,100,0x000000);
 		makeMove();	
+		printIntOnPosColor(segundosW,0x0000FF,0x000000,0,20);
+
 	}
 	clearScreen();
 	//poner quien gano y decir tipo apreta esc para salir o algo asi.
@@ -59,13 +62,13 @@ void playChess(enum game_state state){
 void makeMove(){
 	
 	int x0, y0, xf, yf;
-	int letra = getChar();
+	int letra = getCharWithTimer(&segundosW,0,0,0xFF0000,0x000000);
 	if(letra=='s' || letra=='S'){ //spin (r reserved for rook)
 		rotation = (rotation + 1) % 4;
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
 		return;
 	}
-	if(letra == 'q' || letra == 'Q'){
+	if(letra == 'x' || letra == 'X'){
 		quit=1;
 		return;
 	}
@@ -73,10 +76,10 @@ void makeMove(){
 	if(letra == 'l' || letra == 'L'){
 		int escape;
 		printLogs();
-		while(escape != 'l' && escape != 'L' && escape!='q' && escape != 'Q' ){
+		while(escape != 'l' && escape != 'L' && escape!='x' && escape != 'X' ){
 			escape=getChar();
 		}
-		if(escape=='q' || escape == 'Q'){
+		if(escape=='x' || escape == 'X'){
 			quit=1;
 			return;
 		}
@@ -272,22 +275,6 @@ void addPieceChar(int number){
     }
 }
 
-void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color){
-    int segundos=0;
-    putChar('\n');
-    putChar('\n');
-     
-    //int aux=getTime(SECONDS);
-    //int aux2;
-    //while(segundos<=3600){               // enter del jugador anterior
-        aux2=getTime(SECONDS);
-        if(aux!=aux2){
-            segundos++;
-            printIntOnPosColor(segundos, 0xFFFFFF,bg_color,startx,starty);
-            aux=aux2;
-        }
-    //}
-}
 
 void noPiece(){	
 	error = 1;
@@ -297,25 +284,29 @@ void changePiece(int x, int y){
 	int wrongChar = 1;
 	int c = getChar();
 	while(wrongChar){
-		c = getChar();
 		switch(c){
-			case 'q':
+			case 'Q':
+			case 'q':									
 				board[x][y]= (whoseTurn==0)? 5:-5;
 				wrongChar = 0;
 				break;
+			case 'B':
 			case 'b':
 				board[x][y]= (whoseTurn==0)? 4:-4;
 				wrongChar = 0;
 				break;
+			case 'H':
 			case 'h':
 				board[x][y]= (whoseTurn==0)? 3:-3;
 				wrongChar = 0;
 				break;
+			case 'R':
 			case 'r':
 				board[x][y]= (whoseTurn==0)? 2:-2;
 				wrongChar = 0;
 				break;
 			default:
+				c = getChar();
 				break;
 		}
 	}
@@ -334,12 +325,6 @@ int checkFinalPos(int xf, int yf){
 int rook(int x0, int y0, int xf, int yf){
 	int move=0;
 	int i;
-
-	if(y0==0){
-		leftRooks[whoseTurn]=1;
-	}else if(y0==7){
-		rightRooks[whoseTurn]=1;
-	}
 	
 	if(x0 == xf){
 		move = checkFinalPos(xf,yf);
@@ -374,6 +359,14 @@ int rook(int x0, int y0, int xf, int yf){
 				}
 			}
 		}
+	}
+
+	if(move == 1){
+		if(y0==0){
+			leftRooks[whoseTurn]=1;
+		}else if(y0==7){
+			rightRooks[whoseTurn]=1;
+		}	
 	}
 	return move;
 }
@@ -450,22 +443,18 @@ int king(int x0, int y0, int xf, int yf){
 	//	enroque
 	if(xf==x0 && kingMoves[whoseTurn]==0){
 		if(yf==y0-2 && leftRooks[whoseTurn] == 0){					//HAY QUE VER QUE NO HAYA NADA "ATACANDO" EL MEDIO O LAS FIGURAS
-			if(rook(x0,0,x0,y0-1) == 1 && board[x0][y0-1] == 0){	//no hay nada en el medio
-				move = checkFinalPos(xf,yf);
-				if(move == 1){
-					board[x0][y0-1] = board[x0][0];
-					board[x0][0] = 0;
-				}
+			move = rook(x0,0,x0,y0-1);
+			if(move == 1){	//no hay nada en el medio
+				board[x0][y0-1] = board[x0][0];
+				board[x0][0] = 0;
 			}
 			
 		}
 		else if(yf==y0+2 && rightRooks[whoseTurn] == 0){
-			if(rook(x0,7,x0,y0+1) == 1 && board[x0][y0+1] == 0){	//no hay nada en el medio
-				move = checkFinalPos(xf,yf);
-				if(move == 1){
-					board[x0][y0+1] = board[x0][7];
-				board[x0][7] = 0;
-				}				
+			move = rook(x0,7,x0,y0+1);
+			if( move == 1){	//no hay nada en el medio
+				board[x0][y0+1] = board[x0][7];
+				board[x0][7] = 0;			
 			}
 		}
 	}
@@ -482,11 +471,11 @@ int pawn(int x0, int y0, int xf, int yf){
 	if(whoseTurn==0){		// blancas
 		if(x0 == 1  && yf==y0 && xf == x0+2){
 			if(board[x0+1][y0] == 0){
-				move = checkFinalPos(xf,yf);
+				move = (board[xf][yf] == 0)? 1:0;
 			}		
 		}
 		if(yf==y0 && xf == x0+1){
-			move = checkFinalPos(xf,yf);
+			move = (board[xf][yf] == 0)? 1:0;
 		}
 		if((yf==y0+1 || yf==y0-1) && xf == x0+1){
 			if(board[xf][yf]<0){
@@ -506,11 +495,11 @@ int pawn(int x0, int y0, int xf, int yf){
 	else{		// negras
 		if(x0 == 6  && yf==y0 && xf == x0-2){
 			if(board[x0-1][y0] == 0){
-				move = checkFinalPos(xf,yf);
+				move = (board[xf][yf] == 0)? 1:0;
 			}
 		}
 		if(yf==y0 && xf == x0-1){
-			move = checkFinalPos(xf,yf);
+			move = (board[xf][yf] == 0)? 1:0;
 		}
 		if((yf==y0+1 || yf==y0-1) && xf == x0-1){
 			if(board[xf][yf]>0){
@@ -547,23 +536,23 @@ int gameover(){
 	if(player1 == 0 || player2==0){
 		if(player2 == 0){
 			clearScreen();
-			printColorOnPos("GAME OVER PLAYER 2 WINS",0xFF0000,0x000000,512,300);
-			printColorOnPos("[press Q to quit game or N to start a new one]",0xFF0000,0x000000,250,300);
+			printColorOnPos("GAME OVER PLAYER 2 WINS",0xFF0000,0x000000,320,300);
+			printColorOnPos("[press X to quit game or N to start a new one]",0xFF0000,0x000000,250,330);
 			
 			//return 1;
 		}
 
 		if(player1 == 0){
 			clearScreen();	
-			printColorOnPos("GAME OVER PLAYER 1 WINS",0xFF0000,0x000000,512,300);
-			printColorOnPos("[press Q to quit game or N to start a new one]",0xFF0000,0x000000,250,300);
+			printColorOnPos("GAME OVER PLAYER 1 WINS",0xFF0000,0x000000,320,300);
+			printColorOnPos("[press X to quit game or N to start a new one]",0xFF0000,0x000000,250,330);
 			//return 1;
 		}
 		int escape;
-		while(escape != 'q' && escape != 'Q' && escape != 'n' && escape != 'N' ){
+		while(escape != 'x' && escape != 'X' && escape != 'n' && escape != 'N' ){
 			escape = getChar();
 		}
-		if(escape == 'q' || escape != 'Q' ){
+		if(escape == 'x' || escape != 'X' ){
 			clearScreen();
 			return 1;
 		}
@@ -691,7 +680,7 @@ void initNewGame(){
 
 void printLogs(){
 	clearScreen();
-	printf("plays until now: [press L to continue game or Q to exit]");
+	printf("plays until now: [press L to continue game or X to exit]");
 	printColorOnPos("Player 1:",0xFFFFFF,0x000000,10,20);
 	for(int i=0 ; i<index1 ; i++){
 		if(log1[i]=='\n'){

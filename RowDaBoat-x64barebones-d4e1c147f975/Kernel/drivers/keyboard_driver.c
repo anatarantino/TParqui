@@ -4,7 +4,7 @@
 #include <interrupts.h>
 #include <prints.h>
 #include <video_driver.h>
-
+#include <time.h>
 #define SHIFT 1
 #define NOTSHIFT 0
 #define PRESSED 1
@@ -100,7 +100,24 @@ void keyboard_handler(uint64_t rsp){ // 0 0 0 0 80
 char getChar(){
     char c = 0;
     while (c==0){
-        _hlt();//reduce la frecuencia con la que entra al while
+        _hlt();//Espera a que haya una interrupcion
+        if(index>0){
+            c = buffer[--index];
+        }
+    }
+    return c;
+}
+
+char getCharWithTimer(uint64_t * startSec,uint64_t posX, uint64_t posY, uint64_t f_color, uint64_t bg_color){
+    //restartTimer();
+    char c = 0;
+    while (c==0){
+        _hlt();//Espera a que haya una interrupcion
+        if(ticks_elapsed() % 18 == 0){
+            //updateTimer();
+            *startSec+=1;
+            printTimer(*startSec,posX,posY,f_color,bg_color);
+        }
         if(index>0){
             c = buffer[--index];
         }
