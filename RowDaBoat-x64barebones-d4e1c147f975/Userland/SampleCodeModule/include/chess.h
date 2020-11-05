@@ -16,7 +16,9 @@ typedef enum{
     BKING = -6
 }Pieces;
 
-void playChess();
+enum game_state{new_game=0,game_started};
+
+void playChess(enum game_state state);
 
 // Piezas con sus posiciones iniciales y finales
 int rook(int x0, int y0, int xf, int yf);		// 2 o -2
@@ -34,5 +36,6 @@ void check();
 void timer(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color);
 void makeMove();
 void addPieceChar(int number);
+void initNewGame();
 
 #endif

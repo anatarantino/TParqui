@@ -8,46 +8,50 @@
 
 #define DIM 8
 
-static int board[DIM][DIM] = { {2,3,4,6,5,4,3,2},
-					{1,1,1,1,1,1,1,1},
-					{0,0,0,0,0,0,0,0},
-					{0,0,0,0,0,0,0,0},
-					{0,0,0,0,0,0,0,0},
-					{0,0,0,0,0,0,0,0},
-					{-1,-1,-1,-1,-1,-1,-1,-1},
-					{-2,-3,-4,-6,-5,-4,-3,-2}};		// Positivos son blancos
+static int board[DIM][DIM];	// Positivos son blancos
 
-int whoseTurn = 0;		// 0 es el turno de las blancas, 1 es el turno de las negras
+int whoseTurn;		// 0 es el turno de las blancas, 1 es el turno de las negras
 int error;
-int ret[DIM][DIM];
-
 static char log1[2000],log2[2000];
-static int index1=0,index2=0;
-static int segundosW = 0;
-static int segundosB = 0;
-static int aux = -1;
+static int index1,index2;
+static int segundosW;
+static int segundosB;
+static int aux;
 static int aux2;
-static int rotation=0;
-
+static int rotation;
+static int init = 0;
 // Movimientos para validar el enroque
-int kingMoves[] = {0,0};
-int leftRooks[] = {0,0};
-int rightRooks[] = {0,0};
+int kingMoves[];
+int leftRooks[];
+int rightRooks[];
+static int quit;
 
-int playNotEnded = 1;
 
+void playChess(enum game_state state){
 
-void playChess(){
-
+	if(state == new_game || (state == game_started && (init==0 ||gameover()))){
+		init=1;
+		initNewGame();
+	}
+	if(state == game_started){
+		quit = 0;
+		printColorOnPos(log1,0xFFFFFF,0x000000,856,20);
+		printColorOnPos(log2,0x108520,0x000000,940,20);
+	}
 	//aux=getTime(SECONDS);
-	printColorOnPos("Player 1:",0xFFFFFF,0x000000,856,5);
-	printColorOnPos("Player 2:",0x108520,0x000000,940,5);
 	
-	while(!gameover()){
+	
+	while(!gameover() && !quit){
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
+		printColorOnPos("Player 1:",0xFFFFFF,0x000000,856,5);
+		printColorOnPos(log1,0xFFFFFF,0x000000,856,20);
+		printColorOnPos("Player 2:",0x108520,0x000000,940,5);
+		printColorOnPos(log2,0x108520,0x000000,940,20);
 		//timer(40,40,100,100,0x000000);
 		makeMove();	
 	}
+	clearScreen();
+	//poner quien gano y decir tipo apreta esc para salir o algo asi.
 	
 	
 }
@@ -60,6 +64,25 @@ void makeMove(){
 		rotation = (rotation + 1) % 4;
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
 		return;
+	}
+	if(letra == 'q' || letra == 'Q'){
+		quit=1;
+		return;
+	}
+
+	if(letra == 'l' || letra == 'L'){
+		int escape;
+		printLogs();
+		while(escape != 'l' && escape != 'L' && escape!='q' && escape != 'Q' ){
+			escape=getChar();
+		}
+		if(escape=='q' || escape == 'Q'){
+			quit=1;
+			return;
+		}
+		clearScreen();
+		return;
+		
 	}
 
 	int nro = getChar();
@@ -85,12 +108,6 @@ void makeMove(){
 			aux4=x0;
 			x0=y0;
 			y0=DIM-1-aux4;
-			printf("x0:");
-			printInt(x0);
-			printf("y0:");
-			printInt(y0);
-			putChar('\n');
-			
 		}
 
 		if(board[x0][y0] == 0){		// no selecciono ninguna pieza
@@ -149,10 +166,7 @@ void makeMove(){
 				aux4=xf;
 				xf=yf;
 				yf=DIM-1-aux4;
-				printf("xf:");
-				printInt(xf);
-				printf("yf:");
-				printInt(yf);
+			
 			}
 
 			switch(board[x0][y0]){
@@ -209,12 +223,12 @@ void makeMove(){
 		}else{
 				log2[index2++]=letraF;
 				log2[index2++]=nroF;
-				log2[index2++]='\n ';
+				log2[index2++]='\n';
 		}
 		printColorOnPos(log1,0xFFFFFF,0x000000,856,20);
 		printColorOnPos(log2,0x108520,0x000000,940,20);
 		whoseTurn = (whoseTurn == 0)? 1:0;
-		playNotEnded = 0;
+		
 	}
 	error = 0;
 	
@@ -530,17 +544,30 @@ int gameover(){
 			}
 		}
 	}
+	if(player1 == 0 || player2==0){
+		if(player2 == 0){
+			clearScreen();
+			printColorOnPos("GAME OVER PLAYER 2 WINS",0xFF0000,0x000000,512,300);
+			printColorOnPos("[press Q to quit game or N to start a new one]",0xFF0000,0x000000,250,300);
+			
+			//return 1;
+		}
 
-	if(player2 == 0){
-		//printf("Player 2 wins\n");
-		return 1;
+		if(player1 == 0){
+			clearScreen();	
+			printColorOnPos("GAME OVER PLAYER 1 WINS",0xFF0000,0x000000,512,300);
+			printColorOnPos("[press Q to quit game or N to start a new one]",0xFF0000,0x000000,250,300);
+			//return 1;
+		}
+		int escape;
+		while(escape != 'q' && escape != 'Q' && escape != 'n' && escape != 'N' ){
+			escape = getChar();
+		}
+		if(escape == 'q' || escape != 'Q' ){
+			clearScreen();
+			return 1;
+		}
 	}
-
-	if(player1 == 0){
-		//printf("Player 1 wins\n");
-		return 1;
-	}
-
 	return 0;
 
 }
@@ -620,3 +647,64 @@ void check(){
 	}
 }
 
+void initNewGame(){
+
+	int auxBoard[][DIM] = { {2,3,4,6,5,4,3,2},
+					{1,1,1,1,1,1,1,1},
+					{0,0,0,0,0,0,0,0},
+					{0,0,0,0,0,0,0,0},
+					{0,0,0,0,0,0,0,0},
+					{0,0,0,0,0,0,0,0},
+					{-1,-1,-1,-1,-1,-1,-1,-1},
+					{-2,-3,-4,-6,-5,-4,-3,-2}};
+	
+	for(int i=0; i<DIM ;i++){
+		for(int j=0 ; j<DIM ; j++){
+			board[i][j]=auxBoard[i][j];
+		}
+	}
+
+	for(int i=0 ; i<index1 ; i++){
+		log1[i]=0;
+	}
+	for(int i=0 ; i<index2 ; i++){
+		log2[i]=0;
+	}
+	index1=0;
+	index2=0;
+	whoseTurn = 0;		// 0 es el turno de las blancas, 1 es el turno de las negras
+	error;
+	char log1[2000],log2[2000];
+	index1=0,index2=0;
+	segundosW = 0;
+	segundosB = 0;
+	aux = -1;
+	aux2;
+	rotation=0;
+	quit = 0;
+	// Movimientos para validar el enroque
+	kingMoves[0] = 0; kingMoves[1] = 0;
+	leftRooks[0] = 0; leftRooks[1] = 0;
+	rightRooks[0] = 0; rightRooks[1] = 0;
+
+}
+
+void printLogs(){
+	clearScreen();
+	printf("plays until now: [press L to continue game or Q to exit]");
+	printColorOnPos("Player 1:",0xFFFFFF,0x000000,10,20);
+	for(int i=0 ; i<index1 ; i++){
+		if(log1[i]=='\n'){
+			log1[i] = ' ';
+		}
+	}
+	printColorOnPos(log1,0xFFFFFF,0x000000,10,35);
+	printColorOnPos("Player 2:",0x108520,0x000000,10,350);
+	for(int i=0 ; i<index2 ; i++){
+		if(log2[i]=='\n'){
+			log2[i] = ' ';
+		}
+	}
+	printColorOnPos(log2,0xFFFFFF,0x000000,10,365);
+	
+}

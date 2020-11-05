@@ -307,8 +307,16 @@ static void chess(int args, char *arguments[]){
         return;
     }
     clearScreen();
-//    drawBoard(board,0xB17C54,0xEED09D);
+    printColorOnPos("PRESIONE N SI QUIERE UN NUEVO JUEGO O C PARA CONTINUAR EL ANTERIOR",0X00FF00,0X000000,250,300);
+    int state;
 
-    playChess();
+    while (state!='n' && state != 'c')
+    {
+        state = getChar();
+    }
+    state = (state == 'n') ? 0 : 1;
+    clearScreen();
+    playChess(state);
+
 }
 
