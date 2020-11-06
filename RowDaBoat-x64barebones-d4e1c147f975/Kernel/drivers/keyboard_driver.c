@@ -108,6 +108,7 @@ char getChar(){
     return c;
 }
 
+
 char getCharWithTimer(uint64_t * startSec,uint64_t posX, uint64_t posY, uint64_t f_color, uint64_t bg_color){
     //restartTimer();
     char c = 0;
@@ -121,6 +122,16 @@ char getCharWithTimer(uint64_t * startSec,uint64_t posX, uint64_t posY, uint64_t
         if(index>0){
             c = buffer[--index];
         }
+    }
+    return c;
+}
+
+
+char waitCharInteruption(){
+    char c=0;
+    _hlt();
+    if(index>0){
+        c = buffer[--index];
     }
     return c;
 }

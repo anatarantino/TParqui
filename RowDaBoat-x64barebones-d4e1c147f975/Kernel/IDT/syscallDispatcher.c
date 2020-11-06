@@ -16,6 +16,7 @@
 #define WRITEONSCREEN 8
 #define SECONDSELAPSED 9
 #define TIMEDREAD 10
+#define CHARINTERRUPT 11
 
 //modificar con lo de esceptions
 #define TOTALREGS 16 //hay 17 en el vector, chequear
@@ -26,7 +27,7 @@
 
 
 #define BLACK 0x000000
-#define CANT_SYS 11
+#define CANT_SYS 12
 
 //                          codigo        puntero       length          f_color     bg_color       extra         extra
 //                          uint64_t rax, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9
@@ -50,7 +51,6 @@ uint64_t syscallDispatcher(t_registers * r){
                 break;
             case REGISTERS:
                 return (uint64_t) returnReg();
-                break;
             case TIMERTC:
                 return getTime((time_type)(r->rdi));
             case DRAW:
@@ -66,7 +66,8 @@ uint64_t syscallDispatcher(t_registers * r){
                 break;
             case SECONDSELAPSED:
                 return seconds_elapsed();
-
+            case CHARINTERRUPT:
+                return waitCharInteruption();
             
         }    
     }
