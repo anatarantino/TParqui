@@ -5,6 +5,7 @@
 #include <timeRTC.h>
 #include <chess.h>
 
+#define RED 0xFF0000
 #define COLORP1 0xFFFFFF
 #define COLORP2 0xF69F08
 #define BGCOLOR 0x000000
@@ -583,13 +584,12 @@ int gameover(){
 	int player2 = 0;
 	if(gameOver==1){
 		clearScreen();
-		printColorOnPos("TIME OUT!",COLORP2,BGCOLOR,390,280);
+		printColorOnPos("TIME OUT!",RED,BGCOLOR,450,280);
 		if(whoseTurn==0){
-			printColorOnPos("GAME OVER PLAYER 2 WINS",COLORP2,BGCOLOR,390,300);
+			printColorOnPos("GAME OVER PLAYER 2 WINS",RED,BGCOLOR,390,300);
 		}else{
-			printColorOnPos("GAME OVER PLAYER 1 WINS",COLORP2,BGCOLOR,390,300);
+			printColorOnPos("GAME OVER PLAYER 1 WINS",RED,BGCOLOR,390,300);
 		}
-		printColorOnPos("[press X to quit game or N to start a new one]",COLORP2,BGCOLOR,300,330);
 		return 1;
 	}
 	for(int i=0; i<DIM; i++){
@@ -605,14 +605,12 @@ int gameover(){
 	if(player1 == 0 || player2==0){
 		if(player2 == 0){
 			clearScreen();
-			printColorOnPos("GAME OVER PLAYER 2 WINS",COLORP2,BGCOLOR,390,300);
-			printColorOnPos("[press X to quit game or N to start a new one]",COLORP2,BGCOLOR,300,330);
+			printColorOnPos("GAME OVER PLAYER 2 WINS",RED,BGCOLOR,390,300);
 		}
 
 		if(player1 == 0){
 			clearScreen();	
-			printColorOnPos("GAME OVER PLAYER 1 WINS",COLORP1,BGCOLOR,390,300);
-			printColorOnPos("[press X to quit game or N to start a new one]",COLORP1,BGCOLOR,300,330);
+			printColorOnPos("GAME OVER PLAYER 1 WINS",RED,BGCOLOR,390,300);
 		}
 		exit();
 		return 1;
@@ -622,12 +620,15 @@ int gameover(){
 }
 
 void exit(){
+	printColorOnPos("[press X to quit game or N to start a new one]",INSTRUCTIONCOLOR,BGCOLOR,300,330);
 	int escape;
 	while(escape != 'x' && escape != 'X' && escape != 'n' && escape != 'N' ){
 		escape = getChar();
 	}
-	if(escape == 'x' || escape != 'X' ){
+	if(escape == 'x' || escape == 'X' ){
 		clearScreen();
+	}else{
+		playChess(new_game);
 	}
 }
 

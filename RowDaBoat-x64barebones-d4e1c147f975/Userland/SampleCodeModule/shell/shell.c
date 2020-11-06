@@ -310,11 +310,11 @@ static void chess(int args, char *arguments[]){
     printColorOnPos("PRESIONE N SI QUIERE UN NUEVO JUEGO O C PARA CONTINUAR EL ANTERIOR",0X00FF00,0X000000,230,300);
     int state;
 
-    while (state!='n' && state != 'c')
+    while (state!='n' && state!='N' && state != 'c' && state != 'C')
     {
         state = getChar();
     }
-    state = (state == 'n') ? 0 : 1;
+    state = (state == 'n' || state == 'N') ? 0 : 1;
     clearScreen();
     playChess(state);
 
