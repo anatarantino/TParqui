@@ -46,61 +46,9 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2, int rotation){
                         }else{
                             ficha = matrix[(w-STARTX)/87][8-1-(h-STARTY)/87]; 
                         }
-                        switch(ficha){
-                            case 10:
-                            case 11:
-                            case 12:
-                            case 13:
-                            case 14:
-                            case 15:
-                            case 16:
-                            case 17:
-                                drawPiece(PAWN,w,h,WHITE,actualColor);
-                                break;
-                            case WROOK:
-                                drawPiece(ROOK,w,h,WHITE,actualColor);
-                                break;
-                            case WHORSE:
-                                drawPiece(HORSE,w,h,WHITE,actualColor);
-                                break;
-                            case WBISHOP:
-                                drawPiece(BISHOP,w,h,WHITE,actualColor);
-                                break;
-                            case WQUEEN:
-                                drawPiece(QUEEN,w,h,WHITE,actualColor);
-                                break;
-                            case WKING:
-                                drawPiece(KING,w,h,WHITE,actualColor);
-                                break;
-                            case -10:
-                            case -11:
-                            case -12:
-                            case -13:
-                            case -14:
-                            case -15:
-                            case -16:
-                            case -17:
-                                drawPiece(PAWN,w,h,BLACK,actualColor);
-                                break;
-                            case BROOK:
-                                drawPiece(ROOK,w,h,BLACK,actualColor);
-                                break;
-                            case BHORSE:
-                                drawPiece(HORSE,w,h,BLACK,actualColor);
-                                break;
-                            case BBISHOP:
-                                drawPiece(BISHOP,w,h,BLACK,actualColor);
-                                break;
-                            case BQUEEN:
-                                drawPiece(QUEEN,w,h,BLACK,actualColor);
-                                break;
-                            case BKING:
-                                drawPiece(KING,w,h,BLACK,actualColor);
-                                break;                            
-                            default:
-                                drawPiece(SQUARE,w,h,BLACK,actualColor);
+
+                        pieces(ficha, w, h, actualColor);
                         
-                        }
                     }
                 }
                 actualColor = (actualColor == color2)? color1 :color2;
@@ -121,6 +69,55 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2, int rotation){
             
         }
     }
+}
+
+void pieces(int ficha, int w, int h, int actualColor){
+
+    if(ficha >= 10 && ficha <= 17){
+        drawPiece(PAWN,w,h,WHITE,actualColor);
+    }
+    else if(ficha >= -17 && ficha <= -10){
+        drawPiece(PAWN,w,h,BLACK,actualColor);
+    }
+    else{
+        switch(ficha){
+                                    
+            case WROOK:
+                drawPiece(ROOK,w,h,WHITE,actualColor);
+                break;
+            case WHORSE:
+                drawPiece(HORSE,w,h,WHITE,actualColor);
+                break;
+            case WBISHOP:
+                drawPiece(BISHOP,w,h,WHITE,actualColor);
+                break;
+            case WQUEEN:
+                drawPiece(QUEEN,w,h,WHITE,actualColor);
+                break;
+            case WKING:
+                drawPiece(KING,w,h,WHITE,actualColor);
+                break;
+            case BROOK:
+                drawPiece(ROOK,w,h,BLACK,actualColor);
+                break;
+            case BHORSE:
+                drawPiece(HORSE,w,h,BLACK,actualColor);
+                break;
+            case BBISHOP:
+                drawPiece(BISHOP,w,h,BLACK,actualColor);
+                break;
+            case BQUEEN:
+                drawPiece(QUEEN,w,h,BLACK,actualColor);
+                break;
+            case BKING:
+                drawPiece(KING,w,h,BLACK,actualColor);
+                break;                            
+            default:
+                drawPiece(SQUARE,w,h,BLACK,actualColor);
+        
+        }
+    }
+    
 }
 
 void drawPiece(int piece, int  x, int  y, int pieceColor, int bgColor){
