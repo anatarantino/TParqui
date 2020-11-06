@@ -72,7 +72,20 @@ void playChess(enum game_state state){
 void makeMove(){
 	
 	int x0, y0, xf, yf;
-	int letra;
+	int letra=0;
+	while(letra==0){
+		if(ticks_elapsed() % 18 == 0){
+			if(whoseTurn==0){
+				segundosW++;
+				 printTimer(segundosW,POSP1X,POSTIMERY,COLORP1,0x00FF00);
+			}else{
+				segundosB++;
+				 printTimer(segundosB,POSP1X,POSTIMERY,COLORP1,0x00FF00);
+			}
+			letra=waitCharInterruption();
+		}
+	}
+	
 	if(whoseTurn == 0)
 		letra = getCharWithTimer(&segundosW,POSP1X,POSTIMERY,COLORP1,BGCOLOR);
 	if(whoseTurn == 1)

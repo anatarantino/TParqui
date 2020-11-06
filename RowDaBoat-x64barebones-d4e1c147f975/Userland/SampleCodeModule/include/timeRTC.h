@@ -15,6 +15,6 @@ typedef enum{
 
 uint8_t getTime(time_type descriptor);
 
-uint64_t seconds_elapsed();
+uint64_t ticks_elapsed();
 
 #endif

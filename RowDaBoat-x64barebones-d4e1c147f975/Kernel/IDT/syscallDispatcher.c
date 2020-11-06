@@ -14,7 +14,7 @@
 #define DRAW 6
 #define CLEARSPACE 7
 #define WRITEONSCREEN 8
-#define SECONDSELAPSED 9
+#define TICKSELAPSED 9
 #define TIMEDREAD 10
 #define CHARINTERRUPT 11
 
@@ -64,11 +64,11 @@ uint64_t syscallDispatcher(t_registers * r){
                 syscallWriteOnCurrentPos((char *)r->rdi,(uint64_t)r->rsi,(uint64_t)r->rdx, (uint64_t) r->r10,(uint32_t)r->r8,(uint32_t)r->r9);
                 //no se si no es r9 y despues r8
                 break;
-            case SECONDSELAPSED:
-                return seconds_elapsed();
+            case TICKSELAPSED:
+                return ticks_elapsed();
             case CHARINTERRUPT:
                 return waitCharInteruption();
-            
+        
         }    
     }
     return 0;

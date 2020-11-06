@@ -5,6 +5,8 @@
 #define BLANCO 0xFFFFFF
 #define NEGRO 0x000000
 
+#define CHAR_WIDTH 8
+
 void putChar(char c){
     syscalls(WRITE, (uint64_t)&c, 1, BLANCO, NEGRO, 0, 0);
 }
@@ -85,4 +87,33 @@ uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 	}
 
 	return digits;
+}
+
+void printTimer(uint64_t seconds,uint64_t posX, uint64_t posY, uint64_t f_color, uint64_t bg_color){
+    int h = (seconds/3600); 
+	int m = (seconds -(3600*h))/60;	
+	int s = (seconds -(3600*h)-(m*60));
+    char divider = ':';
+	if(h<10){
+        printIntOnPosColor(0,f_color,bg_color,posX,posY);   
+        posX+=CHAR_WIDTH;
+    }
+    printIntOnPosColor(h,f_color,bg_color,posX,posY);
+    posX+=CHAR_WIDTH;
+    printColorOnPos(&divider,f_color,bg_color,posX,posY);
+    posX+=CHAR_WIDTH;
+    if(m<10){
+        printIntOnPosColor(0,f_color,bg_color,posX,posY);   
+        posX+=CHAR_WIDTH;
+    }
+    printIntOnPosColor(m,f_color,bg_color,posX,posY);
+    posX+=CHAR_WIDTH;
+    printColorOnPos(&divider,f_color,bg_color,posX,posY);
+    posX+=CHAR_WIDTH;
+    if(s<10){
+        printIntOnPosColor(0,f_color,bg_color,posX,posY);   
+        posX+=CHAR_WIDTH;
+    }
+    printIntOnPosColor(s,f_color,bg_color,posX,posY);
+   
 }

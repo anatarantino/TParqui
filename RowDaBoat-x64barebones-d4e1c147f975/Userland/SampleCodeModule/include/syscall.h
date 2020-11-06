@@ -12,7 +12,7 @@
 #define DRAW 6
 #define CLEARSPACE 7
 #define WRITEONSCREEN 8
-#define SECONDSELAPSED 9
+#define TICKSELAPSED 9
 #define TIMEDREAD 10
 #define CHARINTERRUPT 11
 
