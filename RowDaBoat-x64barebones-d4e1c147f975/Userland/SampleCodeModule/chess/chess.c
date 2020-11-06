@@ -555,14 +555,14 @@ int gameover(){
 	if(player1 == 0 || player2==0){
 		if(player2 == 0){
 			clearScreen();
-			printColorOnPos("GAME OVER PLAYER 2 WINS",COLORP2,BGCOLOR,320,300);
-			printColorOnPos("[press X to quit game or N to start a new one]",COLORP2,BGCOLOR,250,330);
+			printColorOnPos("GAME OVER PLAYER 2 WINS",COLORP2,BGCOLOR,370,300);
+			printColorOnPos("[press X to quit game or N to start a new one]",COLORP2,BGCOLOR,300,330);
 		}
 
 		if(player1 == 0){
 			clearScreen();	
-			printColorOnPos("GAME OVER PLAYER 1 WINS",COLORP1,BGCOLOR,320,300);
-			printColorOnPos("[press X to quit game or N to start a new one]",COLORP1,BGCOLOR,250,330);
+			printColorOnPos("GAME OVER PLAYER 1 WINS",COLORP1,BGCOLOR,370,300);
+			printColorOnPos("[press X to quit game or N to start a new one]",COLORP1,BGCOLOR,300,330);
 		}
 		int escape;
 		while(escape != 'x' && escape != 'X' && escape != 'n' && escape != 'N' ){
