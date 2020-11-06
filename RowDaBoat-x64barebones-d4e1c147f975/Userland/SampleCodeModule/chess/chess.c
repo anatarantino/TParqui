@@ -210,46 +210,26 @@ void makeMove(){
 			
 			}
 
-			switch(board[x0][y0]){
-				case -10:
-				case 10:
-                case -11:
-                case 11:
-                case -12:
-                case 12:
-                case -13:
-                case 13:
-                case -14:
-                case 14:
-                case -15:
-                case 15:
-                case -16:
-                case 16:
-                case -17:
-                case 17:
-					move = pawn(x0,y0,xf,yf);
-					break;			
-				case 2:
-				case -2:
-					move = rook(x0,y0,xf,yf);
-					break;
-				case 3:
-				case -3:
-					move = horse(x0,y0,xf,yf);
-					break;
-				case 4:
-				case -4:
-					move = bishop(x0,y0,xf,yf);
-					break;
-				case 5:
-				case -5:
-					move = queen(x0,y0,xf,yf);
-					break;
-				case 6:
-				case -6:
-					move = king(x0,y0,xf,yf);
-					break;
+			int piece = board[x0][y0];
+			if((piece >= 10 && piece <=17)|| (piece >= -17 && piece <= -10)){
+				move = pawn(x0,y0,xf,yf);
 			}
+			else if(piece == 2 || piece == -2){
+				move = rook(x0,y0,xf,yf);
+			}
+			else if(piece == 3 || piece == -3){
+				move = horse(x0,y0,xf,yf);
+			}
+			else if(piece == 4 || piece == -4){
+				move = bishop(x0,y0,xf,yf);
+			}
+			else if(piece == 5 || piece == -5){
+				move = queen(x0,y0,xf,yf);
+			}
+			else if(piece == 6 || piece == -6){
+				move = king(x0,y0,xf,yf);
+			}
+
 			if(move > 0){
 				piece=board[x0][y0];
 				board[xf][yf] = board[x0][y0];
