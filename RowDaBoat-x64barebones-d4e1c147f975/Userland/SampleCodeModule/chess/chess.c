@@ -29,6 +29,8 @@ static int aux2;
 static int rotation;
 static int init = 0;
 static int quit;
+static int last_time;
+static int gameOver;
 
 int pawnMovesW[DIM];
 int pawnMovesB[DIM];
@@ -38,7 +40,6 @@ int kingMoves[2];
 int leftRooks[2];
 int rightRooks[2];
 
-static int last_time;
 
 void playChess(enum game_state state){
 	
@@ -72,24 +73,12 @@ void playChess(enum game_state state){
 void makeMove(){
 	
 	int x0, y0, xf, yf;
-	int letra=0;
-	while(letra==0){
-		if(ticks_elapsed() % 18 == 0){
-			if(whoseTurn==0){
-				segundosW++;
-				 printTimer(segundosW,POSP1X,POSTIMERY,COLORP1,0x00FF00);
-			}else{
-				segundosB++;
-				 printTimer(segundosB,POSP1X,POSTIMERY,COLORP1,0x00FF00);
-			}
-			letra=waitCharInterruption();
-		}
+	int letra=obtainChar();
+
+	if(gameOver==1){
+		return;
 	}
-	
-	if(whoseTurn == 0)
-		letra = getCharWithTimer(&segundosW,POSP1X,POSTIMERY,COLORP1,BGCOLOR);
-	if(whoseTurn == 1)
-		letra = getCharWithTimer(&segundosB,POSP2X,POSTIMERY,COLORP2,BGCOLOR);
+
 	if(letra=='s' || letra=='S'){ //spin (r reserved for rook)
 		rotation = (rotation + 1) % 4;
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
@@ -115,11 +104,11 @@ void makeMove(){
 		
 	}
 
-	int nro;
-	if(whoseTurn == 0)
-		nro = getCharWithTimer(&segundosW,POSP1X,POSTIMERY,COLORP1,BGCOLOR);
-	if(whoseTurn == 1)
-		nro = getCharWithTimer(&segundosB,POSP2X,POSTIMERY,COLORP2,BGCOLOR);
+	int nro=obtainChar();
+
+	if(gameOver==1){
+		return;
+	}
 
 	int aux4;
 
@@ -173,13 +162,14 @@ void makeMove(){
 	}
 	int letraF,nroF, piece;
 	if(x0 != -1 && y0 != -1 && error!=1){		//selecciono una pieza valida
-		if(whoseTurn == 0){
-			letraF = getCharWithTimer(&segundosW,POSP1X,POSTIMERY,COLORP1,BGCOLOR);
-			nroF = getCharWithTimer(&segundosW,POSP1X,POSTIMERY,COLORP1,BGCOLOR);
+		letraF=obtainChar();
+		if(gameOver==1){
+			return;
 		}
-		if(whoseTurn == 1){
-			letraF = getCharWithTimer(&segundosB,POSP2X,POSTIMERY,COLORP2,BGCOLOR);
-			nroF = getCharWithTimer(&segundosB,POSP2X,POSTIMERY,COLORP2,BGCOLOR);
+		nroF=obtainChar();
+		
+		if(gameOver==1){
+			return;
 		}
 
 		if(((letraF >='A' && letraF <= 'H') || (letraF >= 'a' && letraF <= 'h')) && (nroF >= '1' && nroF <= '8')){
@@ -265,6 +255,33 @@ void makeMove(){
 	}
 	error = 0;
 	
+}
+
+char obtainChar(){
+	int letra=0;
+	while(letra==0){
+		if(ticks_elapsed() % 18 == 0){
+			if(whoseTurn==0){
+				segundosW++;
+				printTimer(segundosW,POSP1X,POSTIMERY,COLORP1,BGCOLOR);
+				if(segundosW-segundosB==60){
+					gameOver=1;
+					gameover();
+					return -1;
+				}
+			}else{
+				segundosB++;
+				printTimer(segundosB,POSP2X,POSTIMERY,COLORP2,BGCOLOR);
+				if(segundosB-segundosW==60){
+					gameOver=1;
+					gameover();
+					return -1;
+				}
+			}
+		}
+		letra=waitCharInterruption();
+	}
+	return letra;
 }
 
 void addPieceChar(int number){
@@ -560,6 +577,17 @@ int pawn(int x0, int y0, int xf, int yf){
 int gameover(){
 	int player1 = 0;
 	int player2 = 0;
+	if(gameOver==1){
+		clearScreen();
+		printColorOnPos("TIME OUT!",COLORP2,BGCOLOR,390,280);
+		if(whoseTurn==0){
+			printColorOnPos("GAME OVER PLAYER 2 WINS",COLORP2,BGCOLOR,390,300);
+		}else{
+			printColorOnPos("GAME OVER PLAYER 1 WINS",COLORP2,BGCOLOR,390,300);
+		}
+		printColorOnPos("[press X to quit game or N to start a new one]",COLORP2,BGCOLOR,300,330);
+		return 1;
+	}
 	for(int i=0; i<DIM; i++){
 		for(int j=0; j<DIM; j++){
 			if(board[i][j] == 6){
@@ -705,6 +733,7 @@ void initNewGame(){
 	aux2;
 	rotation=0;
 	quit = 0;
+	gameOver=0;
 	// Movimientos para validar el enroque
 	kingMoves[0] = 0; kingMoves[1] = 0;
 	leftRooks[0] = 0; leftRooks[1] = 0;
