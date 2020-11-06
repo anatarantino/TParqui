@@ -35,4 +35,5 @@ void makeMove();
 void addPieceChar(int number);
 void initNewGame();
 char obtainChar();
+void exit();
 #endif

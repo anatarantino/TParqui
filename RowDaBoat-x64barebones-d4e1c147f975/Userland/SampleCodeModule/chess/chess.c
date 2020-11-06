@@ -52,7 +52,7 @@ void playChess(enum game_state state){
 		printColorOnPos(log1,COLORP1,BGCOLOR,POSP1X,POSLOGSY);
 		printColorOnPos(log2,COLORP2,BGCOLOR,POSP2X,POSLOGSY);
 	}
-	//aux=getTime(SECONDS);
+	
 	
 	
 	while(!gameover() && !quit){
@@ -76,6 +76,7 @@ void makeMove(){
 	int letra=obtainChar();
 
 	if(gameOver==1){
+		exit();
 		return;
 	}
 
@@ -107,6 +108,7 @@ void makeMove(){
 	int nro=obtainChar();
 
 	if(gameOver==1){
+		exit();
 		return;
 	}
 
@@ -164,11 +166,13 @@ void makeMove(){
 	if(x0 != -1 && y0 != -1 && error!=1){		//selecciono una pieza valida
 		letraF=obtainChar();
 		if(gameOver==1){
+			exit();
 			return;
 		}
 		nroF=obtainChar();
 		
 		if(gameOver==1){
+			exit();
 			return;
 		}
 
@@ -610,17 +614,21 @@ int gameover(){
 			printColorOnPos("GAME OVER PLAYER 1 WINS",COLORP1,BGCOLOR,390,300);
 			printColorOnPos("[press X to quit game or N to start a new one]",COLORP1,BGCOLOR,300,330);
 		}
-		int escape;
-		while(escape != 'x' && escape != 'X' && escape != 'n' && escape != 'N' ){
-			escape = getChar();
-		}
-		if(escape == 'x' || escape != 'X' ){
-			clearScreen();
-			return 1;
-		}
+		exit();
+		return 1;
 	}
 	return 0;
 
+}
+
+void exit(){
+	int escape;
+	while(escape != 'x' && escape != 'X' && escape != 'n' && escape != 'N' ){
+		escape = getChar();
+	}
+	if(escape == 'x' || escape != 'X' ){
+		clearScreen();
+	}
 }
 
 void check(){
