@@ -1,4 +1,3 @@
-// Compile : 	gcc chess.c -o chess -Wall -pedantic -std=c99		Execute :	./chess
 #include <graphics.h>
 #include <chess_piece.h>
 #include <prints.h>
@@ -6,6 +5,15 @@
 #include <timeRTC.h>
 #include <chess.h>
 
+#define COLORP1 0xFFFFFF
+#define COLORP2 0xF69F08
+#define BGCOLOR 0x000000
+#define INSTRUCTIONCOLOR 0x00FF00
+#define POSP1X 856
+#define POSP2X 940
+#define POSTITLEY 5
+#define POSTIMERY 40
+#define POSLOGSY 72
 #define DIM 8
 
 static int board[DIM][DIM];	// Positivos son blancos
@@ -36,21 +44,19 @@ void playChess(enum game_state state){
 	}
 	if(state == game_started){
 		quit = 0;
-		printColorOnPos(log1,0xFFFFFF,0x000000,856,20);
-		printColorOnPos(log2,0x108520,0x000000,940,20);
+		printColorOnPos(log1,COLORP1,BGCOLOR,POSP1X,POSLOGSY);
+		printColorOnPos(log2,COLORP2,BGCOLOR,POSP2X,POSLOGSY);
 	}
 	//aux=getTime(SECONDS);
 	
 	
 	while(!gameover() && !quit){
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
-		printColorOnPos("Player 1:",0xFFFFFF,0x000000,856,5);
-		printColorOnPos(log1,0xFFFFFF,0x000000,856,20);
-		printColorOnPos("Player 2:",0x108520,0x000000,940,5);
-		printColorOnPos(log2,0x108520,0x000000,940,20);
-		//timer(40,40,100,100,0x000000);
+		printColorOnPos("Player 1:",COLORP1,BGCOLOR,POSP1X,POSTITLEY);
+		printColorOnPos(log1,COLORP1,BGCOLOR,POSP1X,POSLOGSY);
+		printColorOnPos("Player 2:",COLORP2,BGCOLOR,POSP2X,POSTITLEY);
+		printColorOnPos(log2,COLORP2,BGCOLOR,POSP2X,POSLOGSY);
 		makeMove();	
-		printIntOnPosColor(segundosW,0x0000FF,0x000000,0,20);
 
 	}
 	clearScreen();
@@ -62,7 +68,11 @@ void playChess(enum game_state state){
 void makeMove(){
 	
 	int x0, y0, xf, yf;
-	int letra = getCharWithTimer(&segundosW,0,0,0xFF0000,0x000000);
+	int letra;
+	if(whoseTurn == 0)
+		letra = getCharWithTimer(&segundosW,POSP1X,POSTIMERY,COLORP1,BGCOLOR);
+	if(whoseTurn == 1)
+		letra = getCharWithTimer(&segundosB,POSP2X,POSTIMERY,COLORP2,BGCOLOR);
 	if(letra=='s' || letra=='S'){ //spin (r reserved for rook)
 		rotation = (rotation + 1) % 4;
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
@@ -88,7 +98,12 @@ void makeMove(){
 		
 	}
 
-	int nro = getChar();
+	int nro;
+	if(whoseTurn == 0)
+		nro = getCharWithTimer(&segundosW,POSP1X,POSTIMERY,COLORP1,BGCOLOR);
+	if(whoseTurn == 1)
+		nro = getCharWithTimer(&segundosB,POSP2X,POSTIMERY,COLORP2,BGCOLOR);
+
 	int aux4;
 
 	if(((letra >= 'A' && letra <= 'H') || (letra >= 'a' && letra <= 'h')) && (nro >= '1' && nro<= '8')){
@@ -141,8 +156,14 @@ void makeMove(){
 	}
 	int letraF,nroF, piece;
 	if(x0 != -1 && y0 != -1 && error!=1){		//selecciono una pieza valida
-		letraF = getChar();
-		nroF = getChar();
+		if(whoseTurn == 0){
+			letraF = getCharWithTimer(&segundosW,POSP1X,POSTIMERY,COLORP1,BGCOLOR);
+			nroF = getCharWithTimer(&segundosW,POSP1X,POSTIMERY,COLORP1,BGCOLOR);
+		}
+		if(whoseTurn == 1){
+			letraF = getCharWithTimer(&segundosB,POSP2X,POSTIMERY,COLORP2,BGCOLOR);
+			nroF = getCharWithTimer(&segundosB,POSP2X,POSTIMERY,COLORP2,BGCOLOR);
+		}
 
 		if(((letraF >='A' && letraF <= 'H') || (letraF >= 'a' && letraF <= 'h')) && (nroF >= '1' && nroF <= '8')){
 			if(letraF >='A' && letraF <= 'H'){
@@ -228,8 +249,6 @@ void makeMove(){
 				log2[index2++]=nroF;
 				log2[index2++]='\n';
 		}
-		printColorOnPos(log1,0xFFFFFF,0x000000,856,20);
-		printColorOnPos(log2,0x108520,0x000000,940,20);
 		whoseTurn = (whoseTurn == 0)? 1:0;
 		
 	}
@@ -536,17 +555,14 @@ int gameover(){
 	if(player1 == 0 || player2==0){
 		if(player2 == 0){
 			clearScreen();
-			printColorOnPos("GAME OVER PLAYER 2 WINS",0xFF0000,0x000000,320,300);
-			printColorOnPos("[press X to quit game or N to start a new one]",0xFF0000,0x000000,250,330);
-			
-			//return 1;
+			printColorOnPos("GAME OVER PLAYER 2 WINS",COLORP2,BGCOLOR,320,300);
+			printColorOnPos("[press X to quit game or N to start a new one]",COLORP2,BGCOLOR,250,330);
 		}
 
 		if(player1 == 0){
 			clearScreen();	
-			printColorOnPos("GAME OVER PLAYER 1 WINS",0xFF0000,0x000000,320,300);
-			printColorOnPos("[press X to quit game or N to start a new one]",0xFF0000,0x000000,250,330);
-			//return 1;
+			printColorOnPos("GAME OVER PLAYER 1 WINS",COLORP1,BGCOLOR,320,300);
+			printColorOnPos("[press X to quit game or N to start a new one]",COLORP1,BGCOLOR,250,330);
 		}
 		int escape;
 		while(escape != 'x' && escape != 'X' && escape != 'n' && escape != 'N' ){
@@ -680,20 +696,29 @@ void initNewGame(){
 
 void printLogs(){
 	clearScreen();
-	printf("plays until now: [press L to continue game or X to exit]");
-	printColorOnPos("Player 1:",0xFFFFFF,0x000000,10,20);
+	printColorOnPos(" Moves until now: [press L to continue game or X to exit]",INSTRUCTIONCOLOR,BGCOLOR,0,0);
+	printColorOnPos("Player 1:",COLORP1,BGCOLOR,10,20);
 	for(int i=0 ; i<index1 ; i++){
 		if(log1[i]=='\n'){
 			log1[i] = ' ';
 		}
 	}
-	printColorOnPos(log1,0xFFFFFF,0x000000,10,35);
-	printColorOnPos("Player 2:",0x108520,0x000000,10,350);
+	printColorOnPos(log1,COLORP1,BGCOLOR,10,35);
+	printColorOnPos("Player 2:",COLORP2,BGCOLOR,10,350);
 	for(int i=0 ; i<index2 ; i++){
 		if(log2[i]=='\n'){
 			log2[i] = ' ';
 		}
 	}
-	printColorOnPos(log2,0xFFFFFF,0x000000,10,365);
-	
+	printColorOnPos(log2,COLORP2,BGCOLOR,10,365);
+	for(int i=0 ; i<index1 ; i++){
+		if(log1[i]==' '){
+			log1[i] = '\n';
+		}
+	}
+	for(int i=0 ; i<index2 ; i++){
+		if(log2[i]==' '){
+			log2[i] = '\n';
+		}
+	}
 }
