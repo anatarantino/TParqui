@@ -28,11 +28,15 @@ static int aux;
 static int aux2;
 static int rotation;
 static int init = 0;
+static int quit;
+
+int pawnMovesW[DIM];
+int pawnMovesB[DIM];
+
 // Movimientos para validar el enroque
 int kingMoves[2];
 int leftRooks[2];
 int rightRooks[2];
-static int quit;
 
 static int last_time;
 
@@ -487,20 +491,24 @@ int king(int x0, int y0, int xf, int yf){
 // PAWN
 int pawn(int x0, int y0, int xf, int yf){
 	int move=0;
+	int pos;
 	if(whoseTurn==0){		// blancas
+		pos = board[x0][y0] - 10;
 		if(x0 == 1  && yf==y0 && xf == x0+2){
-			if(board[x0+1][y0] == 0){
-				move = (board[xf][yf] == 0)? 1:0;
+			if(board[x0+1][y0] == 0 && board[xf][yf] == 0){
+				move = 1;
+				pawnMovesW[pos] = 1;
 			}		
 		}
 		if(yf==y0 && xf == x0+1){
 			move = (board[xf][yf] == 0)? 1:0;
 		}
 		if((yf==y0+1 || yf==y0-1) && xf == x0+1){
+			pos = (board[x0][yf] * (-1)) - 10;
 			if(board[xf][yf]<0){
 				move = 1;
 			}
-			else if(x0==4 && board[x0][yf]<0){	// peon al paso
+			else if(x0==4 && board[x0][yf]<0 && pawnMovesB[pos] == 1){	// peon al paso
 				board[x0][yf] = 0;
 				move =1;
 			}
@@ -512,19 +520,22 @@ int pawn(int x0, int y0, int xf, int yf){
 		}
 	}
 	else{		// negras
+		pos = (board[x0][y0] * (-1)) - 10;
 		if(x0 == 6  && yf==y0 && xf == x0-2){
-			if(board[x0-1][y0] == 0){
-				move = (board[xf][yf] == 0)? 1:0;
+			if(board[x0-1][y0] == 0 && board[xf][yf] == 0){
+				move = 1;
+				pawnMovesB[pos]=1;
 			}
 		}
 		if(yf==y0 && xf == x0-1){
 			move = (board[xf][yf] == 0)? 1:0;
 		}
 		if((yf==y0+1 || yf==y0-1) && xf == x0-1){
+			pos = board[x0][yf] - 10;
 			if(board[xf][yf]>0){
 				move = 1;
 			}
-			else if(x0==3 && board[x0][yf]>0){	// peon al paso
+			else if(x0==3 && board[x0][yf]>0 && pawnMovesW[pos] == 1){	// peon al paso
 				board[x0][yf] = 0;
 				move = 1;
 			}
@@ -655,12 +666,12 @@ void check(){
 void initNewGame(){
 
 	int auxBoard[][DIM] = { {2,3,4,6,5,4,3,2},
-					{1,1,1,1,1,1,1,1},
+					{10,11,12,13,14,15,16,17},
 					{0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0},
 					{0,0,0,0,0,0,0,0},
-					{-1,-1,-1,-1,-1,-1,-1,-1},
+					{-10,-11,-12,-13,-14,-15,-16,-17},
 					{-2,-3,-4,-6,-5,-4,-3,-2}};
 	
 	for(int i=0; i<DIM ;i++){
@@ -691,6 +702,12 @@ void initNewGame(){
 	kingMoves[0] = 0; kingMoves[1] = 0;
 	leftRooks[0] = 0; leftRooks[1] = 0;
 	rightRooks[0] = 0; rightRooks[1] = 0;
+
+	for(int i=0; i<DIM; i++){
+		pawnMovesW[i] = 0;
+		pawnMovesB[i] = 0;
+	}
+
 
 }
 
