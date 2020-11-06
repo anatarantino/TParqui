@@ -223,7 +223,7 @@ void makeMove(){
 				piece=board[x0][y0];
 				board[xf][yf] = board[x0][y0];
 				board[x0][y0] = 0;
-				if(move == 2){
+				if(move == 2 && !gameover()){
 					changePiece(xf,yf);
 				}
 				check();
@@ -555,13 +555,13 @@ int gameover(){
 	if(player1 == 0 || player2==0){
 		if(player2 == 0){
 			clearScreen();
-			printColorOnPos("GAME OVER PLAYER 2 WINS",COLORP2,BGCOLOR,370,300);
+			printColorOnPos("GAME OVER PLAYER 2 WINS",COLORP2,BGCOLOR,390,300);
 			printColorOnPos("[press X to quit game or N to start a new one]",COLORP2,BGCOLOR,300,330);
 		}
 
 		if(player1 == 0){
 			clearScreen();	
-			printColorOnPos("GAME OVER PLAYER 1 WINS",COLORP1,BGCOLOR,370,300);
+			printColorOnPos("GAME OVER PLAYER 1 WINS",COLORP1,BGCOLOR,390,300);
 			printColorOnPos("[press X to quit game or N to start a new one]",COLORP1,BGCOLOR,300,330);
 		}
 		int escape;
