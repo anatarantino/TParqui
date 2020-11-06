@@ -127,7 +127,7 @@ char getCharWithTimer(uint64_t * startSec,uint64_t posX, uint64_t posY, uint64_t
 }
 
 
-char waitCharInteruption(){
+char waitCharInterruption(){
     char c=0;
     _hlt();
     if(index>0){

@@ -9,7 +9,7 @@ char getCharWithTimer(uint64_t * startSec,uint64_t posX, uint64_t posY, uint64_t
   return syscalls(TIMEDREAD,(uint64_t) startSec,posX,posY,f_color,bg_color,0);
 }
 
-char waitCharInteruption(){
+char waitCharInterruption(){
   return syscalls(CHARINTERRUPT,0,0,0,0,0,0);
 }
 int strlen(char * str){

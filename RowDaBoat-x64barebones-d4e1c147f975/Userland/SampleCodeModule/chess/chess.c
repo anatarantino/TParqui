@@ -211,8 +211,22 @@ void makeMove(){
 			}
 
 			switch(board[x0][y0]){
-				case 1:
-				case -1:
+				case -10:
+				case 10:
+                case -11:
+                case 11:
+                case -12:
+                case 12:
+                case -13:
+                case 13:
+                case -14:
+                case 14:
+                case -15:
+                case 15:
+                case -16:
+                case 16:
+                case -17:
+                case 17:
 					move = pawn(x0,y0,xf,yf);
 					break;			
 				case 2:

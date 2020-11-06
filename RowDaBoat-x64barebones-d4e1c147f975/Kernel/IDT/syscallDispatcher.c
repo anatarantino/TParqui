@@ -67,7 +67,7 @@ uint64_t syscallDispatcher(t_registers * r){
             case TICKSELAPSED:
                 return ticks_elapsed();
             case CHARINTERRUPT:
-                return waitCharInteruption();
+                return waitCharInterruption();
         
         }    
     }

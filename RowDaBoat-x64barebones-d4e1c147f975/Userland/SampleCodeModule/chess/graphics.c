@@ -47,7 +47,14 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2, int rotation){
                             ficha = matrix[(w-STARTX)/87][8-1-(h-STARTY)/87]; 
                         }
                         switch(ficha){
-                            case WPAWN:
+                            case 10:
+                            case 11:
+                            case 12:
+                            case 13:
+                            case 14:
+                            case 15:
+                            case 16:
+                            case 17:
                                 drawPiece(PAWN,w,h,WHITE,actualColor);
                                 break;
                             case WROOK:
@@ -65,7 +72,14 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2, int rotation){
                             case WKING:
                                 drawPiece(KING,w,h,WHITE,actualColor);
                                 break;
-                            case BPAWN:
+                            case -10:
+                            case -11:
+                            case -12:
+                            case -13:
+                            case -14:
+                            case -15:
+                            case -16:
+                            case -17:
                                 drawPiece(PAWN,w,h,BLACK,actualColor);
                                 break;
                             case BROOK:
@@ -97,8 +111,7 @@ void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2, int rotation){
                     numCount++;
                 }
             }
-            if (h==ENDY && w%87 == 0 && w>=STARTX)
-            {
+            if (h==ENDY && w%87 == 0 && w>=STARTX){
                 if(currentLetter <= 13){
                     drawPiece(currentLetter, w-15,h,WHITE,BLACK);
                     currentLetter++;
