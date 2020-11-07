@@ -28,7 +28,7 @@ int pawn(int x0, int y0, int xf, int yf);		// 1 o -1
 
 int gameover();
 void noPiece();
-void changePiece(int x, int y);
+char changePiece(int x, int y);
 int checkFinalPos(int xf,int yf);
 void check();
 void makeMove();
