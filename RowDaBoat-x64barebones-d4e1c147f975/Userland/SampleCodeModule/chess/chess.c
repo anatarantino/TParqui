@@ -45,6 +45,28 @@ int kingMoves[2];
 int leftRooks[2];
 int rightRooks[2];
 
+static int gameover();
+static void noPiece();
+static char changePiece(int x, int y);
+static int checkFinalPos(int xf,int yf);
+static void check();
+static void makeMove();
+static void addPieceChar(int number);
+static void initNewGame();
+static char obtainChar();
+static int squareUnderAttack(int x, int y, int value);
+static void blankPawnMoves();
+static void exit();
+static void userGuide();
+static void printLogs();
+// Piezas con sus posiciones iniciales y finales
+static int rook(int x0, int y0, int xf, int yf);		// 2 o -2
+static int knight(int x0, int y0, int xf, int yf);		// 3 o -3
+static int bishop(int x0, int y0, int xf, int yf);		// 4 o -4
+static int queen(int x0, int y0, int xf, int yf);		// 5 o -5
+static int king(int x0, int y0, int xf, int yf);		// 6 o -6
+static int pawn(int x0, int y0, int xf, int yf);		// 1 o -1
+
 
 void playChess(enum game_state state){
 	
@@ -76,7 +98,7 @@ void playChess(enum game_state state){
 	
 }
 
-void makeMove(){
+static void makeMove(){
 	
 	int x0, y0, xf, yf;
 	int letra=obtainChar();
@@ -344,7 +366,7 @@ void makeMove(){
 	
 }
 
-char obtainChar(){
+static char obtainChar(){
 	int letra=0;
 	while(letra==0){
 		if(ticks_elapsed() % 18 == 0){
@@ -371,7 +393,7 @@ char obtainChar(){
 	return letra;
 }
 
-void addPieceChar(int number){
+static void addPieceChar(int number){
     switch (number)
     {
     case 2:
@@ -410,11 +432,11 @@ void addPieceChar(int number){
 }
 
 
-void noPiece(){	
+static void noPiece(){	
 	error = 1;
 }
 
-char changePiece(int x, int y){
+static char changePiece(int x, int y){
 	int wrongChar = 1;
 	int c = getChar();
 	while(wrongChar){
@@ -448,7 +470,7 @@ char changePiece(int x, int y){
 	return c;
 }
 
-int checkFinalPos(int xf, int yf){
+static int checkFinalPos(int xf, int yf){
 	if(board[xf][yf] == 0){
 		return 1;
 	} else if((whoseTurn == 0 && board[xf][yf] < 0) || (whoseTurn == 1 && board[xf][yf] > 0)){
@@ -460,7 +482,7 @@ int checkFinalPos(int xf, int yf){
 
 
 // ROOK
-int rook(int x0, int y0, int xf, int yf){
+static int rook(int x0, int y0, int xf, int yf){
 	int move=0;
 	int i;
 	
@@ -514,7 +536,7 @@ int rook(int x0, int y0, int xf, int yf){
 }
 	
 // HORSE
-int knight(int x0, int y0, int xf, int yf){
+static int knight(int x0, int y0, int xf, int yf){
 	int move=0;
 	if((xf==x0+2 && (yf==y0+1 || yf == y0-1)) 	||	(xf==x0-2 && (yf==y0+1 || yf == y0-1)) 
 		||	(yf==y0+2 && (xf==x0+1 || xf == x0-1))	||	(yf==y0+2 && (xf==x0+1 || xf == x0-1))){
@@ -524,7 +546,7 @@ int knight(int x0, int y0, int xf, int yf){
 }
 
 // BISHOP
-int bishop(int x0, int y0, int xf, int yf){
+static int bishop(int x0, int y0, int xf, int yf){
 	int move=0;
 	int constant = xf - x0;
 	int i;
@@ -569,7 +591,7 @@ int bishop(int x0, int y0, int xf, int yf){
 }
 
 // QUEEN
-int queen(int x0, int y0, int xf, int yf){
+static int queen(int x0, int y0, int xf, int yf){
 	int move =0;
 	move = rook(x0,y0,xf,yf);			// si la reina se mueve en linea recta
 	move += bishop(x0,y0,xf,yf);			// si la reina se mueve en diagonal
@@ -577,7 +599,7 @@ int queen(int x0, int y0, int xf, int yf){
 }
 
 // KING
-int king(int x0, int y0, int xf, int yf){
+static int king(int x0, int y0, int xf, int yf){
 	int move=0;
 	int attacked;
 	int value = (whoseTurn == 0)? -1:1;
@@ -653,7 +675,7 @@ int king(int x0, int y0, int xf, int yf){
 }
 
 // PAWN
-int pawn(int x0, int y0, int xf, int yf){
+static int pawn(int x0, int y0, int xf, int yf){
 	int move=0;
 	int pos;
 	if(whoseTurn==0){		// blancas
@@ -722,7 +744,7 @@ int pawn(int x0, int y0, int xf, int yf){
 	return move;
 }
 
-int gameover(){
+static int gameover(){
 	int player1 = 0;
 	int player2 = 0;
 	if(gameOver==1){
@@ -762,7 +784,7 @@ int gameover(){
 
 }
 
-void exit(){
+static void exit(){
 	int escape;
 	while(escape != 'x' && escape != 'X' && escape != 'n' && escape != 'N' ){
 		escape = getChar();
@@ -774,7 +796,7 @@ void exit(){
 	}
 }
 
-void check(){
+static void check(){
 	int x,y;	// coordenadas del rey
 	int i,j;	// contadores
 	int check=0;
@@ -808,7 +830,7 @@ void check(){
 	}
 }
 
-int squareUnderAttack(int x, int y, int value){
+static int squareUnderAttack(int x, int y, int value){
 	int attacked = 0;
 	int b;
 	for(int i=0; i<DIM; i++){
@@ -834,7 +856,7 @@ int squareUnderAttack(int x, int y, int value){
 	return attacked;
 }
 
-void initNewGame(){
+static void initNewGame(){
 
 	int auxBoard[][DIM] = { {2,3,4,6,5,4,3,2},
 					{10,11,12,13,14,15,16,17},
@@ -887,7 +909,7 @@ void initNewGame(){
 
 }
 
-void printLogs(){
+static void printLogs(){
 	clearScreen();
 	printColorOnPos("Player 1:",COLORP1,BLACK,10,20);
 	for(int i=0 ; i<index1 ; i++){
@@ -915,7 +937,7 @@ void printLogs(){
 	}
 }
 
-void blankPawnMoves(){
+static void blankPawnMoves(){
 	if(whoseTurn == 0){
 		for(int i=0; i<DIM; i++){
 			pawnMovesB[i]=0;				// para evitar que el peon al paso se pueda realizar
@@ -928,7 +950,7 @@ void blankPawnMoves(){
 	}
 }
 
-void userGuide(){
+static void userGuide(){
 	clearScreen();
 	printColor("User Guide:\n\n",YELLOW,BLACK);
 
