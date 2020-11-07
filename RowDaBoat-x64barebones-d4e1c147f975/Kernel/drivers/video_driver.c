@@ -1,4 +1,3 @@
-
 #include <video_driver.h>
 
 struct vbe_mode_info_structure {
@@ -75,15 +74,6 @@ void printChar(char c, uint64_t f_color, uint64_t bg_color){
 }
 void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color,uint32_t posX,uint32_t posY){
 	int isCurrentPos =( (posX == sc->current_x) && (posY == sc->current_y)) ? 1:0;
-	// if((screenData->width -(x + sc->offset)) <= CHAR_WIDTH){
-	// 	x = posX;
-	// 	y += CHAR_HEIGHT;
-	// 	// if (screenData->height - posY < CHAR_HEIGHT) {
-    //     //           posY -= CHAR_HEIGHT;
-    //     //           //scrollScreen();
-    //     // }
-			
-	// }
 	uint32_t x = posX;
 	if(( (screenData->width -(x + sc->offset)) < CHAR_WIDTH )){
         x = 0;
@@ -122,63 +112,6 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color,uint32_t posX
 	}
 	
 }
-/*
-void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color){
-	if( sc->current_x + sc->offset == screenData->width){
-		sc->current_x = 0;
-		sc->current_y += CHAR_HEIGHT;
-		// if (screenData->height - sc->current_y < CHAR_HEIGHT) {
-        //           sc->current_y -= CHAR_HEIGHT;
-        //           scrollScreen();
-        // }
-			
-	}
-
-	unsigned char * char_map = charMap(c);
-	uint32_t x = sc->current_x + sc->offset;
-	uint32_t y = sc->current_y;
-
-	for(int i=0 ; i<CHAR_HEIGHT ; i++){
-		for(int j=0 ; j<CHAR_WIDTH ; j++){
-			int8_t isMarked = (char_map[i] >> (CHAR_WIDTH - j - 1)) & 0x01;
-			if(isMarked){
-				drawPixel(x,y,f_color);
-			}else{
-				drawPixel(x,y,bg_color); 	
-			}
-			x++;
-		}
-		x = sc->current_x + sc->offset;
-		y++;
-	}
-	sc->current_x += CHAR_WIDTH;
-	
-}
-*/
-
-// void printOnCurrent(char c, uint32_t startx, uint32_t starty, uint64_t f_color, uint64_t bg_color){
-// 	//guardo donde estaba el cursor
-// 	uint32_t aux_currentx=sc->current_x;
-// 	uint32_t aux_currenty=sc->current_y;
-
-// 	unsigned char * char_map = charMap(c);
-
-// 	for(int i=0 ; i<CHAR_HEIGHT ; i++){
-// 		for(int j=0 ; j<CHAR_WIDTH ; j++){
-// 			int8_t isMarked = (char_map[i] >> (CHAR_WIDTH - j - 1)) & 0x01;
-// 			if(isMarked){
-// 				drawPixel(startx,starty,f_color);
-// 			}else{
-// 				drawPixel(startx,starty,bg_color); 	
-// 			}
-// 			startx++;
-// 		}
-// 		startx = sc->current_x + sc->offset;
-// 		starty++;
-// 	}
-// 	sc->current_x = aux_currentx;
-// 	sc->current_y = aux_currenty;
-// }
 
 void deleteChar(uint64_t bg_color){  //falta corregir que si hay un '\n' y se borra que vuelva a la ultima pos
 	if(sc->current_x == 0 && sc->current_y == 0){
@@ -234,8 +167,8 @@ void clearSpace(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, 
 	sc->current_y = aux_currenty;
 }
 
-void scrollScreen(){//3 tamaño pixel
-    memcpy((void *)((uint64_t)screenData->framebuffer), (void *) ((uint64_t)screenData->framebuffer+CHAR_HEIGHT*3*SCREEN_WIDTH),SCREEN_WIDTH*3*(SCREEN_HEIGHT-CHAR_HEIGHT));
+void scrollScreen(){
+    memcpy((void *)((uint64_t)screenData->framebuffer), (void *) ((uint64_t)screenData->framebuffer+CHAR_HEIGHT*PIXEL_SIZE*SCREEN_WIDTH),SCREEN_WIDTH*3*(SCREEN_HEIGHT-CHAR_HEIGHT));
 }
 
 	

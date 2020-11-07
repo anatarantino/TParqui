@@ -8,5 +8,6 @@ void * memcpy(void * destination, const void * source, uint64_t length);
 
 char *cpu_vendor(char *result);
 
+void *getRSP();
 
 #endif

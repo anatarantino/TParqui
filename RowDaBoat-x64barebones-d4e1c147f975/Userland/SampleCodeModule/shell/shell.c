@@ -6,6 +6,7 @@
 #include <graphics.h>
 #include <chess.h>
 #include <colors.h>
+#include <lib.h>
 
 #define TOTAL_SIZE 150
 #define TOTAL_COMMANDS 8
@@ -189,7 +190,7 @@ static void time(int args, char *arguments[]){
         return;
     }
     putChar('\n');
-    printColor("Date time:",0xFFFF00,BLACK);
+    printColor("Date time:",YELLOW,BLACK);
     putChar('\n');
     printTime(DAYOFWEEK);
     putChar('\n');

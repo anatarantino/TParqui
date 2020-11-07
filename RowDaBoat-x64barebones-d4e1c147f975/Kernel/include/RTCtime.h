@@ -14,7 +14,6 @@ typedef enum{
 }time_type;
 
 uint8_t getTime(time_type descriptor); //descriptor is for hours, minutes or seconds
-
 uint8_t getRTC(uint64_t descriptor);
 
 #endif

@@ -8,4 +8,3 @@ uint8_t getTime(time_type descriptor){
 uint64_t ticks_elapsed(){
     return syscalls(TICKSELAPSED,0,0,0,0,0,0);
 }
-
