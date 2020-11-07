@@ -32,6 +32,7 @@ static int init = 0;
 static int quit;
 static int gameOver;
 
+
 int pawnMovesW[DIM];
 int pawnMovesB[DIM];
 
@@ -56,6 +57,7 @@ void playChess(enum game_state state){
 	
 	
 	while(!gameover() && !quit){
+		printColorOnPos("User Guide\npress 'U'",YELLOW,BLACK,0,700);
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
 		printColorOnPos("Player 1:",COLORP1,BLACK,POSP1X,POSTITLEY);
 		printColorOnPos(log1,COLORP1,BLACK,POSP1X,POSLOGSY);
@@ -103,6 +105,15 @@ void makeMove(){
 		clearScreen();
 		return;
 		
+	}
+	if(letra == 'u' || letra == 'U'){
+		userGuide();
+		int escape;
+		while(escape != 'u' && escape != 'U'){
+			escape = getChar();
+		}
+		clearScreen();
+		return;
 	}
 
 	int nro=obtainChar();
@@ -808,4 +819,34 @@ void blankPawnMoves(){
 			pawnMovesW[i]=0;
 		}
 	}
+}
+
+void userGuide(){
+	clearScreen();
+	printColor("User Guide:\n\n",YELLOW,BLACK);
+
+	printColor("Board Instructions:\n",YELLOW,BLACK);
+	printf("press 'X' to pause and exit game.\npress 'S' to spin the board.\npress 'L' to display all moves.\n\n");
+
+	printColor("Game Instructions:\n",YELLOW,BLACK);
+	printf("Each square of the chessboard is identified with a unique pair of a letter and a number.");
+	printf("To move a piece, insert the letter and number of the position of your chosen piece and the letter and number of the destination desired.\n\n");
+	printf("-The king moves exactly one square horizontally, vertically, or diagonally.\n");
+	printf("A special move with the king known as castling is allowed only once per player, per game.\n");
+	printf("-A rook moves any number of vacant squares horizontally or vertically. It also is moved when castling.\n");
+	printf("-A bishop moves any number of vacant squares diagonally.\n");
+	printf("-The queen moves any number of vacant squares horizontally, vertically, or diagonally.\n");
+	printf("-A knight moves always in an 'L' pattern.");
+	printf("This can be thought of as moving two squares horizontally then one square vertically, or moving one square horizontally then two squares vertically.\n");
+	printf("The knight is not blocked by other pieces: it jumps to the new location.\n");
+	printf("-A pawn moves straight forward one square, if that square is vacant.\n");
+	printf("If it has not yet moved, a pawn also has the option of moving two squares straight forward, provided both squares are vacant.\n");
+	printf("Pawns cannot move backwards.\n");
+	printf("Pawns are the only pieces that capture differently from how they move.\n");
+	printf("A pawn can capture an enemy piece on either of the two squares diagonally in front of the pawn (but cannot move to those\nsquares if they are vacant).");
+	printf("The pawn is also involved in the  two special moves en passant and promotion.\n");
+	printf("When a player plays a pawn to the rank furthest from its starting position, he must exchange that pawn for a new queen, rook,  bishop or knight.");
+	printf("This is called the square of 'promotion'.\n");
+	printf("To choose your new piece press 'Q' for queen, 'N' for knight, 'B' for bishop, 'R' for rook.\n\n");
+	printColor("Press 'U' to go back to game",YELLOW,BLACK);
 }

@@ -38,4 +38,5 @@ char obtainChar();
 int squareUnderAttack(int x, int y, int value);
 void blankPawnMoves();
 void exit();
+void userGuide();
 #endif
