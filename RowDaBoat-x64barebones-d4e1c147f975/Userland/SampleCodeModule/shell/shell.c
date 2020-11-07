@@ -41,6 +41,7 @@ static void help(int args, char *arguments[]);
 static void clear(int args, char *arguments[]);
 static void divisionByZero(int args,char *arguments[]);
 static void opCodeException(int args,char *arguments[]);
+static void cleanBuffer();
 
 void startShell(){
     char c;
@@ -52,6 +53,14 @@ void startShell(){
         analizeChar(c);
     }
 
+}
+
+static void cleanBuffer(){
+    for (int i = 0; i < TOTAL_SIZE; i++) {
+        buff[i] = 0;
+    }
+    buff[index] = 0;
+	index=0;
 }
 
 static void analizeChar(char c){
