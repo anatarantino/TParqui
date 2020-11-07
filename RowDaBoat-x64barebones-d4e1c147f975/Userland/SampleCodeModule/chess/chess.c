@@ -485,28 +485,57 @@ int queen(int x0, int y0, int xf, int yf){
 // KING
 int king(int x0, int y0, int xf, int yf){
 	int move=0;
+	int attacked;
+	int value = (whoseTurn == 0)? -1:1;
 	if((xf==x0 &&(yf==y0+1 || yf==y0-1)) || (yf==y0 && (xf==x0+1 || xf == x0-1))){ //rook moves
-		move = checkFinalPos(xf,yf);
+		if(checkFinalPos(xf,yf) && !squareUnderAttack(xf,yf,value)){
+			move = 1;
+		}
+		
 	}
 	else if((xf==x0+1 && yf==y0+1) || (xf==x0+1 && yf==y0-1) || (xf==x0-1 && yf==y0+1) || (xf==x0-1 && yf==y0-1)){	// bishop moves
-		move = checkFinalPos(xf,yf);
+		if(checkFinalPos(xf,yf) && !squareUnderAttack(xf,yf,value)){
+			move = 1;
+		}
 	}
 
 	//	enroque
 	if(xf==x0 && kingMoves[whoseTurn]==0){
-		if(yf==y0-2 && leftRooks[whoseTurn] == 0){					//HAY QUE VER QUE NO HAYA NADA "ATACANDO" EL MEDIO O LAS FIGURAS
+		if(yf==y0-2 && leftRooks[whoseTurn] == 0){					
 			move = rook(x0,0,x0,y0-1);
 			if(move == 1){	//no hay nada en el medio
-				board[x0][y0-1] = board[x0][0];
-				board[x0][0] = 0;
+				for(int i=0; i<=y0; i++){
+					attacked = squareUnderAttack(x0,i, value);
+					if(attacked == 1){
+						break;
+					}
+				}
+				if(!attacked){
+					board[x0][y0-1] = board[x0][0];
+					board[x0][0] = 0;
+				}else{
+					move = 0;
+				}
+				
 			}
 			
 		}
 		else if(yf==y0+2 && rightRooks[whoseTurn] == 0){
 			move = rook(x0,7,x0,y0+1);
 			if( move == 1){	//no hay nada en el medio
-				board[x0][y0+1] = board[x0][7];
-				board[x0][7] = 0;			
+				for(int i=7; i>=y0; i--){
+					attacked = squareUnderAttack(x0,i, value);
+					if(attacked == 1){
+						break;
+					}
+				}
+				if(!attacked){
+					board[x0][y0+1] = board[x0][7];
+					board[x0][7] = 0;	
+				}else{
+					move = 0;
+				}
+						
 			}
 		}
 	}
@@ -639,72 +668,57 @@ void check(){
 	if(whoseTurn==0){
 		for(i=0; i<DIM; i++){
 			for(j=0;j<DIM; j++){
-				if(board[i][j]==-6){
+				if(board[i][j]==-6){	// jaque al rey negro
 					x=i;
 					y=j;
 					break;
 				}
 			}
 		}
-		for(i=0; i<DIM; i++){
-			for(j=0; j<DIM; j++){
-				switch(board[i][j]){
-					case 1:
-						check=pawn(i,j,x,y);
-						break;
-					case 2:
-						check=rook(i,j,x,y);
-						break;
-					case 3:
-						check=horse(i,j,x,y);
-						break;
-					case 4:
-						check=bishop(i,j,x,y);
-						break;
-					case 5:
-						check=queen(i,j,x,y);
-						break;
-				}
-				
-			}
-		}
+		check = squareUnderAttack(x,y,1);	// si hay piezas blancas atancando el casillero
 	}
 	else{
 		for(i=0; i<DIM; i++){
 			for(j=0;j<DIM; j++){
-				if(board[i][j]==6){
+				if(board[i][j]==6){		// jaque al rey blanco
 					x=i;
 					y=j;
 					break;
 				}
 			}
 		}
-		for(i=0; i<DIM; i++){
-			for(j=0; j<DIM; j++){
-				switch(board[i][j]){
-					case -1:
-						check=pawn(i,j,x,y);
-						break;
-					case -2:
-						check=rook(i,j,x,y);
-						break;
-					case -3:
-						check=horse(i,j,x,y);
-						break;
-					case -4:
-						check=bishop(i,j,x,y);
-						break;
-					case -5:
-						check=queen(i,j,x,y);
-						break;
-				}
-			}
-		}
-		
+		check = squareUnderAttack(x,y,-1);  // si hay piezas negras atancando el casillero
 	}
+
 	if(check==1){
 		//printf("CHECK\n");
 	}
+}
+
+int squareUnderAttack(int x, int y, int value){
+	int attacked = 0;
+	int b;
+	for(int i=0; i<DIM; i++){
+		for(int j=0; j<DIM; j++){
+			b = board[i][j];
+			if(b == 1*value){
+				attacked=pawn(i,j,x,y);
+			}
+			else if(b == 2*value){
+				attacked=rook(i,j,x,y);
+			}
+			else if(b == 3*value){
+				attacked=horse(i,j,x,y);
+			}
+			else if(b == 4*value){
+				attacked=bishop(i,j,x,y);
+			}
+			else if(b == 5*value){
+				attacked=queen(i,j,x,y);
+			}
+		}
+	}
+	return attacked;
 }
 
 void initNewGame(){

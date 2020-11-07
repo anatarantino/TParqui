@@ -35,5 +35,6 @@ void makeMove();
 void addPieceChar(int number);
 void initNewGame();
 char obtainChar();
+int squareUnderAttack(int x, int y, int value);
 void exit();
 #endif
