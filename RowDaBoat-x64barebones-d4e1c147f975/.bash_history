@@ -1,31 +1,3 @@
-make -s
-make clean
-make -s
-make clean
-make -s
-make clean
-make -s
-ls
-cd root
-make cleak
-make clean
-cd Toolchain/
-make clean
-make all
-cd ..
-make all
-make
-make all
-make all
-make clean
-cd Toolchain/
-make clean
-make all
-cd ..
-make all
-ls
-chmos u+rwx Userland
-chmod u+rwx Userland
 make all
 make clean
 cd Toolchain/
@@ -491,6 +463,34 @@ cd ..
 make -s
 exit
 cd root
+make clean
+cd Toolchain/
+make clean
+make all
+cd ..
+make all
+exit
+cd root
+make clean
+cd Toolchain/
+make clean
+make all
+cd ..
+make all
+make clean
+cd Toolchain/
+make clean
+make all
+cd ..
+make all
+ls
+chmod u+wrx Image
+make clean
+cd Toolchain/
+make clean
+make all
+cd ..
+make all
 make clean
 cd Toolchain/
 make clean
