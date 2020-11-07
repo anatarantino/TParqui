@@ -31,6 +31,11 @@ static int rotation;
 static int init = 0;
 static int quit;
 static int gameOver;
+static int capture;
+static int pawnCapture;
+static char col;
+static int castling;
+
 
 int pawnMovesW[DIM];
 int pawnMovesB[DIM];
@@ -39,6 +44,28 @@ int pawnMovesB[DIM];
 int kingMoves[2];
 int leftRooks[2];
 int rightRooks[2];
+
+static int gameover();
+static void noPiece();
+static char changePiece(int x, int y);
+static int checkFinalPos(int xf,int yf);
+static void check();
+static void makeMove();
+static void addPieceChar(int number);
+static void initNewGame();
+static char obtainChar();
+static int squareUnderAttack(int x, int y, int value);
+static void blankPawnMoves();
+static void exit();
+static void userGuide();
+static void printLogs();
+// Piezas con sus posiciones iniciales y finales
+static int rook(int x0, int y0, int xf, int yf);		// 2 o -2
+static int knight(int x0, int y0, int xf, int yf);		// 3 o -3
+static int bishop(int x0, int y0, int xf, int yf);		// 4 o -4
+static int queen(int x0, int y0, int xf, int yf);		// 5 o -5
+static int king(int x0, int y0, int xf, int yf);		// 6 o -6
+static int pawn(int x0, int y0, int xf, int yf);		// 1 o -1
 
 
 void playChess(enum game_state state){
@@ -56,6 +83,7 @@ void playChess(enum game_state state){
 	
 	
 	while(!gameover() && !quit){
+		printColorOnPos("User Guide\npress 'U'",YELLOW,BLACK,0,700);
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
 		printColorOnPos("Player 1:",COLORP1,BLACK,POSP1X,POSTITLEY);
 		printColorOnPos(log1,COLORP1,BLACK,POSP1X,POSLOGSY);
@@ -70,7 +98,7 @@ void playChess(enum game_state state){
 	
 }
 
-void makeMove(){
+static void makeMove(){
 	
 	int x0, y0, xf, yf;
 	int letra=obtainChar();
@@ -103,6 +131,15 @@ void makeMove(){
 		clearScreen();
 		return;
 		
+	}
+	if(letra == 'u' || letra == 'U'){
+		userGuide();
+		int escape;
+		while(escape != 'u' && escape != 'U'){
+			escape = getChar();
+		}
+		clearScreen();
+		return;
 	}
 
 	int nro=obtainChar();
@@ -188,6 +225,7 @@ void makeMove(){
 		else{
 			error = 1;
 		}
+		
 		if(error!=1){
 			int move = 0;
 			if(rotation==1){
@@ -204,7 +242,7 @@ void makeMove(){
 			
 			}
 
-			int piece = board[x0][y0];
+			piece = board[x0][y0];
 			if((piece >= 10 && piece <=17)|| (piece >= -17 && piece <= -10)){
 				move = pawn(x0,y0,xf,yf);
 			}
@@ -229,7 +267,7 @@ void makeMove(){
 				board[xf][yf] = board[x0][y0];
 				board[x0][y0] = 0;
 				if(move == 2 && !gameover()){
-					changePiece(xf,yf);
+					col = changePiece(xf,yf);
 				}
 				check();
 				blankPawnMoves();
@@ -242,27 +280,93 @@ void makeMove(){
 	}
 	
 	if(error == 0){
-		addPieceChar(piece);
-		if(letra>='a' && letra<='h'){
-			letra=letra - 'a'+'A';
+		if(castling == 2){
+			if(whoseTurn == 0){
+				log1[index1++] = 'O';
+				log1[index1++] = '-';
+				log1[index1++] = 'O';
+				log1[index1++] = '\n';
+			}
+			else{
+				log2[index2++] = 'O';
+				log2[index2++] = '-';
+				log2[index2++] = 'O';
+				log2[index2++] = '\n';
+			}
 		}
-		if(whoseTurn==0){
-				log1[index1++]=letraF;
-				log1[index1++]=nroF;
-				log1[index1++]='\n';
-		}else{
-				log2[index2++]=letraF;
-				log2[index2++]=nroF;
-				log2[index2++]='\n';
+		else if(castling == 1){
+			if(whoseTurn == 0){
+				log1[index1++] = 'O';
+				log1[index1++] = '-';
+				log1[index1++] = 'O';
+				log1[index1++] = '-';
+				log1[index1++] = 'O';
+				log1[index1++] = '\n';
+			}
+			else{
+				log2[index2++] = 'O';
+				log2[index2++] = '-';
+				log2[index2++] = 'O';
+				log2[index2++] = '-';
+				log2[index2++] = 'O';
+				log2[index2++] = '\n';
+			}
 		}
+		else{
+			addPieceChar(piece);
+			if(pawnCapture == 1){
+				if(whoseTurn == 0){
+					log1[index1++] = col;
+				}
+				else{
+					log2[index2++] = col;
+				}
+			}
+			
+			if(whoseTurn==0){
+					if(capture == 1){
+						log1[index1++]='x';
+					}
+					log1[index1++]=letraF;
+					log1[index1++]=nroF;
+					log1[index1++]='\n';
+			}else{
+					if(capture == 1){
+						log2[index2++]='x';
+					}
+					log2[index2++]=letraF;
+					log2[index2++]=nroF;
+					log2[index2++]='\n';
+			}
+		}
+		if(pawnCapture == 2){
+			if(whoseTurn == 0){
+					index1--;
+					log1[index1++] = '=';
+					log1[index1++] = col;
+					log1[index1++]='\n';
+				}
+				else{
+					index2--;
+					log2[index2++] = '=';
+					log2[index2++] = col;
+					log2[index2++]='\n';
+				}
+		}
+		
 		whoseTurn = (whoseTurn == 0)? 1:0;
+		
 		
 	}
 	error = 0;
+	capture = 0;
+	pawnCapture = 0;
+	col = ' ';
+	castling = 0;
 	
 }
 
-char obtainChar(){
+static char obtainChar(){
 	int letra=0;
 	while(letra==0){
 		if(ticks_elapsed() % 18 == 0){
@@ -289,7 +393,7 @@ char obtainChar(){
 	return letra;
 }
 
-void addPieceChar(int number){
+static void addPieceChar(int number){
     switch (number)
     {
     case 2:
@@ -328,11 +432,11 @@ void addPieceChar(int number){
 }
 
 
-void noPiece(){	
+static void noPiece(){	
 	error = 1;
 }
 
-void changePiece(int x, int y){
+static char changePiece(int x, int y){
 	int wrongChar = 1;
 	int c = getChar();
 	while(wrongChar){
@@ -363,10 +467,14 @@ void changePiece(int x, int y){
 		}
 	}
 	
+	return c;
 }
 
-int checkFinalPos(int xf, int yf){
-	if(board[xf][yf] == 0 || (whoseTurn == 0 && board[xf][yf] < 0) || (whoseTurn == 1 && board[xf][yf] > 0)){
+static int checkFinalPos(int xf, int yf){
+	if(board[xf][yf] == 0){
+		return 1;
+	} else if((whoseTurn == 0 && board[xf][yf] < 0) || (whoseTurn == 1 && board[xf][yf] > 0)){
+		capture = 1;
 		return 1;
 	}
 	return 0;
@@ -374,7 +482,7 @@ int checkFinalPos(int xf, int yf){
 
 
 // ROOK
-int rook(int x0, int y0, int xf, int yf){
+static int rook(int x0, int y0, int xf, int yf){
 	int move=0;
 	int i;
 	
@@ -384,6 +492,7 @@ int rook(int x0, int y0, int xf, int yf){
 			for(i=y0+1; i<yf;i++){
 				if(board[x0][i] != 0){
 					move = 0;
+					capture = 0;
 				}
 			}
 		}
@@ -391,6 +500,7 @@ int rook(int x0, int y0, int xf, int yf){
 			for(i=y0-1; i>yf;i--){
 				if(board[x0][i] != 0){
 					move = 0;
+					capture = 0;
 				}
 			}
 		}
@@ -401,6 +511,7 @@ int rook(int x0, int y0, int xf, int yf){
 			for(i=x0+1; i<xf;i++){
 				if(board[i][y0] != 0){
 					move = 0;
+					capture = 0;
 				}
 			}
 		}
@@ -408,6 +519,7 @@ int rook(int x0, int y0, int xf, int yf){
 			for(i=x0-1; i>xf;i--){
 				if(board[i][y0] != 0){
 					move = 0;
+					capture = 0;
 				}
 			}
 		}
@@ -424,7 +536,7 @@ int rook(int x0, int y0, int xf, int yf){
 }
 	
 // HORSE
-int knight(int x0, int y0, int xf, int yf){
+static int knight(int x0, int y0, int xf, int yf){
 	int move=0;
 	if((xf==x0+2 && (yf==y0+1 || yf == y0-1)) 	||	(xf==x0-2 && (yf==y0+1 || yf == y0-1)) 
 		||	(yf==y0+2 && (xf==x0+1 || xf == x0-1))	||	(yf==y0+2 && (xf==x0+1 || xf == x0-1))){
@@ -434,7 +546,7 @@ int knight(int x0, int y0, int xf, int yf){
 }
 
 // BISHOP
-int bishop(int x0, int y0, int xf, int yf){
+static int bishop(int x0, int y0, int xf, int yf){
 	int move=0;
 	int constant = xf - x0;
 	int i;
@@ -444,6 +556,7 @@ int bishop(int x0, int y0, int xf, int yf){
 			for(i=1; (x0+i)<xf;i++){
 				if(board[x0+i][y0+i] != 0){
 					move =0;
+					capture = 0;
 				}
 			}
 		}
@@ -451,6 +564,7 @@ int bishop(int x0, int y0, int xf, int yf){
 			for(i=1; (x0+i)<xf;i++){
 				if(board[x0+i][y0-i] != 0){
 					move =0;
+					capture = 0;
 				}
 			}
 		}
@@ -458,6 +572,7 @@ int bishop(int x0, int y0, int xf, int yf){
 			for(i=1; (x0-i)>xf;i++){
 				if(board[x0-i][y0-i] != 0){
 					move =0;
+					capture = 0;
 				}
 			}
 		}
@@ -465,6 +580,7 @@ int bishop(int x0, int y0, int xf, int yf){
 			for(i=1; (x0-i)<xf;i++){
 				if(board[x0-i][y0+i] != 0){
 					move =0;
+					capture = 0;
 				}
 			}
 		}
@@ -475,7 +591,7 @@ int bishop(int x0, int y0, int xf, int yf){
 }
 
 // QUEEN
-int queen(int x0, int y0, int xf, int yf){
+static int queen(int x0, int y0, int xf, int yf){
 	int move =0;
 	move = rook(x0,y0,xf,yf);			// si la reina se mueve en linea recta
 	move += bishop(x0,y0,xf,yf);			// si la reina se mueve en diagonal
@@ -483,19 +599,29 @@ int queen(int x0, int y0, int xf, int yf){
 }
 
 // KING
-int king(int x0, int y0, int xf, int yf){
+static int king(int x0, int y0, int xf, int yf){
 	int move=0;
 	int attacked;
 	int value = (whoseTurn == 0)? -1:1;
 	if((xf==x0 &&(yf==y0+1 || yf==y0-1)) || (yf==y0 && (xf==x0+1 || xf == x0-1))){ //rook moves
-		if(checkFinalPos(xf,yf) && !squareUnderAttack(xf,yf,value)){
-			move = 1;
+		if(checkFinalPos(xf,yf)){
+			if(!squareUnderAttack(xf,yf,value)){
+				move = 1;
+			}
+			else{
+				capture = 0;
+			}
 		}
 		
 	}
 	else if((xf==x0+1 && yf==y0+1) || (xf==x0+1 && yf==y0-1) || (xf==x0-1 && yf==y0+1) || (xf==x0-1 && yf==y0-1)){	// bishop moves
-		if(checkFinalPos(xf,yf) && !squareUnderAttack(xf,yf,value)){
-			move = 1;
+		if(checkFinalPos(xf,yf)){
+			if(!squareUnderAttack(xf,yf,value)){
+				move = 1;
+			}
+			else{
+				capture = 0;
+			}
 		}
 	}
 
@@ -513,6 +639,7 @@ int king(int x0, int y0, int xf, int yf){
 				if(!attacked){
 					board[x0][y0-1] = board[x0][0];
 					board[x0][0] = 0;
+					castling = 2;
 				}else{
 					move = 0;
 				}
@@ -532,6 +659,7 @@ int king(int x0, int y0, int xf, int yf){
 				if(!attacked){
 					board[x0][y0+1] = board[x0][7];
 					board[x0][7] = 0;	
+					castling = 1;
 				}else{
 					move = 0;
 				}
@@ -547,7 +675,7 @@ int king(int x0, int y0, int xf, int yf){
 }
 
 // PAWN
-int pawn(int x0, int y0, int xf, int yf){
+static int pawn(int x0, int y0, int xf, int yf){
 	int move=0;
 	int pos;
 	if(whoseTurn==0){		// blancas
@@ -570,11 +698,15 @@ int pawn(int x0, int y0, int xf, int yf){
 				board[x0][yf] = 0;
 				move =1;
 			}
+			pawnCapture = 1;
+			col = y0 + 'a';
+			capture = 1;
 		}
 
 		// para el cambio de pieza
 		if(move == 1 && xf==7){
 			move = 2;
+			pawnCapture = 2;
 		}
 	}
 	else{		// negras
@@ -597,18 +729,22 @@ int pawn(int x0, int y0, int xf, int yf){
 				board[x0][yf] = 0;
 				move = 1;
 			}
+			pawnCapture = 1;
+			col = y0 + 'a';
+			capture = 1;
 		}
 
 		// para el cambio de pieza
 		if(move == 1 && xf==0){
 			move = 2;
+			pawnCapture = 2;
 		}
 	}
 
 	return move;
 }
 
-int gameover(){
+static int gameover(){
 	int player1 = 0;
 	int player2 = 0;
 	if(gameOver==1){
@@ -648,7 +784,7 @@ int gameover(){
 
 }
 
-void exit(){
+static void exit(){
 	int escape;
 	while(escape != 'x' && escape != 'X' && escape != 'n' && escape != 'N' ){
 		escape = getChar();
@@ -660,7 +796,7 @@ void exit(){
 	}
 }
 
-void check(){
+static void check(){
 	int x,y;	// coordenadas del rey
 	int i,j;	// contadores
 	int check=0;
@@ -694,7 +830,7 @@ void check(){
 	}
 }
 
-int squareUnderAttack(int x, int y, int value){
+static int squareUnderAttack(int x, int y, int value){
 	int attacked = 0;
 	int b;
 	for(int i=0; i<DIM; i++){
@@ -720,7 +856,7 @@ int squareUnderAttack(int x, int y, int value){
 	return attacked;
 }
 
-void initNewGame(){
+static void initNewGame(){
 
 	int auxBoard[][DIM] = { {2,3,4,6,5,4,3,2},
 					{10,11,12,13,14,15,16,17},
@@ -756,6 +892,10 @@ void initNewGame(){
 	rotation=0;
 	quit = 0;
 	gameOver=0;
+	capture = 0;
+	pawnCapture = 0;
+	col = ' ';
+	castling = 0;
 	// Movimientos para validar el enroque
 	kingMoves[0] = 0; kingMoves[1] = 0;
 	leftRooks[0] = 0; leftRooks[1] = 0;
@@ -769,7 +909,7 @@ void initNewGame(){
 
 }
 
-void printLogs(){
+static void printLogs(){
 	clearScreen();
 	printColorOnPos("Player 1:",COLORP1,BLACK,10,20);
 	for(int i=0 ; i<index1 ; i++){
@@ -797,7 +937,7 @@ void printLogs(){
 	}
 }
 
-void blankPawnMoves(){
+static void blankPawnMoves(){
 	if(whoseTurn == 0){
 		for(int i=0; i<DIM; i++){
 			pawnMovesB[i]=0;				// para evitar que el peon al paso se pueda realizar
@@ -808,4 +948,34 @@ void blankPawnMoves(){
 			pawnMovesW[i]=0;
 		}
 	}
+}
+
+static void userGuide(){
+	clearScreen();
+	printColor("User Guide:\n\n",YELLOW,BLACK);
+
+	printColor("Board Instructions:\n",YELLOW,BLACK);
+	printf("press 'X' to pause and exit game.\npress 'S' to spin the board.\npress 'L' to display all moves.\n\n");
+
+	printColor("Game Instructions:\n",YELLOW,BLACK);
+	printf("Each square of the chessboard is identified with a unique pair of a letter and a number.");
+	printf("To move a piece, insert the letter and number of the position of your chosen piece and the letter and number of the destination desired.\n\n");
+	printf("-The king moves exactly one square horizontally, vertically, or diagonally.\n");
+	printf("A special move with the king known as castling is allowed only once per player, per game.\n");
+	printf("-A rook moves any number of vacant squares horizontally or vertically. It also is moved when castling.\n");
+	printf("-A bishop moves any number of vacant squares diagonally.\n");
+	printf("-The queen moves any number of vacant squares horizontally, vertically, or diagonally.\n");
+	printf("-A knight moves always in an 'L' pattern.");
+	printf("This can be thought of as moving two squares horizontally then one square vertically, or moving one square horizontally then two squares vertically.\n");
+	printf("The knight is not blocked by other pieces: it jumps to the new location.\n");
+	printf("-A pawn moves straight forward one square, if that square is vacant.\n");
+	printf("If it has not yet moved, a pawn also has the option of moving two squares straight forward, provided both squares are vacant.\n");
+	printf("Pawns cannot move backwards.\n");
+	printf("Pawns are the only pieces that capture differently from how they move.\n");
+	printf("A pawn can capture an enemy piece on either of the two squares diagonally in front of the pawn (but cannot move to those\nsquares if they are vacant).");
+	printf("The pawn is also involved in the  two special moves en passant and promotion.\n");
+	printf("When a player plays a pawn to the rank furthest from its starting position, he must exchange that pawn for a new queen, rook,  bishop or knight.");
+	printf("This is called the square of 'promotion'.\n");
+	printf("To choose your new piece press 'Q' for queen, 'N' for knight, 'B' for bishop, 'R' for rook.\n\n");
+	printColor("Press 'U' to go back to game",YELLOW,BLACK);
 }
