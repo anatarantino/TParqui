@@ -203,6 +203,7 @@ void makeMove(){
 		else{
 			error = 1;
 		}
+		
 		if(error!=1){
 			int move = 0;
 			if(rotation==1){
@@ -219,7 +220,7 @@ void makeMove(){
 			
 			}
 
-			int piece = board[x0][y0];
+			piece = board[x0][y0];
 			if((piece >= 10 && piece <=17)|| (piece >= -17 && piece <= -10)){
 				move = pawn(x0,y0,xf,yf);
 			}
@@ -257,25 +258,28 @@ void makeMove(){
 	}
 	
 	if(error == 0){
-		if(castling == 1){
+		if(castling == 2){
 			if(whoseTurn == 0){
 				log1[index1++] = 'O';
 				log1[index1++] = '-';
 				log1[index1++] = 'O';
+				log1[index1++] = '\n';
 			}
 			else{
 				log2[index2++] = 'O';
 				log2[index2++] = '-';
 				log2[index2++] = 'O';
+				log2[index2++] = '\n';
 			}
 		}
-		else if(castling == 2){
+		else if(castling == 1){
 			if(whoseTurn == 0){
 				log1[index1++] = 'O';
 				log1[index1++] = '-';
 				log1[index1++] = 'O';
 				log1[index1++] = '-';
 				log1[index1++] = 'O';
+				log1[index1++] = '\n';
 			}
 			else{
 				log2[index2++] = 'O';
@@ -283,9 +287,11 @@ void makeMove(){
 				log2[index2++] = 'O';
 				log2[index2++] = '-';
 				log2[index2++] = 'O';
+				log2[index2++] = '\n';
 			}
 		}
 		else{
+			addPieceChar(piece);
 			if(pawnCapture == 1){
 				if(whoseTurn == 0){
 					log1[index1++] = col;
@@ -293,12 +299,6 @@ void makeMove(){
 				else{
 					log2[index2++] = col;
 				}
-			}
-			else{
-				addPieceChar(piece);
-				// if(letra>='a' && letra<='h'){
-				// 	letra=letra - 'a'+'A';
-				// }
 			}
 			
 			if(whoseTurn==0){
@@ -310,7 +310,7 @@ void makeMove(){
 					log1[index1++]='\n';
 			}else{
 					if(capture == 1){
-						log1[index2++]='x';
+						log2[index2++]='x';
 					}
 					log2[index2++]=letraF;
 					log2[index2++]=nroF;
@@ -319,11 +319,13 @@ void makeMove(){
 		}
 		if(pawnCapture == 2){
 			if(whoseTurn == 0){
+					index1--;
 					log1[index1++] = '=';
 					log1[index1++] = col;
 					log1[index1++]='\n';
 				}
 				else{
+					index2--;
 					log2[index2++] = '=';
 					log2[index2++] = col;
 					log2[index2++]='\n';
