@@ -44,7 +44,8 @@ static void clear(int args, char *arguments[]);
 
 void startShell(){
     char c;
-
+    printColorOnPos("Press 'help' to see the commands of this shell.",0X00FF00,0X000000,0,0);
+    putChar('\n');
     printf(user);
     while(1){
         c=getChar();
@@ -184,6 +185,8 @@ static void time(int args, char *arguments[]){
         return;
     }
     putChar('\n');
+    printColor("Date time:",0xFFFF00,BLACK);
+    putChar('\n');
     printTime(DAYOFWEEK);
     putChar('\n');
     printTime(DAY);
@@ -278,7 +281,7 @@ static void help(int args, char *arguments[]){
     printf("printmem -> receives a pointer and makes a memory dump of 32 bytes on screen starting on the direction introduced.\n"); //igual al de fran cambiar!!!
     printf("time -> prints system time on screen.\n"); 
     printf("clear -> clears the screen.\n");
-    printf("chess -> this command starts a chess game.\n");
+    printf("chess -> this command starts a chess game.");
 
 }
 
