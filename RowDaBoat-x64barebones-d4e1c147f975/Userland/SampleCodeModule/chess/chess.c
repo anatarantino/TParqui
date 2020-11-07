@@ -213,7 +213,7 @@ void makeMove(){
 				move = rook(x0,y0,xf,yf);
 			}
 			else if(piece == 3 || piece == -3){
-				move = horse(x0,y0,xf,yf);
+				move = knight(x0,y0,xf,yf);
 			}
 			else if(piece == 4 || piece == -4){
 				move = bishop(x0,y0,xf,yf);
@@ -233,6 +233,7 @@ void makeMove(){
 					changePiece(xf,yf);
 				}
 				check();
+				blankPawnMoves();
 			}
 			else{
 				error = 1;
@@ -299,10 +300,10 @@ void addPieceChar(int number){
         log2[index2++] = 'R';
         break;
     case 3:
-        log1[index1++] = 'H';
+        log1[index1++] = 'N';
         break;
     case -3:
-        log2[index2++] = 'H';
+        log2[index2++] = 'N';
         break;
     case 4:
         log1[index1++] = 'B';
@@ -347,8 +348,8 @@ void changePiece(int x, int y){
 				board[x][y]= (whoseTurn==0)? 4:-4;
 				wrongChar = 0;
 				break;
-			case 'H':
-			case 'h':
+			case 'N':
+			case 'n':
 				board[x][y]= (whoseTurn==0)? 3:-3;
 				wrongChar = 0;
 				break;
@@ -424,7 +425,7 @@ int rook(int x0, int y0, int xf, int yf){
 }
 	
 // HORSE
-int horse(int x0, int y0, int xf, int yf){
+int knight(int x0, int y0, int xf, int yf){
 	int move=0;
 	if((xf==x0+2 && (yf==y0+1 || yf == y0-1)) 	||	(xf==x0-2 && (yf==y0+1 || yf == y0-1)) 
 		||	(yf==y0+2 && (xf==x0+1 || xf == x0-1))	||	(yf==y0+2 && (xf==x0+1 || xf == x0-1))){
@@ -708,7 +709,7 @@ int squareUnderAttack(int x, int y, int value){
 				attacked=rook(i,j,x,y);
 			}
 			else if(b == 3*value){
-				attacked=horse(i,j,x,y);
+				attacked=knight(i,j,x,y);
 			}
 			else if(b == 4*value){
 				attacked=bishop(i,j,x,y);
@@ -795,6 +796,19 @@ void printLogs(){
 	for(int i=0 ; i<index2 ; i++){
 		if(log2[i]==' '){
 			log2[i] = '\n';
+		}
+	}
+}
+
+void blankPawnMoves(){
+	if(whoseTurn == 0){
+		for(int i=0; i<DIM; i++){
+			pawnMovesB[i]=0;				// para evitar que el peon al paso se pueda realizar
+		}									// en otra jugada que no sea la primera
+	}
+	else{
+		for(int i=0; i<DIM; i++){
+			pawnMovesW[i]=0;
 		}
 	}
 }
