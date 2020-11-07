@@ -5,13 +5,11 @@
 char getChar(){
     return syscalls(READ, 0, 0, 0, 0, 0, 0);
 }
-char getCharWithTimer(uint64_t * startSec,uint64_t posX, uint64_t posY, uint64_t f_color, uint64_t bg_color){
-  return syscalls(TIMEDREAD,(uint64_t) startSec,posX,posY,f_color,bg_color,0);
-}
 
 char waitCharInterruption(){
   return syscalls(CHARINTERRUPT,0,0,0,0,0,0);
 }
+
 int strlen(char * str){
     int i = 0;
     while(str[i]!= 0){
@@ -35,7 +33,7 @@ int stringcmp(char * str1, char * str2){
     return FALSE;
 }
 
-int scanf(const char* format,...){     //scanf("%d %d %f",&num1, &num2, &num3);             CHEQUEARLO 
+int scanf(const char* format,...){     //scanf("%d %d %f",&num1, &num2, &num3);
     va_list args;
     int i = 0, j=0, count = 0;
     char *buff = read();
@@ -91,28 +89,6 @@ uint64_t hexastrToInt(char *str){
 
 }
 
-char* read(){
-    int index = 0;
-    char c;
-    char buffer[SIZE];
-
-    while ((c = getChar()) != '\n') {
-        if(c == '\b'){
-            if (index != 0) {
-                index--;
-            }
-        }
-        else if(c != EOF){
-            if (index <= SIZE) {
-                buffer[index++] = c;
-            }
-        }
-    }
-    buffer[index] = '\0';
-    return buffer;
-}
-
-
 char* strToInt(char* string, int* num){
     *num = 0;
 	  int signo = 1;
@@ -134,17 +110,6 @@ char* strToInt(char* string, int* num){
         string++;
     }
     return string;
-}
-
-void * memset(void * destination, int32_t c, uint64_t length)
-{
-	uint8_t chr = (uint8_t)c;
-	char * dst = (char*)destination;
-
-	while(length--)
-		dst[length] = chr;
-
-	return destination;
 }
 
 int strtok(char * str, const char delim, char * array[], int arraySize){

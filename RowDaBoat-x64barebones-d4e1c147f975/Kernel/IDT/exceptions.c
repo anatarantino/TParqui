@@ -1,11 +1,10 @@
 #include <prints.h>
+#include <colors.h>
+#include <vars.h>
+
 #define ZERO_EXCEPTION 0
 #define INVALID_OP	6
 #define TOTALREGS 16 //hay 17 en el vector, chequear
-#define RED 0xFF0000
-#define YELLOW 0xFFFF00
-#define BLACK 0x000000
-#define VIOLET 0xB266FF
 
 static void zero_division();
 static void invalid_op();
@@ -16,7 +15,7 @@ static char* dataRegisters[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R1
 						"R8: ", "RSI: ", "RDI: ", "RBP: ", "RDX: ", "RCX: ", "RBX: ",
                         "RAX: ", "RIP: ", "RSP: "};
 
-void exceptionDispatcher(int exception, void * registers) {
+void exceptionDispatcher(int exception, uint64_t * registers) {
 	if (exception == ZERO_EXCEPTION){
 		zero_division();
 	}else if(exception == INVALID_OP){
@@ -24,7 +23,8 @@ void exceptionDispatcher(int exception, void * registers) {
 	}
 	printRegisters(registers);
 	printNewLine();
-	//resetCurrentProcess()  hay que implementarlo al final :O
+	registers[TOTALREGS]=(uint64_t)sampleCodeModuleAddress;
+	registers[TOTALREGS+3]=(uint64_t)sampleCodeModuleRSP;
 }
 
 static void zero_division() {
@@ -41,7 +41,7 @@ static void printRegisters(uint64_t * registers){
 		printHexColor(registers[i],VIOLET,BLACK); 
 		printNewLine();
 	}
-	//fran imprime el rsp aparte
+	//imprimir rsp aparte??
 	printColor(dataRegisters[TOTALREGS],VIOLET,BLACK);
-	printHexColor(registers[15 + 3],VIOLET,BLACK);
+	printHexColor(registers[15 + 3],WHITE,BLACK);
 }

@@ -5,6 +5,7 @@
 #include <prints.h>
 #include <video_driver.h>
 #include <time.h>
+
 #define SHIFT 1
 #define NOTSHIFT 0
 #define PRESSED 1
@@ -13,6 +14,7 @@
 #define TOTALKEYS 60
 #define MAX 150
 #define TOTALREGS 15
+
 static unsigned char pressed(unsigned char key );
 static void updateRegisters(uint64_t * rsp);
 
@@ -23,8 +25,6 @@ static uint64_t registers[TOTALREGS+2] = {0};
 
 static char buffer[MAX]={0};
 static int index=0;
-//static char flag;
-//char caps;
 
 static unsigned char key;
 static char shift = 0;

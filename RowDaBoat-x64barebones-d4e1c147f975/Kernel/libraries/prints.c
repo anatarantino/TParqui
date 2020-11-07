@@ -2,9 +2,7 @@
 #include <video_driver.h>
 #include <prints.h>
 #include <strings.h>
-
-//#define BLANCO 0xFFFFFF
-//#define NEGRO 0x000000
+#include <colors.h>
 
 void syscallWrite(char* str, uint8_t length, uint64_t f_color, uint64_t bg_color){
     
@@ -15,11 +13,9 @@ void syscallWrite(char* str, uint8_t length, uint64_t f_color, uint64_t bg_color
             deleteChar(bg_color);
         }else if(str[i] == '\t'){
             for(int i =0 ; i<3 ; i++){
-                //printCharOnScreen(' ',f_color,bg_color);
                 printChar(' ',f_color,bg_color);
             }
         }else{
-            //printCharOnScreen(str[i],f_color,bg_color);
             printChar(str[i],f_color,bg_color);
         }
     }
@@ -54,7 +50,7 @@ void syscallWriteOnCurrentPos(char *str,uint8_t length, uint64_t f_color, uint64
 }
 
 void putChar(char c){
-    syscallWrite(&c,1,0xFFFFFF,0x000000);
+    syscallWrite(&c,1,WHITE,BLACK);
 }
 
 void putCharColor(char c,uint64_t f_color,uint64_t bg_color){
@@ -63,7 +59,7 @@ void putCharColor(char c,uint64_t f_color,uint64_t bg_color){
 
 
 void printf(char* str){
-    syscallWrite(str,strlen(str),0xFFFFFF,0x000000);
+    syscallWrite(str,strlen(str),WHITE,BLACK);
 }
 
 void printColor(char* str, uint64_t f_color, uint64_t bg_color){

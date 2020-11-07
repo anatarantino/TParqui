@@ -1,5 +1,6 @@
 GLOBAL cpu_vendor
 GLOBAL getRTC
+GLOBAL getRSP
 
 section .text
 
@@ -79,3 +80,7 @@ getRTC:
 	pop rbx
 	pop rax
 %endmacro
+
+getRSP:
+	lea eax,[rsp]
+	ret

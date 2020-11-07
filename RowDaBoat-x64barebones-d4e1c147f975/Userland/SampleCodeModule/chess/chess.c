@@ -4,12 +4,12 @@
 #include <strings.h>
 #include <timeRTC.h>
 #include <chess.h>
+#include <lib.h>
+#include <colors.h>
 
-#define RED 0xFF0000
 #define COLORP1 0xFFFFFF
 #define COLORP2 0xF69F08
-#define BGCOLOR 0x000000
-#define INSTRUCTIONCOLOR 0x00FF00
+
 #define POSP1X 856
 #define POSP2X 940
 #define POSTITLEY 5
@@ -30,7 +30,6 @@ static int aux2;
 static int rotation;
 static int init = 0;
 static int quit;
-static int last_time;
 static int gameOver;
 static int capture;
 static int pawnCapture;
@@ -54,18 +53,18 @@ void playChess(enum game_state state){
 	}
 	if(state == game_started){
 		quit = 0;
-		printColorOnPos(log1,COLORP1,BGCOLOR,POSP1X,POSLOGSY);
-		printColorOnPos(log2,COLORP2,BGCOLOR,POSP2X,POSLOGSY);
+		printColorOnPos(log1,COLORP1,BLACK,POSP1X,POSLOGSY);
+		printColorOnPos(log2,COLORP2,BLACK,POSP2X,POSLOGSY);
 	}
 	
 	
 	
 	while(!gameover() && !quit){
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
-		printColorOnPos("Player 1:",COLORP1,BGCOLOR,POSP1X,POSTITLEY);
-		printColorOnPos(log1,COLORP1,BGCOLOR,POSP1X,POSLOGSY);
-		printColorOnPos("Player 2:",COLORP2,BGCOLOR,POSP2X,POSTITLEY);
-		printColorOnPos(log2,COLORP2,BGCOLOR,POSP2X,POSLOGSY);
+		printColorOnPos("Player 1:",COLORP1,BLACK,POSP1X,POSTITLEY);
+		printColorOnPos(log1,COLORP1,BLACK,POSP1X,POSLOGSY);
+		printColorOnPos("Player 2:",COLORP2,BLACK,POSP2X,POSTITLEY);
+		printColorOnPos(log2,COLORP2,BLACK,POSP2X,POSLOGSY);
 		makeMove();	
 
 	}
@@ -335,7 +334,7 @@ char obtainChar(){
 		if(ticks_elapsed() % 18 == 0){
 			if(whoseTurn==0){
 				segundosW++;
-				printTimer(segundosW,POSP1X,POSTIMERY,COLORP1,BGCOLOR);
+				printTimer(segundosW,POSP1X,POSTIMERY,COLORP1,BLACK);
 				if(segundosW-segundosB==60){
 					gameOver=1;
 					gameover();
@@ -343,7 +342,7 @@ char obtainChar(){
 				}
 			}else{
 				segundosB++;
-				printTimer(segundosB,POSP2X,POSTIMERY,COLORP2,BGCOLOR);
+				printTimer(segundosB,POSP2X,POSTIMERY,COLORP2,BLACK);
 				if(segundosB-segundosW==60){
 					gameOver=1;
 					gameover();
@@ -712,11 +711,11 @@ int gameover(){
 	int player2 = 0;
 	if(gameOver==1){
 		clearScreen();
-		printColorOnPos("TIME OUT!",RED,BGCOLOR,450,280);
+		printColorOnPos("TIME OUT!",RED,BLACK,450,280);
 		if(whoseTurn==0){
-			printColorOnPos("GAME OVER PLAYER 2 WINS",RED,BGCOLOR,390,300);
+			printColorOnPos("GAME OVER PLAYER 2 WINS",RED,BLACK,390,300);
 		}else{
-			printColorOnPos("GAME OVER PLAYER 1 WINS",RED,BGCOLOR,390,300);
+			printColorOnPos("GAME OVER PLAYER 1 WINS",RED,BLACK,390,300);
 		}
 		return 1;
 	}
@@ -733,12 +732,12 @@ int gameover(){
 	if(player1 == 0 || player2==0){
 		if(player2 == 0){
 			clearScreen();
-			printColorOnPos("GAME OVER PLAYER 2 WINS",RED,BGCOLOR,390,300);
+			printColorOnPos("GAME OVER PLAYER 2 WINS",RED,BLACK,390,300);
 		}
 
 		if(player1 == 0){
 			clearScreen();	
-			printColorOnPos("GAME OVER PLAYER 1 WINS",RED,BGCOLOR,390,300);
+			printColorOnPos("GAME OVER PLAYER 1 WINS",RED,BLACK,390,300);
 		}
 		exit();
 		return 1;
@@ -748,7 +747,6 @@ int gameover(){
 }
 
 void exit(){
-	printColorOnPos("[press X to quit game or N to start a new one]",INSTRUCTIONCOLOR,BGCOLOR,300,330);
 	int escape;
 	while(escape != 'x' && escape != 'X' && escape != 'n' && escape != 'N' ){
 		escape = getChar();
@@ -875,21 +873,20 @@ void initNewGame(){
 
 void printLogs(){
 	clearScreen();
-	printColorOnPos(" Moves until now: [press L to continue game or X to exit]",INSTRUCTIONCOLOR,BGCOLOR,0,0);
-	printColorOnPos("Player 1:",COLORP1,BGCOLOR,10,20);
+	printColorOnPos("Player 1:",COLORP1,BLACK,10,20);
 	for(int i=0 ; i<index1 ; i++){
 		if(log1[i]=='\n'){
 			log1[i] = ' ';
 		}
 	}
-	printColorOnPos(log1,COLORP1,BGCOLOR,10,35);
-	printColorOnPos("Player 2:",COLORP2,BGCOLOR,10,350);
+	printColorOnPos(log1,COLORP1,BLACK,10,35);
+	printColorOnPos("Player 2:",COLORP2,BLACK,10,350);
 	for(int i=0 ; i<index2 ; i++){
 		if(log2[i]=='\n'){
 			log2[i] = ' ';
 		}
 	}
-	printColorOnPos(log2,COLORP2,BGCOLOR,10,365);
+	printColorOnPos(log2,COLORP2,BLACK,10,365);
 	for(int i=0 ; i<index1 ; i++){
 		if(log1[i]==' '){
 			log1[i] = '\n';
