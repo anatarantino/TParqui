@@ -1,14 +1,12 @@
 #include <prints.h>
 #include <syscall.h>
 #include <strings.h>
-
-#define BLANCO 0xFFFFFF
-#define NEGRO 0x000000
+#include <colors.h>
 
 #define CHAR_WIDTH 8
 
 void putChar(char c){
-    syscalls(WRITE, (uint64_t)&c, 1, BLANCO, NEGRO, 0, 0);
+    syscalls(WRITE, (uint64_t)&c, 1, WHITE, BLACK, 0, 0);
 }
 
 void putCharColor(char c,uint64_t f_color,uint64_t bg_color){
@@ -16,7 +14,7 @@ void putCharColor(char c,uint64_t f_color,uint64_t bg_color){
 }
 
 void printf(char* str){
-    syscalls(WRITE, (uint64_t)str, strlen(str), BLANCO, NEGRO, 0, 0);
+    syscalls(WRITE, (uint64_t)str, strlen(str), WHITE, BLACK, 0, 0);
 }
 
 void printHex(uint64_t num){

@@ -5,10 +5,7 @@
 #include <timeRTC.h>
 #include <graphics.h>
 #include <chess.h>
-
-#define WHITE 0xFFFFFF
-#define BLACK 0x000000
-#define RED 0xFF0000
+#include <colors.h>
 
 #define TOTAL_SIZE 150
 #define TOTAL_COMMANDS 8
@@ -18,7 +15,7 @@
 enum comm_num{INFOREG=0,PRINTMEM,TIME,CHESS,HELP,CLEARSC,DIVZERO,OPCODE};
 
 static char * commands[] = {"inforeg","printmem","time","chess","help","clear","divByZeroException","opCodeException"};
-static char * user = "user >> ";
+static char * user = "grupo33@user:~$";
 
 static char * registers[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9:  ",
                            "R8:  ", "RSI: ", "RDI: ", "RBP: ", "RDX: ", "RCX: ", "RBX: ","RAX: ",
@@ -46,8 +43,7 @@ static void opCodeException(int args,char *arguments[]);
 
 void startShell(){
     char c;
-    printColorOnPos("Press 'help' to see the commands of this shell.",0X00FF00,0X000000,0,0);
-    putChar('\n');
+    printMessage();
     printf(user);
     while(1){
         c=getChar();
@@ -151,11 +147,10 @@ static void inforeg(int args, char *arguments[]){
     putChar('\n');
     uint64_t* regs=(uint64_t *)getRegisters();
     for(int i=0; i< TOTAL_REG; i++){
-        printf(registers[i]);
+        printColor(registers[i],VIOLET,BLACK);
         printHex(regs[i]);
         putChar('\n');
     }
-    putChar('\n');
 }
 
 static void printmem(int args, char *arguments[]){
@@ -309,7 +304,8 @@ static void clear(int args, char *arguments[]){
 
 
 static void printMessage(){
-    printColor("Hola aca va un mensaje super hermo diciendo que arranca el programa",0xFFFF00,0xF0FF0F);
+    printColorOnPos("Press 'help' to see the commands of this shell.",GREEN,BLACK,0,0);
+    putChar('\n');
 }
 
 static void divisionByZero(int args,char *arguments[]){
@@ -343,7 +339,7 @@ static void chess(int args, char *arguments[]){
         return;
     }
     clearScreen();
-    printColorOnPos("PRESIONE N SI QUIERE UN NUEVO JUEGO O C PARA CONTINUAR EL ANTERIOR",0X00FF00,0X000000,230,300);
+    printColorOnPos("PRESIONE N SI QUIERE UN NUEVO JUEGO O C PARA CONTINUAR EL ANTERIOR",GREEN,BLACK,230,300);
     int state;
 
     while (state!='n' && state!='N' && state != 'c' && state != 'C')
