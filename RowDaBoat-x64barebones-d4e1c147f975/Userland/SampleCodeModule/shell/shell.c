@@ -16,7 +16,7 @@
 enum comm_num{INFOREG=0,PRINTMEM,TIME,CHESS,HELP,CLEARSC,DIVZERO,OPCODE};
 
 static char * commands[] = {"inforeg","printmem","time","chess","help","clear","divByZeroException","opCodeException"};
-static char * user = "grupo33@user:~$";
+static char * user = "grupo33@user:~$ ";
 
 static char * registers[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9:  ",
                            "R8:  ", "RSI: ", "RDI: ", "RBP: ", "RDX: ", "RCX: ", "RBX: ","RAX: ",
@@ -44,6 +44,7 @@ static void opCodeException(int args,char *arguments[]);
 
 void startShell(){
     char c;
+    cleanBuffer();
     printMessage();
     printf(user);
     while(1){
@@ -316,12 +317,10 @@ static void divisionByZero(int args,char *arguments[]){
         putChar('\n');
         return;
     }
-
     int a = 0;
-    int b = 1/a;
-    a = b;
-    return;
-
+    int b = 20 / a;
+    if (b == 0) {
+    }
 }
 static void opCodeException(int args,char *arguments[]){
     if(args!=1){

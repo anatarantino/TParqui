@@ -73,11 +73,10 @@ SECTION .text
 	iretq
 %endmacro
 
-
-
 %macro exceptionHandler 1
 	pushState
 	mov rdi, %1 ; pasaje de parametro
+	mov rsi,rsp
 	call exceptionDispatcher
 
 	popState
@@ -156,7 +155,6 @@ _irq04Handler:
 _irq05Handler:
 	irqHandlerMaster 5
 
-
 ;Zero Division Exception
 _exception0Handler:
 	exceptionHandler 0
@@ -169,8 +167,6 @@ haltcpu:
 	cli
 	hlt
 	ret
-
-
 
 SECTION .bss
 	aux resq 1

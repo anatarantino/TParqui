@@ -21,6 +21,18 @@ void _syscallHandler(void);
 
 void _exception0Handler(void);
 void _exception6Handler(void);
+void _exception1Handler(void);
+
+void _exception2Handler(void);
+
+void _exception3Handler(void);
+
+void _exception4Handler(void);
+
+void _exception5Handler(void);
+
+void _exception7Handler(void);
+
 
 void _cli(void);
 

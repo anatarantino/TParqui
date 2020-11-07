@@ -1,6 +1,6 @@
 #include <prints.h>
 #include <colors.h>
-#include <vars.h>
+#include <exceptions.h>
 
 #define ZERO_EXCEPTION 0
 #define INVALID_OP	6
@@ -9,6 +9,7 @@
 static void zero_division();
 static void invalid_op();
 static void printRegisters(uint64_t * registers);
+static uint64_t returnRIP,returnRSP;
 
 //puede cambiar el orden de como los recibimos
 static char* dataRegisters[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9: ", 
@@ -16,15 +17,19 @@ static char* dataRegisters[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R1
                         "RAX: ", "RIP: ", "RSP: "};
 
 void exceptionDispatcher(int exception, uint64_t * registers) {
-	if (exception == ZERO_EXCEPTION){
+    printInt(exception);
+	switch (exception){
+	case ZERO_EXCEPTION:
 		zero_division();
-	}else if(exception == INVALID_OP){
+		break;
+	case INVALID_OP:
 		invalid_op();
+		break;
 	}
 	printRegisters(registers);
 	printNewLine();
-	registers[TOTALREGS]=(uint64_t)sampleCodeModuleAddress;
-	registers[TOTALREGS+3]=(uint64_t)sampleCodeModuleRSP;
+	registers[TOTALREGS-1]=returnRIP;
+	registers[TOTALREGS-1+3]=returnRSP;
 }
 
 static void zero_division() {
@@ -38,10 +43,15 @@ static void invalid_op(){
 static void printRegisters(uint64_t * registers){
 	for(int i=0 ; i < TOTALREGS ; i++){
 		printColor(dataRegisters[i],VIOLET,BLACK);
-		printHexColor(registers[i],VIOLET,BLACK); 
+		printHexColor(registers[i],WHITE,BLACK); 
 		printNewLine();
 	}
 	//imprimir rsp aparte??
-	printColor(dataRegisters[TOTALREGS],VIOLET,BLACK);
+	printColor(dataRegisters[TOTALREGS-1],VIOLET,BLACK);
 	printHexColor(registers[15 + 3],WHITE,BLACK);
+}
+
+void initExceptionHandler(uint64_t rip,uint64_t rsp){
+	returnRIP=rip;
+	returnRSP=rsp;
 }

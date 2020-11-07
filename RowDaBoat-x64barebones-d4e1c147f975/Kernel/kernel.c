@@ -8,20 +8,18 @@
 #include <idtLoader.h>
 #include <keyboard_driver.h>
 #include <colors.h>
-#include <vars.h>
+#include <exceptions.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
 extern uint8_t bss;
 extern uint8_t endOfKernelBinary;
-extern uint8_t endOfKernel;
-
-void * sampleCodeModuleAddress = (void*)0x400000;
-void * sampleCodeModuleRSP;
+extern uint8_t endOfKernel; 
 
 static const uint64_t PageSize = 0x1000;
 
+static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
 
 typedef int (*EntryPoint)();
@@ -53,7 +51,7 @@ void * initializeKernelBinary(){
 int main(){
 	load_idt();
 	initializeVideo(WHITE,BLACK);
-	sampleCodeModuleRSP=getRSP();
+	initExceptionHandler((uint64_t)sampleCodeModuleAddress,getRSP());
 	((EntryPoint)sampleCodeModuleAddress)();
 	return 0;
 }

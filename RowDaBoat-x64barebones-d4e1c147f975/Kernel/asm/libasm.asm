@@ -82,5 +82,5 @@ getRTC:
 %endmacro
 
 getRSP:
-	lea eax,[rsp]
+	mov rax,rsp
 	ret
