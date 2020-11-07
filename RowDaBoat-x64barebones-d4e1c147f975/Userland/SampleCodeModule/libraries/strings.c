@@ -1,6 +1,7 @@
 #include <strings.h>
 #include <stdarg.h>
 #include <syscall.h>
+#include <lib.h>
 
 char getChar(){
     return syscalls(READ, 0, 0, 0, 0, 0, 0);
@@ -36,7 +37,8 @@ int stringcmp(char * str1, char * str2){
 int scanf(const char* format,...){     //scanf("%d %d %f",&num1, &num2, &num3);
     va_list args;
     int i = 0, j=0, count = 0;
-    char *buff = read();
+    char *buff={0};
+    read(buff);
     char *character;
     va_start(args,format);
     while (format && format[i]) {
@@ -75,6 +77,24 @@ int scanf(const char* format,...){     //scanf("%d %d %f",&num1, &num2, &num3);
     }
     va_end(args);
     return count;
+}
+
+void read(char *buffer){
+    int index = 0;
+    char c;
+    while ((c = getChar()) != '\n') {
+        if(c == '\b'){
+            if (index != 0) {
+                index--;
+            }
+        }
+        else if(c != EOF){
+            if (index <= SIZE) {
+                buffer[index++] = c;
+            }
+        }
+    }
+    buffer[index] = '\0';
 }
 
 uint64_t hexastrToInt(char *str){

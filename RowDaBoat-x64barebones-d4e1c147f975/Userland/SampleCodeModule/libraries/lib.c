@@ -1,4 +1,5 @@
 #include <lib.h>
+#include <strings.h>
 #include <syscall.h>
 
 uint64_t* getRegisters(){
@@ -74,27 +75,6 @@ uint32_t uintToBaseHexa(uint64_t value, char * buffer, uint32_t base, uint32_t l
 	}
 
 	return digits;
-}
-
-char* read(){
-    int index = 0;
-    char c;
-    char buffer[SIZE];
-
-    while ((c = getChar()) != '\n') {
-        if(c == '\b'){
-            if (index != 0) {
-                index--;
-            }
-        }
-        else if(c != EOF){
-            if (index <= SIZE) {
-                buffer[index++] = c;
-            }
-        }
-    }
-    buffer[index] = '\0';
-    return buffer;
 }
 
 void * memset(void * destination, int32_t c, uint64_t length)

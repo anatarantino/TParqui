@@ -82,7 +82,7 @@ void printHex(uint64_t num){
 
 void printHexColor(uint64_t num, uint64_t f_color, uint64_t bg_color){
     char buff[10];
-    uintToBase(num,buff,16);
+    uintToBaseHexa(num,buff,16,8);
     printColor(buff,f_color,bg_color);
 }
 

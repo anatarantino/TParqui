@@ -33,6 +33,7 @@ void _exception5Handler(void);
 
 void _exception7Handler(void);
 
+void aux4(void);
 
 void _cli(void);
 
