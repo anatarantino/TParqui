@@ -285,9 +285,9 @@ void makeMove(){
 			}
 			else{
 				addPieceChar(piece);
-				if(letra>='a' && letra<='h'){
-					letra=letra - 'a'+'A';
-				}
+				// if(letra>='a' && letra<='h'){
+				// 	letra=letra - 'a'+'A';
+				// }
 			}
 			
 			if(whoseTurn==0){
@@ -310,21 +310,24 @@ void makeMove(){
 			if(whoseTurn == 0){
 					log1[index1++] = '=';
 					log1[index1++] = col;
+					log1[index1++]='\n';
 				}
 				else{
 					log2[index2++] = '=';
 					log2[index2++] = col;
+					log2[index2++]='\n';
 				}
 		}
 		
 		whoseTurn = (whoseTurn == 0)? 1:0;
-		capture = 0;
-		pawnCapture = 0;
-		col = ' ';
-		castling = 0;
+		
 		
 	}
 	error = 0;
+	capture = 0;
+	pawnCapture = 0;
+	col = ' ';
+	castling = 0;
 	
 }
 
