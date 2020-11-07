@@ -11,13 +11,13 @@
 #define RED 0xFF0000
 
 #define TOTAL_SIZE 150
-#define TOTAL_COMMANDS 6
+#define TOTAL_COMMANDS 8
 #define TOTAL_REG 17
 #define TOTAL_ARGUMENTS 5
 
-enum comm_num{INFOREG=0,PRINTMEM,TIME,CHESS,HELP,CLEARSC};
+enum comm_num{INFOREG=0,PRINTMEM,TIME,CHESS,HELP,CLEARSC,DIVZERO,OPCODE};
 
-static char * commands[] = {"inforeg","printmem","time","chess","help","clear"};
+static char * commands[] = {"inforeg","printmem","time","chess","help","clear","divByZeroException","opCodeException"};
 static char * user = "user >> ";
 
 static char * registers[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9: ",
@@ -41,6 +41,8 @@ static void printTime(time_type desc);
 static void chess(int args, char *arguments[]);
 static void help(int args, char *arguments[]);
 static void clear(int args, char *arguments[]);
+static void divisionByZero(int args,char *arguments[]);
+static void opCodeException(int args,char *arguments[]);
 
 void startShell(){
     char c;
@@ -120,7 +122,14 @@ static void applyCommand(int command_num,char *arguments[],int totArgs){
     case CLEARSC:
         clear(totArgs,arguments);
         break;
+    case DIVZERO:
+        divisionByZero(totArgs,arguments);
+        break;
+    case OPCODE:
+        opCodeException(totArgs,arguments);
+        break;
     }
+
 }
 
 static void removeChar(){
@@ -279,6 +288,8 @@ static void help(int args, char *arguments[]){
     printf("time -> prints system time on screen.\n"); 
     printf("clear -> clears the screen.\n");
     printf("chess -> this command starts a chess game.\n");
+    printf("divByZeroException -> tests the division by zero exception.\n");
+    printf("opCodeException -> tests the exception caused by an invalid operation code.\n");
 
 }
 
@@ -298,7 +309,29 @@ static void printMessage(){
     printColor("Hola aca va un mensaje super hermo diciendo que arranca el programa",0xFFFF00,0xF0FF0F);
 }
 
+static void divisionByZero(int args,char *arguments[]){
+    if(args!=1){
+        putChar('\n');
+        printf("Invalid ammount of arguments");
+        putChar('\n');
+        return;
+    }
 
+    int a = 0;
+    int b = 1/a;
+    a = b;
+    return;
+
+}
+static void opCodeException(int args,char *arguments[]){
+    if(args!=1){
+        putChar('\n');
+        printf("Invalid ammount of arguments");
+        putChar('\n');
+        return;
+    }
+    __asm__("ud2");
+}
 static void chess(int args, char *arguments[]){
     if(args!=1){
         putChar('\n');

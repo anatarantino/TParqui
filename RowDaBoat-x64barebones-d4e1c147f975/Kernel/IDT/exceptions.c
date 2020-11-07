@@ -1,6 +1,6 @@
 #include <prints.h>
 #define ZERO_EXCEPTION 0
-#define INVALID_OP	1
+#define INVALID_OP	6
 #define TOTALREGS 16 //hay 17 en el vector, chequear
 #define RED 0xFF0000
 #define YELLOW 0xFFFF00
@@ -25,15 +25,14 @@ void exceptionDispatcher(int exception, void * registers) {
 	printRegisters(registers);
 	printNewLine();
 	//resetCurrentProcess()  hay que implementarlo al final :O
-
 }
 
 static void zero_division() {
-	printColor("ZERO DIVISION ERROR: division by zero is undefined",YELLOW,RED);
+	printColor("\nZERO DIVISION ERROR: division by zero is undefined.\n",YELLOW,RED);
 }
 
 static void invalid_op(){
-	printColor("INVALID OPERATION CODE EXCEPTION",YELLOW,RED);
+	printColor("\nINVALID OPERATION CODE EXCEPTION.\n",YELLOW,RED);
 }
 
 static void printRegisters(uint64_t * registers){
@@ -45,6 +44,4 @@ static void printRegisters(uint64_t * registers){
 	//fran imprime el rsp aparte
 	printColor(dataRegisters[TOTALREGS],VIOLET,BLACK);
 	printHexColor(registers[15 + 3],VIOLET,BLACK);
-
-
 }
