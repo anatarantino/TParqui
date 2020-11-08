@@ -17,6 +17,12 @@
 #define POSLOGSY 72
 #define DIM 8
 
+#define NOPIECE 0
+#define BLACKPIECE 1
+#define WHITEPIECE 2
+#define INVALIDPOS 3
+#define INVALIDMOVE 4
+
 static int board[DIM][DIM];	// Positivos son blancos
 
 int whoseTurn;		// 0 es el turno de las blancas, 1 es el turno de las negras
@@ -28,6 +34,7 @@ static uint64_t segundosB;
 static int aux;
 static int rotation;
 static int init = 0;
+static int exitFlag = 0;
 static int quit;
 static int gameOver;
 static int capture;
@@ -61,6 +68,7 @@ static void userGuide();
 static void printLogs();
 static void logsOnScreen();
 static void logs(int piece, char letraF, char nroF);
+static void printError(int n);
 
 // Piezas con sus posiciones iniciales y finales
 static int rook(int x0, int y0, int xf, int yf);		// 2 o -2
@@ -73,15 +81,23 @@ static int pawn(int x0, int y0, int xf, int yf);		// 1 o -1
 
 void playChess(){
 
-	printColorOnPos("PRESS N FOR A NEW GAME OR C TO CONTINUE A PREVIOUS MATCH",GREEN,BLACK,230,300);
-    int state;
+	int state;
 
-    while (state!='n' && state!='N' && state != 'c' && state != 'C')
-    {
-        state = getChar();
-    }
-    state = (state == 'n' || state == 'N') ? 0 : 1;
-    clearScreen();
+	if(exitFlag == 0){
+		printColorOnPos("PRESS N FOR A NEW GAME OR C TO CONTINUE A PREVIOUS MATCH",GREEN,BLACK,250,300);
+		
+
+		while (state!='n' && state!='N' && state != 'c' && state != 'C')
+		{
+			state = getChar();
+		}
+		state = (state == 'n' || state == 'N') ? 0 : 1;
+		clearScreen();
+	}
+	else{
+		state = new_game;
+	}
+	
 	
 	if(state == new_game || (state == game_started && (init==0 ||gameover()))){
 		init=1;
@@ -94,10 +110,10 @@ void playChess(){
 	}
 	
 	
-	printColorOnPos("Player 1:",COLORP1,BLACK,POSP1X,POSTITLEY);
-	printColorOnPos("Player 2:",COLORP2,BLACK,POSP2X,POSTITLEY);
 	
 	while(!gameover() && !quit){
+		printColorOnPos("Player 1",COLORP1,BLACK,POSP1X,POSTITLEY);
+		printColorOnPos("Player 2",COLORP2,BLACK,POSP2X,POSTITLEY);
 		printColorOnPos("User Guide\npress 'U'",YELLOW,BLACK,0,700);
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
 		makeMove();	
@@ -149,6 +165,8 @@ static void makeMove(){
 		clearScreen();
 		return;
 	}
+	
+	clearSpace(0,130,73,400,BLACK);
 
 	int nro=obtainChar();
 
@@ -182,22 +200,26 @@ static void makeMove(){
 		}
 
 		if(board[x0][y0] == 0){		// no selecciono ninguna pieza
+			printError(NOPIECE);
 			error = 1;
 		}
 		else{
 			if(whoseTurn == 0){
 				if(board[x0][y0] <0){	// selecciono una pieza negra
+					printError(BLACKPIECE);
 					error = 1;
 				}
 			}
 			else{
 				if(board[x0][y0] > 0){	// selecciono una pieza blanca
+					printError(WHITEPIECE);
 					error = 1;
 				}
 			}
 		}
 	}
 	else{
+		printError(INVALIDPOS);
 		error = 1;
 	}
 	int letraF,nroF, piece;
@@ -224,6 +246,7 @@ static void makeMove(){
 			xf = nroF-'1';
 		}
 		else{
+			printError(INVALIDPOS);
 			error = 1;
 		}
 		
@@ -268,12 +291,17 @@ static void makeMove(){
 				board[xf][yf] = board[x0][y0];
 				board[x0][y0] = 0;
 				if(move == 2 && !gameover()){
+					printColorOnPos("Q: Queen", WHITE,BLACK,0,130);
+					printColorOnPos("B: Bishop", WHITE,BLACK,0,150);
+					printColorOnPos("N: Knight", WHITE,BLACK,0,170);
+					printColorOnPos("R: Rook", WHITE,BLACK,0,190);
 					col = changePiece(xf,yf);
 				}
 				check();
 				blankPawnMoves();
 			}
 			else{
+				printError(INVALIDMOVE);
 				error = 1;
 			}
 
@@ -283,6 +311,7 @@ static void makeMove(){
 	if(error == 0){
 		logs(piece, letraF, nroF);
 	}
+
 	error = 0;
 	capture = 0;
 	pawnCapture = 0;
@@ -675,6 +704,8 @@ static int gameover(){
 		}else{
 			printColorOnPos("GAME OVER PLAYER 1 WINS",RED,BLACK,390,300);
 		}
+		printColorOnPos("PRESS N FOR A NEW GAME OR X TO EXIT",GREEN,BLACK,350,320);
+		exit();
 		return 1;
 	}
 	for(int i=0; i<DIM; i++){
@@ -697,6 +728,7 @@ static int gameover(){
 			clearScreen();	
 			printColorOnPos("GAME OVER PLAYER 1 WINS",RED,BLACK,390,300);
 		}
+		printColorOnPos("PRESS N FOR A NEW GAME OR X TO EXIT",GREEN,BLACK,350,320);
 		exit();
 		return 1;
 	}
@@ -709,10 +741,10 @@ static void exit(){
 	while(escape != 'x' && escape != 'X' && escape != 'n' && escape != 'N' ){
 		escape = getChar();
 	}
-	if(escape == 'x' || escape == 'X' ){
-		clearScreen();
-	}else{
-		playChess(new_game);
+	clearScreen();
+	if(escape == 'n' || escape == 'N' ){
+		exitFlag = 1;
+		playChess();
 	}
 }
 
@@ -746,7 +778,7 @@ static void check(){
 	}
 
 	if(check==1){
-		//printf("CHECK\n");
+		printColorOnPos("CHECK", WHITE,BLACK,10,210);
 	}
 }
 
@@ -809,6 +841,7 @@ static void initNewGame(){
 	rotation=0;
 	quit = 0;
 	gameOver=0;
+	exitFlag = 0;
 	capture = 0;
 	pawnCapture = 0;
 	col = ' ';
@@ -831,6 +864,7 @@ static void initNewGame(){
 
 static void printLogs(){
 	clearScreen();
+	printColorOnPos("Press L to return to the game or X to exit",GREEN,BLACK,10,0);
 	printColorOnPos("Player 1:",COLORP1,BLACK,10,20);
 	for(int i=0 ; i<index1 ; i++){
 		if(log1[i]=='\n'){
@@ -994,4 +1028,32 @@ static void logsOnScreen(){
 	}
 	printColorOnPos(log1+indexToprint1,COLORP1,BLACK,POSP1X,POSLOGSY);
 	printColorOnPos(log2+indexToprint2,COLORP2,BLACK,POSP2X,POSLOGSY);
+}
+
+static void printError(int n){
+	printColorOnPos("ERROR", WHITE,BLACK,10,130);
+	switch(n){
+		case NOPIECE:
+			printColorOnPos("No piece", WHITE,BLACK,0,150);
+			printColorOnPos("Selected", WHITE,BLACK,0,170);
+			break;
+		case BLACKPIECE:
+			printColorOnPos("Black", WHITE,BLACK,10,150);
+			printColorOnPos("Piece", WHITE,BLACK,10,170);
+			printColorOnPos("Selected", WHITE,BLACK,0,190);
+			break;
+		case WHITEPIECE:
+			printColorOnPos("White", WHITE,BLACK,10,150);
+			printColorOnPos("Piece", WHITE,BLACK,10,170);
+			printColorOnPos("Selected", WHITE,BLACK,0,190);
+			break;
+		case INVALIDPOS:
+			printColorOnPos("Invalid", WHITE,BLACK,3,150);
+			printColorOnPos("Position", WHITE,BLACK,0,170);
+			break;
+		case INVALIDMOVE:
+			printColorOnPos("Invalid", WHITE,BLACK,3,150);
+			printColorOnPos("Move", WHITE,BLACK,13,170);
+			break;
+	}		
 }
