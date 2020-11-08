@@ -26,7 +26,6 @@ static int index1,index2;
 static uint64_t segundosW;
 static uint64_t segundosB;
 static int aux;
-static int aux2;
 static int rotation;
 static int init = 0;
 static int quit;
@@ -35,7 +34,9 @@ static int capture;
 static int pawnCapture;
 static char col;
 static int castling;
-
+static int linesLog2;
+static int indexToprint1;
+static int indexToprint2;
 
 int pawnMovesW[DIM];
 int pawnMovesB[DIM];
@@ -59,6 +60,7 @@ static void blankPawnMoves();
 static void exit();
 static void userGuide();
 static void printLogs();
+static void logsOnScreen();
 // Piezas con sus posiciones iniciales y finales
 static int rook(int x0, int y0, int xf, int yf);		// 2 o -2
 static int knight(int x0, int y0, int xf, int yf);		// 3 o -3
@@ -76,21 +78,18 @@ void playChess(enum game_state state){
 	}
 	if(state == game_started){
 		quit = 0;
-		printColorOnPos(log1,COLORP1,BLACK,POSP1X,POSLOGSY);
-		printColorOnPos(log2,COLORP2,BLACK,POSP2X,POSLOGSY);
+		printColorOnPos(log1+indexToprint1,COLORP1,BLACK,POSP1X,POSLOGSY);
+		printColorOnPos(log2+indexToprint2,COLORP2,BLACK,POSP2X,POSLOGSY);
 	}
 	
 	
+	printColorOnPos("Player 1:",COLORP1,BLACK,POSP1X,POSTITLEY);
+	printColorOnPos("Player 2:",COLORP2,BLACK,POSP2X,POSTITLEY);
 	
 	while(!gameover() && !quit){
 		printColorOnPos("User Guide\npress 'U'",YELLOW,BLACK,0,700);
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
-		printColorOnPos("Player 1:",COLORP1,BLACK,POSP1X,POSTITLEY);
-		printColorOnPos(log1,COLORP1,BLACK,POSP1X,POSLOGSY);
-		printColorOnPos("Player 2:",COLORP2,BLACK,POSP2X,POSTITLEY);
-		printColorOnPos(log2,COLORP2,BLACK,POSP2X,POSLOGSY);
 		makeMove();	
-
 	}
 	clearScreen();
 	//poner quien gano y decir tipo apreta esc para salir o algo asi.
@@ -292,6 +291,7 @@ static void makeMove(){
 				log2[index2++] = '-';
 				log2[index2++] = 'O';
 				log2[index2++] = '\n';
+				linesLog2++;
 			}
 		}
 		else if(castling == 1){
@@ -310,6 +310,7 @@ static void makeMove(){
 				log2[index2++] = '-';
 				log2[index2++] = 'O';
 				log2[index2++] = '\n';
+				linesLog2++;
 			}
 		}
 		else{
@@ -337,6 +338,7 @@ static void makeMove(){
 					log2[index2++]=letraF;
 					log2[index2++]=nroF;
 					log2[index2++]='\n';
+					linesLog2++;
 			}
 		}
 		if(pawnCapture == 2){
@@ -351,10 +353,12 @@ static void makeMove(){
 					log2[index2++] = '=';
 					log2[index2++] = col;
 					log2[index2++]='\n';
+					linesLog2++;
 				}
 		}
 		
 		whoseTurn = (whoseTurn == 0)? 1:0;
+		logsOnScreen();
 		
 		
 	}
@@ -882,12 +886,14 @@ static void initNewGame(){
 	index1=0;
 	index2=0;
 	whoseTurn = 0;		// 0 es el turno de las blancas, 1 es el turno de las negras
+<<<<<<< HEAD
 	error;
+=======
+>>>>>>> fc21948b419fe5eb16421cb59c58b9d9d8c30f4d
 	index1=0,index2=0;
 	segundosW = 0;
 	segundosB = 0;
 	aux = -1;
-	aux2;
 	rotation=0;
 	quit = 0;
 	gameOver=0;
@@ -895,6 +901,9 @@ static void initNewGame(){
 	pawnCapture = 0;
 	col = ' ';
 	castling = 0;
+	linesLog2 = 0;
+	indexToprint1=0;
+	indexToprint2=0;
 	// Movimientos para validar el enroque
 	kingMoves[0] = 0; kingMoves[1] = 0;
 	leftRooks[0] = 0; leftRooks[1] = 0;
@@ -977,4 +986,17 @@ static void userGuide(){
 	printf("This is called the square of 'promotion'.\n");
 	printf("To choose your new piece press 'Q' for queen, 'N' for knight, 'B' for bishop, 'R' for rook.\n\n");
 	printColor("Press 'U' to go back to game",YELLOW,BLACK);
+}
+
+static void logsOnScreen(){
+	if(linesLog2 > 3){
+		clearSpace(POSP1X,POSLOGSY,1023,500,BLACK);
+		int i;
+		for(i = indexToprint1; log1[i]!='\n'; i++){}
+		indexToprint1=i+1;
+		for(i = indexToprint2; log2[i]!='\n'; i++){}
+		indexToprint2=i+1;
+	}
+	printColorOnPos(log1+indexToprint1,COLORP1,BLACK,POSP1X,POSLOGSY);
+	printColorOnPos(log2+indexToprint2,COLORP2,BLACK,POSP2X,POSLOGSY);
 }
