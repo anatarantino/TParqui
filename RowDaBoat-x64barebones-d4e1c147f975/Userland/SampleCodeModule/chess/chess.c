@@ -47,7 +47,6 @@ int leftRooks[2];
 int rightRooks[2];
 
 static int gameover();
-static void noPiece();
 static char changePiece(int x, int y);
 static int checkFinalPos(int xf,int yf);
 static void check();
@@ -70,7 +69,17 @@ static int king(int x0, int y0, int xf, int yf);		// 6 o -6
 static int pawn(int x0, int y0, int xf, int yf);		// 1 o -1
 
 
-void playChess(enum game_state state){
+void playChess(){
+
+	printColorOnPos("PRESIONE N SI QUIERE UN NUEVO JUEGO O C PARA CONTINUAR EL ANTERIOR",GREEN,BLACK,230,300);
+    int state;
+
+    while (state!='n' && state!='N' && state != 'c' && state != 'C')
+    {
+        state = getChar();
+    }
+    state = (state == 'n' || state == 'N') ? 0 : 1;
+    clearScreen();
 	
 	if(state == new_game || (state == game_started && (init==0 ||gameover()))){
 		init=1;
@@ -93,8 +102,6 @@ void playChess(enum game_state state){
 	}
 	clearScreen();
 	//poner quien gano y decir tipo apreta esc para salir o algo asi.
-	
-	
 }
 
 static void makeMove(){
@@ -107,7 +114,7 @@ static void makeMove(){
 		return;
 	}
 
-	if(letra=='s' || letra=='S'){ //spin (r reserved for rook)
+	if(letra=='s' || letra=='S'){ //spin 
 		rotation = (rotation + 1) % 4;
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
 		return;
@@ -173,25 +180,18 @@ static void makeMove(){
 		}
 
 		if(board[x0][y0] == 0){		// no selecciono ninguna pieza
-			noPiece();
-			x0 = -1;
-			y0 = -1;
+			error = 1;
 		}
 		else{
 			if(whoseTurn == 0){
 				if(board[x0][y0] <0){	// selecciono una pieza negra
-					noPiece();
-					x0 = -1;
-					y0 = -1;
+					error = 1;
 				}
 			}
 			else{
 				if(board[x0][y0] > 0){	// selecciono una pieza blanca
-					noPiece();
-					x0 = -1;
-					y0 = -1;
+					error = 1;
 				}
-			
 			}
 		}
 	}
@@ -199,7 +199,7 @@ static void makeMove(){
 		error = 1;
 	}
 	int letraF,nroF, piece;
-	if(x0 != -1 && y0 != -1 && error!=1){		//selecciono una pieza valida
+	if(error!=1){		//selecciono una pieza valida
 		letraF=obtainChar();
 		if(gameOver==1){
 			exit();
@@ -433,11 +433,6 @@ static void addPieceChar(int number){
     default:
         break;
     }
-}
-
-
-static void noPiece(){	
-	error = 1;
 }
 
 static char changePiece(int x, int y){

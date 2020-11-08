@@ -16,6 +16,6 @@ typedef enum{
 
 enum game_state{new_game=0,game_started};
 
-void playChess(enum game_state state);
+void playChess();
 
 #endif
