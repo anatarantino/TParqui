@@ -49,15 +49,15 @@ typedef struct{
 	uint32_t height;
 }screen_t;
 
-screen_t *sc;
+screen_t sc;
 
 void initializeVideo(int f_color,int bg_color){
-	sc->current_x =0;
-	sc->current_y=0;
-	sc->default_bg_color = bg_color;
-	sc->default_f_color = f_color;
-	sc->offset = CHAR_WIDTH;
-	sc->height= SCREEN_HEIGHT;
+	sc.current_x =0;
+	sc.current_y=0;
+	sc.default_bg_color = bg_color;
+	sc.default_f_color = f_color;
+	sc.offset = CHAR_WIDTH;
+	sc.height= SCREEN_HEIGHT;
 }
 
 
@@ -70,12 +70,12 @@ void drawPixel(int x,int y,int color){ //RGB
 }
 
 void printChar(char c, uint64_t f_color, uint64_t bg_color){
-	printCharOnScreen(c,f_color,bg_color,sc->current_x,sc->current_y);
+	printCharOnScreen(c,f_color,bg_color,sc.current_x,sc.current_y);
 }
 void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color,uint32_t posX,uint32_t posY){
-	int isCurrentPos =( (posX == sc->current_x) && (posY == sc->current_y)) ? 1:0;
+	int isCurrentPos =( (posX == sc.current_x) && (posY == sc.current_y)) ? 1:0;
 	uint32_t x = posX;
-	if(( (screenData->width -(x + sc->offset)) < CHAR_WIDTH )){
+	if(( (screenData->width -(x + sc.offset)) < CHAR_WIDTH )){
         x = 0;
         posY += CHAR_HEIGHT;
 		if (screenData->height - posY < CHAR_HEIGHT) {
@@ -87,7 +87,7 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color,uint32_t posX
 	}
 	
 	uint32_t y = posY;
-	x += sc->offset;
+	x += sc.offset;
 	
 	unsigned char * char_map = charMap(c);
 
@@ -101,46 +101,46 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color,uint32_t posX
 			}
 			x++;
 		}
-		x = posX + sc->offset;
+		x = posX + sc.offset;
 		y++;
 	}
 	posX += CHAR_WIDTH;
 
 	if(isCurrentPos){
-		sc->current_x = posX;
-		sc->current_y = posY;
+		sc.current_x = posX;
+		sc.current_y = posY;
 	}
 	
 }
 
 void deleteChar(uint64_t bg_color){  //falta corregir que si hay un '\n' y se borra que vuelva a la ultima pos
-	if(sc->current_x == 0 && sc->current_y == 0){
+	if(sc.current_x == 0 && sc.current_y == 0){
 		return;
 	}
-	if(sc->current_x == 0){
-		sc->current_x = screenData->width - sc->offset;	
+	if(sc.current_x == 0){
+		sc.current_x = screenData->width - sc.offset;	
 		
-		sc->current_y -= CHAR_HEIGHT;
+		sc.current_y -= CHAR_HEIGHT;
 	}
-	sc->current_x -= CHAR_WIDTH;
+	sc.current_x -= CHAR_WIDTH;
 	printChar(' ',bg_color,bg_color);
-	sc->current_x -= CHAR_WIDTH;
+	sc.current_x -= CHAR_WIDTH;
 }
 
 
 void newLine(){
-	sc->current_y += CHAR_HEIGHT;
-	sc->current_x =0;
-	if (screenData->height - sc->current_y < CHAR_HEIGHT) {
-        sc->current_y -= CHAR_HEIGHT;
+	sc.current_y += CHAR_HEIGHT;
+	sc.current_x =0;
+	if (screenData->height - sc.current_y < CHAR_HEIGHT) {
+        sc.current_y -= CHAR_HEIGHT;
         scrollScreen();
-		clearSpace(sc->current_x, sc->current_y,SCREEN_WIDTH,sc->current_y+CHAR_HEIGHT, 0x000000);
+		clearSpace(sc.current_x, sc.current_y,SCREEN_WIDTH,sc.current_y+CHAR_HEIGHT, 0x000000);
     }
 }
 
 void clearScreen(uint64_t bg_color){
-	sc->current_x = 0;
-	sc->current_y = 0;
+	sc.current_x = 0;
+	sc.current_y = 0;
 	for(int i=0 ; i<=screenData->width ;i+=CHAR_WIDTH){
 		for(int j=0 ; j<=screenData->height ; j+=CHAR_HEIGHT){
 			//printChar(' ',bg_color,bg_color);
@@ -148,22 +148,22 @@ void clearScreen(uint64_t bg_color){
 			printCharOnScreen(' ',bg_color,bg_color,i,j);
 		}
 	}
-	sc->current_x = 0;
-	sc->current_y = 0;
+	sc.current_x = 0;
+	sc.current_y = 0;
 }
 
 void clearSpace(uint32_t startx, uint32_t starty, uint32_t endx, uint32_t endy, uint64_t bg_color){
-	uint32_t aux_currentx=sc->current_x;
-	uint32_t aux_currenty=sc->current_y;
-	sc->current_x = startx;
-	sc->current_y = starty;
+	uint32_t aux_currentx=sc.current_x;
+	uint32_t aux_currenty=sc.current_y;
+	sc.current_x = startx;
+	sc.current_y = starty;
 	for(int i=starty ; i<=endy ;i++){            
 		for(int j=startx ; j<=endx ; j++){
 			drawPixel(j,i,bg_color);
 		}
 	}
-	sc->current_x = aux_currentx;
-	sc->current_y = aux_currenty;
+	sc.current_x = aux_currentx;
+	sc.current_y = aux_currenty;
 }
 
 void scrollScreen(){

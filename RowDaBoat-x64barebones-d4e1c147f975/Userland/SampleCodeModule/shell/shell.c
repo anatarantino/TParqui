@@ -327,9 +327,8 @@ static void divisionByZero(int args,char *arguments[]){
     }
     flag=0;
     int a = 0;
-    int b = 20 / a;
-    if (b == 0) {
-    }
+    int b=10/a;
+    a=b;
 }
 static void opCodeException(int args,char *arguments[]){
     if(args!=1){
