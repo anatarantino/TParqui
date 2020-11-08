@@ -17,8 +17,6 @@ GLOBAL _syscallHandler
 GLOBAL _exception0Handler
 GLOBAL _exception6Handler
 
-GLOBAL aux4
-
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN syscallDispatcher
@@ -63,8 +61,8 @@ SECTION .text
 
 %macro irqHandlerMaster 1
 	pushState
-	mov rsi,rsp
 	mov rdi, %1 ; pasaje de parametro
+	mov rsi,rsp
 	call irqDispatcher
 
 	; signal pic EOI (End of Interrupt)
@@ -131,10 +129,6 @@ picSlaveMask:
     out	0A1h,al
     pop     rbp
     retn
-
-aux4:
-	hlt
-	ret
 
 ;8254 Timer (Timer Tick)
 _irq00Handler:

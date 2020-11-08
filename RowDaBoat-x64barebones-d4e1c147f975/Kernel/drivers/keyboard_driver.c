@@ -55,7 +55,6 @@ void keyboard_handler(uint64_t rsp){ // 0 0 0 0 80
                 case 0x1D:
                     control = 1;
                     break;
-            
                 default:
                     if(pressedKeys[key][0]!=0){
                         if(control == 1 && pressedKeys[key][0] == 'r'){
@@ -110,12 +109,10 @@ char getChar(){
 
 
 char getCharWithTimer(uint64_t * startSec,uint64_t posX, uint64_t posY, uint64_t f_color, uint64_t bg_color){
-    //restartTimer();
     char c = 0;
     while (c==0){
         _hlt();//Espera a que haya una interrupcion
         if(ticks_elapsed() % 18 == 0){
-            //updateTimer();
             *startSec+=1;
             printTimer(*startSec,posX,posY,f_color,bg_color);
         }

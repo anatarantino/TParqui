@@ -123,7 +123,6 @@ void deleteChar(uint64_t bg_color){  //falta corregir que si hay un '\n' y se bo
 		sc->current_y -= CHAR_HEIGHT;
 	}
 	sc->current_x -= CHAR_WIDTH;
-	//printCharOnScreen(' ',0x000000,0x000000);
 	printChar(' ',bg_color,bg_color);
 	sc->current_x -= CHAR_WIDTH;
 }

@@ -75,32 +75,32 @@ void printNewLine(){
 }
 
 void printHex(uint64_t num){
-    char buff[10];
+    char buff[10]={0};
     uintToBase(num,buff,16);
     printf(buff);
 }
 
 void printHexColor(uint64_t num, uint64_t f_color, uint64_t bg_color){
-    char buff[10];
+    char buff[10]={0};
     uintToBaseHexa(num,buff,16,8);
     printColor(buff,f_color,bg_color);
 }
 
 void printInt(uint64_t num){
-    char buff[10];
+    char buff[10]={0};
     uintToBase(num,buff,10);
     printf(buff);
 }
 
 
 void printIntColor(uint64_t num, uint64_t f_color, uint64_t bg_color){
-    char buff[10];
+    char buff[10]={0};
     uintToBase(num,buff,10);
     printColor(buff,f_color,bg_color);
 }
 
 void printIntOnPos(int num, uint64_t f_color, uint64_t bg_color, uint32_t posX, uint32_t posY){
-    char buff[10];
+    char buff[10]={0};
     uintToBase(num,buff,10);
     printColorOnPos(buff,f_color,bg_color,posX,posY);
 }
