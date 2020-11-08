@@ -84,7 +84,7 @@ void pieces(int ficha, int w, int h, int actualColor){
                 drawPiece(ROOK,w,h,WHITE,actualColor);
                 break;
             case WHORSE:
-                drawPiece(HORSE,w,h,WHITE,actualColor);
+                drawPiece(KNIGHT,w,h,WHITE,actualColor);
                 break;
             case WBISHOP:
                 drawPiece(BISHOP,w,h,WHITE,actualColor);
@@ -99,7 +99,7 @@ void pieces(int ficha, int w, int h, int actualColor){
                 drawPiece(ROOK,w,h,BLACK,actualColor);
                 break;
             case BHORSE:
-                drawPiece(HORSE,w,h,BLACK,actualColor);
+                drawPiece(KNIGHT,w,h,BLACK,actualColor);
                 break;
             case BBISHOP:
                 drawPiece(BISHOP,w,h,BLACK,actualColor);

@@ -6,7 +6,7 @@
 
 #define PAWN 0
 #define ROOK 1
-#define HORSE 2 //KNIGHT
+#define KNIGHT 2
 #define BISHOP 3
 #define QUEEN 4
 #define KING 5

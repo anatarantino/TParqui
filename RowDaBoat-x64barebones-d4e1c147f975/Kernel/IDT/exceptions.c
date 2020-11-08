@@ -12,7 +12,7 @@ static void invalid_op();
 static void printRegisters(uint64_t * registers);
 static uint64_t returnRIP,returnRSP;
 
-//puede cambiar el orden de como los recibimos
+
 static char* dataRegisters[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9:  ", 
 						"R8:  ", "RSI: ", "RDI: ", "RBP: ", "RDX: ", "RCX: ", "RBX: ",
                         "RAX: ", "RIP: ", "RSP: "};

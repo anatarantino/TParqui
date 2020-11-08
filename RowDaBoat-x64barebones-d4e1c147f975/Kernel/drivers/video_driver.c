@@ -143,8 +143,6 @@ void clearScreen(uint64_t bg_color){
 	sc.current_y = 0;
 	for(int i=0 ; i<=screenData->width ;i+=CHAR_WIDTH){
 		for(int j=0 ; j<=screenData->height ; j+=CHAR_HEIGHT){
-			//printChar(' ',bg_color,bg_color);
-			//printChar(' ',bg_color,bg_color);
 			printCharOnScreen(' ',bg_color,bg_color,i,j);
 		}
 	}

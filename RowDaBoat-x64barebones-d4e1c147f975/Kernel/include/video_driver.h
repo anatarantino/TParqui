@@ -14,7 +14,6 @@
 void initializeVideo(int bg_color,int f_color);
 void drawPixel(int x,int y,int color);
 void printChar(char c, uint64_t f_color, uint64_t bg_color);
-//void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color);
 void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color,uint32_t posX,uint32_t posY);
 void deleteChar(uint64_t bg_color);
 void newLine();

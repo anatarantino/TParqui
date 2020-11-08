@@ -15,8 +15,8 @@
 #define TICKSELAPSED 9
 #define CHARINTERRUPT 10
 
-//modificar con lo de exceptions
-#define TOTALREGS 16 //hay 17 en el vector, chequear
+
+#define TOTALREGS 16
 #define CANT_SYS 11
 
 typedef struct
