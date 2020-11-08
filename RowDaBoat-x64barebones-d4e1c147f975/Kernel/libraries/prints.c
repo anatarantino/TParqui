@@ -104,32 +104,3 @@ void printIntOnPos(int num, uint64_t f_color, uint64_t bg_color, uint32_t posX, 
     uintToBase(num,buff,10);
     printColorOnPos(buff,f_color,bg_color,posX,posY);
 }
-
-void printTimer(uint64_t seconds,uint64_t posX, uint64_t posY, uint64_t f_color, uint64_t bg_color){
-    int h = (seconds/3600); 
-	int m = (seconds -(3600*h))/60;	
-	int s = (seconds -(3600*h)-(m*60));
-    char divider = ':';
-    if(h<10){
-        printIntOnPos(0,f_color,bg_color,posX,posY);   
-        posX+=CHAR_WIDTH;
-    }
-    printIntOnPos(h,f_color,bg_color,posX,posY);
-    posX+=CHAR_WIDTH;
-    printColorOnPos(&divider,f_color,bg_color,posX,posY);
-    posX+=CHAR_WIDTH;
-    if(m<10){
-        printIntOnPos(0,f_color,bg_color,posX,posY);   
-        posX+=CHAR_WIDTH;
-    }
-    printIntOnPos(m,f_color,bg_color,posX,posY);
-    posX+=CHAR_WIDTH;
-    printColorOnPos(&divider,f_color,bg_color,posX,posY);
-    posX+=CHAR_WIDTH;
-    if(s<10){
-        printIntOnPos(0,f_color,bg_color,posX,posY);   
-        posX+=CHAR_WIDTH;
-    }
-    printIntOnPos(s,f_color,bg_color,posX,posY);
-   
-}
