@@ -984,7 +984,7 @@ static void logs(int piece, char letraF, char nroF){
 }
 
 static void logsOnScreen(){
-	if(linesLog2 > 3 && whoseTurn == 1){
+	if(linesLog2 > 15 && whoseTurn == 1){
 		clearSpace(POSP1X,POSLOGSY,1023,500,BLACK);
 		int i;
 		for(i = indexToprint1; log1[i]!='\n'; i++){}
