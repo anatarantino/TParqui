@@ -6,7 +6,6 @@
 #include <shell.h>
 #include <timeRTC.h>
 
-
 #define WHITE 0xFFFFFF
 #define BLACK 0x000000
 #define SCREENWIDTH 1024

@@ -886,10 +886,6 @@ static void initNewGame(){
 	index1=0;
 	index2=0;
 	whoseTurn = 0;		// 0 es el turno de las blancas, 1 es el turno de las negras
-<<<<<<< HEAD
-	error;
-=======
->>>>>>> fc21948b419fe5eb16421cb59c58b9d9d8c30f4d
 	index1=0,index2=0;
 	segundosW = 0;
 	segundosB = 0;

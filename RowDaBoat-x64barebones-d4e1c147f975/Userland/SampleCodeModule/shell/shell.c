@@ -24,7 +24,7 @@ static char * registers[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: 
 
 
 static char buff[TOTAL_SIZE]={0};
-static int index=0;
+static int index=0,flag=1;
 
 //static functions
 static void printMessage();
@@ -46,7 +46,9 @@ static void cleanBuffer();
 void startShell(){
     char c=0;
     cleanBuffer();
-    printMessage();
+    if(flag){
+        printMessage();
+    }
     printf(user);
     while(1){
         c=getChar();
@@ -316,6 +318,7 @@ static void divisionByZero(int args,char *arguments[]){
         putChar('\n');
         return;
     }
+    flag=0;
     int a = 0;
     int b = 20 / a;
     if (b == 0) {
@@ -328,6 +331,7 @@ static void opCodeException(int args,char *arguments[]){
         putChar('\n');
         return;
     }
+    flag=0;
     __asm__("ud2");
 }
 static void chess(int args, char *arguments[]){

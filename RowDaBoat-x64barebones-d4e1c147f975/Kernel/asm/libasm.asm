@@ -1,6 +1,7 @@
 GLOBAL cpu_vendor
 GLOBAL getRTC
 GLOBAL getRSP
+global start
 
 section .text
 

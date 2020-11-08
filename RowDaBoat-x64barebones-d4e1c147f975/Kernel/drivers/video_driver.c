@@ -52,8 +52,8 @@ typedef struct{
 screen_t *sc;
 
 void initializeVideo(int f_color,int bg_color){
-	sc->current_x = 0;
-	sc->current_y = 0;
+	sc->current_x =0;
+	sc->current_y=0;
 	sc->default_bg_color = bg_color;
 	sc->default_f_color = f_color;
 	sc->offset = CHAR_WIDTH;
