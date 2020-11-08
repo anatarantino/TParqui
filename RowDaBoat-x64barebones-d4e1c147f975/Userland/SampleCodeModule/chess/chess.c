@@ -109,6 +109,8 @@ void playChess(){
 static void makeMove(){
 	
 	int x0, y0, xf, yf;
+	printColorOnPos("Initial", WHITE,BLACK,0,210);
+	printColorOnPos("Position ", WHITE,BLACK,0,230);
 	printColorOnPos("Enter a ", WHITE,BLACK,0,250);
 	printColorOnPos("letter", WHITE,BLACK,0,270);
 	int letra=obtainChar();
@@ -152,11 +154,11 @@ static void makeMove(){
 		return;
 	}
 	
-	clearSpace(0,130,73,400,BLACK);
+	clearSpace(0,250,73,400,BLACK);
 	printColorOnPos("Enter a ", WHITE,BLACK,0,250);
 	printColorOnPos("number", WHITE,BLACK,0,270);
 	int nro=obtainChar();
-
+	clearSpace(0,130,73,400,BLACK);
 	if(gameOver==1){
 		exit();
 		return;
@@ -211,13 +213,20 @@ static void makeMove(){
 	}
 	int letraF,nroF, piece;
 	if(error!=1){		//selecciono una pieza valida
+		printColorOnPos("Final", WHITE,BLACK,0,210);
+		printColorOnPos("Position", WHITE,BLACK,0,230);
+		printColorOnPos("Enter a ", WHITE,BLACK,0,250);
+		printColorOnPos("letter", WHITE,BLACK,0,270);
 		letraF=obtainChar();
+		clearSpace(0,250,73,400,BLACK);
 		if(gameOver==1){
 			exit();
 			return;
 		}
+		printColorOnPos("Enter a ", WHITE,BLACK,0,250);
+		printColorOnPos("number", WHITE,BLACK,0,270);
 		nroF=obtainChar();
-		
+		clearSpace(0,210,73,400,BLACK);
 		if(gameOver==1){
 			exit();
 			return;
@@ -768,7 +777,7 @@ static void check(){
 	}
 
 	if(check==1){
-		printColorOnPos("CHECK", WHITE,BLACK,10,210);
+		printColorOnPos("CHECK", WHITE,BLACK,10,290);
 	}
 }
 
