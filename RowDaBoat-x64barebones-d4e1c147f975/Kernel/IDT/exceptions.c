@@ -1,10 +1,11 @@
 #include <prints.h>
 #include <colors.h>
 #include <exceptions.h>
+#include <interrupts.h>
 
 #define ZERO_EXCEPTION 0
 #define INVALID_OP	6
-#define TOTALREGS 16 //hay 17 en el vector, chequear
+#define TOTALREGS 17
 
 static void zero_division();
 static void invalid_op();
@@ -12,11 +13,13 @@ static void printRegisters(uint64_t * registers);
 static uint64_t returnRIP,returnRSP;
 
 //puede cambiar el orden de como los recibimos
-static char* dataRegisters[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9: ", 
-						"R8: ", "RSI: ", "RDI: ", "RBP: ", "RDX: ", "RCX: ", "RBX: ",
+static char* dataRegisters[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R10: ", "R9:  ", 
+						"R8:  ", "RSI: ", "RDI: ", "RBP: ", "RDX: ", "RCX: ", "RBX: ",
                         "RAX: ", "RIP: ", "RSP: "};
 
 void exceptionDispatcher(int exception, uint64_t * registers) {
+	printInt(exception);
+//	_hlt();//acordarse de eliminar aux4
 	switch (exception){
 	case ZERO_EXCEPTION:
 		zero_division();
@@ -27,8 +30,8 @@ void exceptionDispatcher(int exception, uint64_t * registers) {
 	}
 	printRegisters(registers);
 	printNewLine();
-	registers[TOTALREGS-1]=returnRIP;
-	registers[TOTALREGS-1+3]=returnRSP;
+	registers[TOTALREGS-2]=returnRIP;
+	registers[TOTALREGS-2+3]=returnRSP;
 }
 
 static void zero_division() {
@@ -40,12 +43,11 @@ static void invalid_op(){
 }
 
 static void printRegisters(uint64_t * registers){
-	for(int i=0 ; i < TOTALREGS ; i++){
+	for(int i=0 ; i < TOTALREGS-1 ; i++){
 		printColor(dataRegisters[i],VIOLET,BLACK);
 		printHexColor(registers[i],WHITE,BLACK); 
 		printNewLine();
 	}
-	//imprimir rsp aparte??
 	printColor(dataRegisters[TOTALREGS-1],VIOLET,BLACK);
 	printHexColor(registers[15 + 3],WHITE,BLACK);
 }

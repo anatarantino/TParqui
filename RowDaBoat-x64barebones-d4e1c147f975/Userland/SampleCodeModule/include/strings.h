@@ -16,5 +16,6 @@ int scanf(const char* format,...);
 uint64_t hexastrToInt(char *str);
 char* strToInt(char* string, int* num);
 int strtok(char * str, const char delim, char * array[], int arraySize);
+void read(char *buff);
 
 #endif

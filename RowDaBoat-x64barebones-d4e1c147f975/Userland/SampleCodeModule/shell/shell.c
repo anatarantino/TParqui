@@ -55,14 +55,6 @@ void startShell(){
 
 }
 
-static void cleanBuffer(){
-    for (int i = 0; i < TOTAL_SIZE; i++) {
-        buff[i] = 0;
-    }
-    buff[index] = 0;
-	index=0;
-}
-
 static void analizeChar(char c){
     switch (c)
     {
@@ -361,3 +353,10 @@ static void chess(int args, char *arguments[]){
 
 }
 
+static void cleanBuffer(){
+    for (int i = 0; i < TOTAL_SIZE; i++) {
+        buff[i] = 0;
+    }
+    buff[index] = 0;
+	index=0;
+}
