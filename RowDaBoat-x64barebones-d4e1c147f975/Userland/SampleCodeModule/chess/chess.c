@@ -71,7 +71,7 @@ static int pawn(int x0, int y0, int xf, int yf);		// 1 o -1
 
 void playChess(){
 
-	printColorOnPos("PRESIONE N SI QUIERE UN NUEVO JUEGO O C PARA CONTINUAR EL ANTERIOR",GREEN,BLACK,230,300);
+	printColorOnPos("PRESS N FOR A NEW GAME OR C TO CONTINUE A PREVIOUS MATCH",GREEN,BLACK,230,300);
     int state;
 
     while (state!='n' && state!='N' && state != 'c' && state != 'C')
