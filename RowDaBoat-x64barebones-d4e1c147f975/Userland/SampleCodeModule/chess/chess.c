@@ -119,7 +119,7 @@ void playChess(){
 		makeMove();	
 	}
 	clearScreen();
-	//poner quien gano y decir tipo apreta esc para salir o algo asi.
+
 }
 
 static void makeMove(){
@@ -802,6 +802,9 @@ static int squareUnderAttack(int x, int y, int value){
 			}
 			else if(b == 5*value){
 				attacked=queen(i,j,x,y);
+			}
+			if(attacked == 1){
+				return attacked;
 			}
 		}
 	}

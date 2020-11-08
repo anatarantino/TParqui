@@ -305,9 +305,16 @@ static void clear(int args, char *arguments[]){
 
 }
 
-
+//"inforeg","printmem","time","chess","help","clear","divByZeroException","opCodeException"
 static void printMessage(){
-    printColorOnPos("Press 'help' to see the commands of this shell.",GREEN,BLACK,0,0);
+    printColorOnPos("Welcome to the shell!",GREEN,BLACK,0,0);
+    putChar('\n');
+    printColorOnPos("Please enter one of the following commands:",GREEN,BLACK,0,20);
+    putChar('\n');
+    printColorOnPos("- inforeg - printmem - time - chess - clear - divByZeroException - opCodeException",GREEN,BLACK,0,40);
+    putChar('\n');
+    printColorOnPos("Or press 'help' to see more information on the commands of this shell.",GREEN,BLACK,0,60);
+    putChar('\n');
     putChar('\n');
 }
 
