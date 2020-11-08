@@ -44,7 +44,7 @@ static void opCodeException(int args,char *arguments[]);
 static void cleanBuffer();
 
 void startShell(){
-    char c;
+    char c=0;
     cleanBuffer();
     printMessage();
     printf(user);
@@ -68,11 +68,9 @@ static void analizeChar(char c){
         removeChar();
         break;
     default:
-    if((index-2) < TOTAL_SIZE){
         buff[index++]=c;
         putChar(c);
-    }
-     break;
+        break;
     }
 }
 
@@ -158,7 +156,7 @@ static void inforeg(int args, char *arguments[]){
 
 static void printmem(int args, char *arguments[]){
    uint64_t num=hexastrToInt(arguments[0]);
-    char buffer[200];
+    char buffer[50];
     if(args!=2){
         putChar('\n');
         printf("Invalid ammount of arguments");
@@ -211,7 +209,7 @@ static void time(int args, char *arguments[]){
 }
 
 static void printTime(time_type desc){
-    char buff_aux[3];
+    char buff_aux[3]={0};
     int aux;
     switch(desc){
         case YEAR:

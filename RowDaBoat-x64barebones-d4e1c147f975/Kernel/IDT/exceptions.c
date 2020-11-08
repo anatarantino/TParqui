@@ -19,7 +19,6 @@ static char* dataRegisters[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R1
 
 void exceptionDispatcher(int exception, uint64_t * registers) {
 	printInt(exception);
-//	_hlt();//acordarse de eliminar aux4
 	switch (exception){
 	case ZERO_EXCEPTION:
 		zero_division();

@@ -125,7 +125,7 @@ static void makeMove(){
 	}
 
 	if(letra == 'l' || letra == 'L'){
-		int escape;
+		int escape=0;
 		printLogs();
 		while(escape != 'l' && escape != 'L' && escape!='x' && escape != 'X' ){
 			escape=getChar();
@@ -140,7 +140,7 @@ static void makeMove(){
 	}
 	if(letra == 'u' || letra == 'U'){
 		userGuide();
-		int escape;
+		int escape=0;
 		while(escape != 'u' && escape != 'U'){
 			escape = getChar();
 		}
@@ -784,7 +784,7 @@ static int gameover(){
 }
 
 static void exit(){
-	int escape;
+	int escape=0;
 	while(escape != 'x' && escape != 'X' && escape != 'n' && escape != 'N' ){
 		escape = getChar();
 	}
@@ -881,6 +881,7 @@ static void initNewGame(){
 	index1=0;
 	index2=0;
 	whoseTurn = 0;		// 0 es el turno de las blancas, 1 es el turno de las negras
+	error;
 	index1=0,index2=0;
 	segundosW = 0;
 	segundosB = 0;
