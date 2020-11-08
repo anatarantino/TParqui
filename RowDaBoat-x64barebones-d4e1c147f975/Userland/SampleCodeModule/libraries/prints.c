@@ -78,3 +78,7 @@ void printTimer(uint64_t seconds,uint64_t posX, uint64_t posY, uint64_t f_color,
     printIntOnPosColor(s,f_color,bg_color,posX,posY);
    
 }
+
+void newln(){
+    putChar('\n');
+}

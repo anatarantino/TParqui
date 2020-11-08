@@ -7,26 +7,10 @@
 #include <lib.h>
 #include <colors.h>
 
-#define COLORP1 0xFFFFFF
-#define COLORP2 0xF69F08
-
-#define POSP1X 856
-#define POSP2X 940
-#define POSTITLEY 5
-#define POSTIMERY 40
-#define POSLOGSY 72
-#define DIM 8
-
-#define NOPIECE 0
-#define BLACKPIECE 1
-#define WHITEPIECE 2
-#define INVALIDPOS 3
-#define INVALIDMOVE 4
-
 static int board[DIM][DIM];	// Positivos son blancos
 
-int whoseTurn;		// 0 es el turno de las blancas, 1 es el turno de las negras
-int error;
+static int whoseTurn;		// 0 es el turno de las blancas, 1 es el turno de las negras
+static int error;
 static char log1[2000],log2[2000];
 static int index1,index2;
 static uint64_t segundosW;
@@ -45,13 +29,13 @@ static int linesLog2;
 static int indexToprint1;
 static int indexToprint2;
 
-int pawnMovesW[DIM];
-int pawnMovesB[DIM];
+static int pawnMovesW[DIM];
+static int pawnMovesB[DIM];
 
 // Movimientos para validar el enroque
-int kingMoves[2];
-int leftRooks[2];
-int rightRooks[2];
+static int kingMoves[2];
+static int leftRooks[2];
+static int rightRooks[2];
 
 static int gameover();
 static char changePiece(int x, int y);
@@ -125,6 +109,8 @@ void playChess(){
 static void makeMove(){
 	
 	int x0, y0, xf, yf;
+	printColorOnPos("Enter a ", WHITE,BLACK,0,250);
+	printColorOnPos("letter", WHITE,BLACK,0,270);
 	int letra=obtainChar();
 
 	if(gameOver==1){
@@ -167,7 +153,8 @@ static void makeMove(){
 	}
 	
 	clearSpace(0,130,73,400,BLACK);
-
+	printColorOnPos("Enter a ", WHITE,BLACK,0,250);
+	printColorOnPos("number", WHITE,BLACK,0,270);
 	int nro=obtainChar();
 
 	if(gameOver==1){
@@ -291,10 +278,13 @@ static void makeMove(){
 				board[xf][yf] = board[x0][y0];
 				board[x0][y0] = 0;
 				if(move == 2 && !gameover()){
-					printColorOnPos("Q: Queen", WHITE,BLACK,0,130);
-					printColorOnPos("B: Bishop", WHITE,BLACK,0,150);
-					printColorOnPos("N: Knight", WHITE,BLACK,0,170);
-					printColorOnPos("R: Rook", WHITE,BLACK,0,190);
+					printColorOnPos("Choose", WHITE,BLACK,0,130);
+					printColorOnPos("your piece", WHITE,BLACK,0,150);
+
+					printColorOnPos("Q: Queen", WHITE,BLACK,0,170);
+					printColorOnPos("B: Bishop", WHITE,BLACK,0,190);
+					printColorOnPos("N: Knight", WHITE,BLACK,0,210);
+					printColorOnPos("R: Rook", WHITE,BLACK,0,230);
 					col = changePiece(xf,yf);
 				}
 				check();

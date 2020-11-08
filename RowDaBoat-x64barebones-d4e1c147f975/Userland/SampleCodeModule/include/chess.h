@@ -1,6 +1,22 @@
 #ifndef CHESS_H
 #define CHESS_H
 
+#define COLORP1 0xFFFFFF
+#define COLORP2 0xF69F08
+
+#define POSP1X 856
+#define POSP2X 940
+#define POSTITLEY 5
+#define POSTIMERY 40
+#define POSLOGSY 72
+#define DIM 8
+
+#define NOPIECE 0
+#define BLACKPIECE 1
+#define WHITEPIECE 2
+#define INVALIDPOS 3
+#define INVALIDMOVE 4
+
 typedef enum{
     WROOK = 2,
     WHORSE = 3,

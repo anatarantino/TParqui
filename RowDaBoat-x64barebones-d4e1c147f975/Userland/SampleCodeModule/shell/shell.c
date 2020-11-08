@@ -12,6 +12,7 @@
 #define TOTAL_COMMANDS 8
 #define TOTAL_REG 17
 #define TOTAL_ARGUMENTS 5
+#define STLINE 43
 
 enum comm_num{INFOREG=0,PRINTMEM,TIME,CHESS,HELP,CLEARSC,DIVZERO,OPCODE};
 
@@ -42,11 +43,15 @@ static void clear(int args, char *arguments[]);
 static void divisionByZero(int args,char *arguments[]);
 static void opCodeException(int args,char *arguments[]);
 static void cleanBuffer();
+static void invalidAmount();
 
 void startShell(){
     char c=0;
     cleanBuffer();
     if(flag){
+        for(int i; i<STLINE; i++){
+            newln();
+        }
         printMessage();
     }
     printf(user);
@@ -91,10 +96,9 @@ static void findCommand(){
         }
     }
     if(comm != CLEARSC && comm !=CHESS){
-        putChar('\n');
+        newln();
         if(flag == FALSE){
-            printColor("Invalid command",RED,BLACK);
-            putChar('\n');
+            printColor("Invalid command\n",RED,BLACK);
         }
 
     }
@@ -142,17 +146,15 @@ static void removeChar(){
 
 static void inforeg(int args, char *arguments[]){
     if(args!=1){
-        putChar('\n');
-        printf("Invalid ammount of arguments");
-        putChar('\n');
+        invalidAmount();
         return;
     }
-    putChar('\n');
+    newln();
     uint64_t* regs=(uint64_t *)getRegisters();
     for(int i=0; i< TOTAL_REG; i++){
         printColor(registers[i],VIOLET,BLACK);
         printHex(regs[i]);
-        putChar('\n');
+        newln();
     }
 }
 
@@ -160,18 +162,15 @@ static void printmem(int args, char *arguments[]){
    uint64_t num=hexastrToInt(arguments[0]);
     char buffer[50];
     if(args!=2){
-        putChar('\n');
-        printf("Invalid ammount of arguments");
-        putChar('\n');
+        invalidAmount();
         return;
     }
     if(num==0){
-        putChar('\n');
-        printf("Invalid argument");
-        putChar('\n');
+        newln();
+        printColor("Invalid argument", RED, BLACK);
         return;
     }
-    putChar('\n');
+    newln();
     uint8_t *rsp=(uint8_t *) num;
       for (int i = 0; i < 4; i++){
         for (int j = 0; j < 8; j++){
@@ -179,29 +178,27 @@ static void printmem(int args, char *arguments[]){
             printf(buffer);
             putChar(' ');
         }
-        putChar('\n'); 
+        newln(); 
     }
 
 }
 
 static void time(int args, char *arguments[]){
     if(args!=1){
-        putChar('\n');
-        printf("Invalid ammount of arguments");
-        putChar('\n');
+        invalidAmount();
         return;
     }
-    putChar('\n');
+    newln();
     printColor("Date time:",YELLOW,BLACK);
-    putChar('\n');
+    newln();
     printTime(DAYOFWEEK);
-    putChar('\n');
+    newln();
     printTime(DAY);
     putChar('/');
     printTime(MONTH);
     putChar('/');
     printTime(YEAR);
-    putChar('\n');
+    newln();
     printTime(HOURS);
     putChar(':');
     printTime(MINUTES);
@@ -276,12 +273,10 @@ static void printTime(time_type desc){
 
 static void help(int args, char *arguments[]){
     if(args!=1){
-        putChar('\n');
-        printf("Invalid ammount of arguments");
-        putChar('\n');
+        invalidAmount();
         return;
     }
-    putChar('\n');
+    newln();
     printf("HELP\n");
     printf("DESCRIPTION: this is a list of the commands available.\n");
     printf("inforeg -> prints registers values, press ctrl + r to update values.\n");
@@ -296,33 +291,24 @@ static void help(int args, char *arguments[]){
 
 static void clear(int args, char *arguments[]){
     if(args!=1){
-        putChar('\n');
-        printf("Invalid ammount of arguments");
-        putChar('\n');
+        invalidAmount();
+        newln();
         return;
     }
     clearScreen();
 
 }
 
-//"inforeg","printmem","time","chess","help","clear","divByZeroException","opCodeException"
 static void printMessage(){
-    printColorOnPos("Welcome to the shell!",GREEN,BLACK,0,0);
-    putChar('\n');
-    printColorOnPos("Please enter one of the following commands:",GREEN,BLACK,0,20);
-    putChar('\n');
-    printColorOnPos("- inforeg - printmem - time - chess - clear - divByZeroException - opCodeException",GREEN,BLACK,0,40);
-    putChar('\n');
-    printColorOnPos("Or press 'help' to see more information on the commands of this shell.",GREEN,BLACK,0,60);
-    putChar('\n');
-    putChar('\n');
+    printColor("Welcome to the shell!\n",GREEN,BLACK);
+    printColor("Please enter one of the following commands:\n",GREEN,BLACK);
+    printColor("- inforeg - printmem - time - chess - clear - divByZeroException - opCodeException\n",GREEN,BLACK);
+    printColor("Or press 'help' to see more information on the commands of this shell.\n",GREEN,BLACK);
 }
 
 static void divisionByZero(int args,char *arguments[]){
     if(args!=1){
-        putChar('\n');
-        printf("Invalid ammount of arguments");
-        putChar('\n');
+        invalidAmount();
         return;
     }
     flag=0;
@@ -332,9 +318,7 @@ static void divisionByZero(int args,char *arguments[]){
 }
 static void opCodeException(int args,char *arguments[]){
     if(args!=1){
-        putChar('\n');
-        printf("Invalid ammount of arguments");
-        putChar('\n');
+        invalidAmount();
         return;
     }
     flag=0;
@@ -342,9 +326,8 @@ static void opCodeException(int args,char *arguments[]){
 }
 static void chess(int args, char *arguments[]){
     if(args!=1){
-        putChar('\n');
-        printf("Invalid ammount of arguments");
-        putChar('\n');
+        invalidAmount();
+        newln();
         return;
     }
     clearScreen();
@@ -359,4 +342,9 @@ static void cleanBuffer(){
     }
     buff[index] = 0;
 	index=0;
+}
+
+static void invalidAmount(){
+    newln();
+    printColor("Invalid ammount of arguments", RED, BLACK);
 }
