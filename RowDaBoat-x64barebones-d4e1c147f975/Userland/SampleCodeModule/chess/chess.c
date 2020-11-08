@@ -60,6 +60,8 @@ static void exit();
 static void userGuide();
 static void printLogs();
 static void logsOnScreen();
+static void logs(int piece, char letraF, char nroF);
+
 // Piezas con sus posiciones iniciales y finales
 static int rook(int x0, int y0, int xf, int yf);		// 2 o -2
 static int knight(int x0, int y0, int xf, int yf);		// 3 o -3
@@ -279,88 +281,7 @@ static void makeMove(){
 	}
 	
 	if(error == 0){
-		if(castling == 2){
-			if(whoseTurn == 0){
-				log1[index1++] = 'O';
-				log1[index1++] = '-';
-				log1[index1++] = 'O';
-				log1[index1++] = '\n';
-			}
-			else{
-				log2[index2++] = 'O';
-				log2[index2++] = '-';
-				log2[index2++] = 'O';
-				log2[index2++] = '\n';
-				linesLog2++;
-			}
-		}
-		else if(castling == 1){
-			if(whoseTurn == 0){
-				log1[index1++] = 'O';
-				log1[index1++] = '-';
-				log1[index1++] = 'O';
-				log1[index1++] = '-';
-				log1[index1++] = 'O';
-				log1[index1++] = '\n';
-			}
-			else{
-				log2[index2++] = 'O';
-				log2[index2++] = '-';
-				log2[index2++] = 'O';
-				log2[index2++] = '-';
-				log2[index2++] = 'O';
-				log2[index2++] = '\n';
-				linesLog2++;
-			}
-		}
-		else{
-			addPieceChar(piece);
-			if(pawnCapture == 1){
-				if(whoseTurn == 0){
-					log1[index1++] = col;
-				}
-				else{
-					log2[index2++] = col;
-				}
-			}
-			
-			if(whoseTurn==0){
-					if(capture == 1){
-						log1[index1++]='x';
-					}
-					log1[index1++]=letraF;
-					log1[index1++]=nroF;
-					log1[index1++]='\n';
-			}else{
-					if(capture == 1){
-						log2[index2++]='x';
-					}
-					log2[index2++]=letraF;
-					log2[index2++]=nroF;
-					log2[index2++]='\n';
-					linesLog2++;
-			}
-		}
-		if(pawnCapture == 2){
-			if(whoseTurn == 0){
-					index1--;
-					log1[index1++] = '=';
-					log1[index1++] = col;
-					log1[index1++]='\n';
-				}
-				else{
-					index2--;
-					log2[index2++] = '=';
-					log2[index2++] = col;
-					log2[index2++]='\n';
-					linesLog2++;
-				}
-		}
-		
-		whoseTurn = (whoseTurn == 0)? 1:0;
-		logsOnScreen();
-		
-		
+		logs(piece, letraF, nroF);
 	}
 	error = 0;
 	capture = 0;
@@ -978,6 +899,89 @@ static void userGuide(){
 	printf("This is called the square of 'promotion'.\n");
 	printf("To choose your new piece press 'Q' for queen, 'N' for knight, 'B' for bishop, 'R' for rook.\n\n");
 	printColor("Press 'U' to go back to game",YELLOW,BLACK);
+}
+
+static void logs(int piece, char letraF, char nroF){
+	if(castling == 2){
+		if(whoseTurn == 0){
+			log1[index1++] = 'O';
+			log1[index1++] = '-';
+			log1[index1++] = 'O';
+			log1[index1++] = '\n';
+		}
+		else{
+			log2[index2++] = 'O';
+			log2[index2++] = '-';
+			log2[index2++] = 'O';
+			log2[index2++] = '\n';
+			linesLog2++;
+		}
+	}
+	else if(castling == 1){
+		if(whoseTurn == 0){
+			log1[index1++] = 'O';
+			log1[index1++] = '-';
+			log1[index1++] = 'O';
+			log1[index1++] = '-';
+			log1[index1++] = 'O';
+			log1[index1++] = '\n';
+		}
+		else{
+			log2[index2++] = 'O';
+			log2[index2++] = '-';
+			log2[index2++] = 'O';
+			log2[index2++] = '-';
+			log2[index2++] = 'O';
+			log2[index2++] = '\n';
+			linesLog2++;
+		}
+	}
+	else{
+		addPieceChar(piece);
+		if(pawnCapture == 1){
+			if(whoseTurn == 0){
+				log1[index1++] = col;
+			}
+			else{
+				log2[index2++] = col;
+			}
+		}
+		
+		if(whoseTurn==0){
+				if(capture == 1){
+					log1[index1++]='x';
+				}
+				log1[index1++]=letraF;
+				log1[index1++]=nroF;
+				log1[index1++]='\n';
+		}else{
+				if(capture == 1){
+					log2[index2++]='x';
+				}
+				log2[index2++]=letraF;
+				log2[index2++]=nroF;
+				log2[index2++]='\n';
+				linesLog2++;
+		}
+	}
+	if(pawnCapture == 2){
+		if(whoseTurn == 0){
+				index1--;
+				log1[index1++] = '=';
+				log1[index1++] = col;
+				log1[index1++]='\n';
+			}
+			else{
+				index2--;
+				log2[index2++] = '=';
+				log2[index2++] = col;
+				log2[index2++]='\n';
+				linesLog2++;
+			}
+	}
+
+	whoseTurn = (whoseTurn == 0)? 1:0;
+	logsOnScreen();
 }
 
 static void logsOnScreen(){
