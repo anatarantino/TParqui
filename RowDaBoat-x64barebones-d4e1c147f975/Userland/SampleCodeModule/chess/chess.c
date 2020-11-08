@@ -47,7 +47,6 @@ int leftRooks[2];
 int rightRooks[2];
 
 static int gameover();
-static void noPiece();
 static char changePiece(int x, int y);
 static int checkFinalPos(int xf,int yf);
 static void check();
@@ -61,6 +60,8 @@ static void exit();
 static void userGuide();
 static void printLogs();
 static void logsOnScreen();
+static void logs(int piece, char letraF, char nroF);
+
 // Piezas con sus posiciones iniciales y finales
 static int rook(int x0, int y0, int xf, int yf);		// 2 o -2
 static int knight(int x0, int y0, int xf, int yf);		// 3 o -3
@@ -70,7 +71,17 @@ static int king(int x0, int y0, int xf, int yf);		// 6 o -6
 static int pawn(int x0, int y0, int xf, int yf);		// 1 o -1
 
 
-void playChess(enum game_state state){
+void playChess(){
+
+	printColorOnPos("PRESS N FOR A NEW GAME OR C TO CONTINUE A PREVIOUS MATCH",GREEN,BLACK,230,300);
+    int state;
+
+    while (state!='n' && state!='N' && state != 'c' && state != 'C')
+    {
+        state = getChar();
+    }
+    state = (state == 'n' || state == 'N') ? 0 : 1;
+    clearScreen();
 	
 	if(state == new_game || (state == game_started && (init==0 ||gameover()))){
 		init=1;
@@ -93,8 +104,6 @@ void playChess(enum game_state state){
 	}
 	clearScreen();
 	//poner quien gano y decir tipo apreta esc para salir o algo asi.
-	
-	
 }
 
 static void makeMove(){
@@ -107,7 +116,7 @@ static void makeMove(){
 		return;
 	}
 
-	if(letra=='s' || letra=='S'){ //spin
+	if(letra=='s' || letra=='S'){ //spin 
 		rotation = (rotation + 1) % 4;
 		drawBoard(board,0xB17C54,0xEED09D,rotation);
 		return;
@@ -173,25 +182,18 @@ static void makeMove(){
 		}
 
 		if(board[x0][y0] == 0){		// no selecciono ninguna pieza
-			noPiece();
-			x0 = -1;
-			y0 = -1;
+			error = 1;
 		}
 		else{
 			if(whoseTurn == 0){
 				if(board[x0][y0] <0){	// selecciono una pieza negra
-					noPiece();
-					x0 = -1;
-					y0 = -1;
+					error = 1;
 				}
 			}
 			else{
 				if(board[x0][y0] > 0){	// selecciono una pieza blanca
-					noPiece();
-					x0 = -1;
-					y0 = -1;
+					error = 1;
 				}
-			
 			}
 		}
 	}
@@ -199,7 +201,7 @@ static void makeMove(){
 		error = 1;
 	}
 	int letraF,nroF, piece;
-	if(x0 != -1 && y0 != -1 && error!=1){		//selecciono una pieza valida
+	if(error!=1){		//selecciono una pieza valida
 		letraF=obtainChar();
 		if(gameOver==1){
 			exit();
@@ -279,88 +281,7 @@ static void makeMove(){
 	}
 	
 	if(error == 0){
-		if(castling == 2){
-			if(whoseTurn == 0){
-				log1[index1++] = 'O';
-				log1[index1++] = '-';
-				log1[index1++] = 'O';
-				log1[index1++] = '\n';
-			}
-			else{
-				log2[index2++] = 'O';
-				log2[index2++] = '-';
-				log2[index2++] = 'O';
-				log2[index2++] = '\n';
-				linesLog2++;
-			}
-		}
-		else if(castling == 1){
-			if(whoseTurn == 0){
-				log1[index1++] = 'O';
-				log1[index1++] = '-';
-				log1[index1++] = 'O';
-				log1[index1++] = '-';
-				log1[index1++] = 'O';
-				log1[index1++] = '\n';
-			}
-			else{
-				log2[index2++] = 'O';
-				log2[index2++] = '-';
-				log2[index2++] = 'O';
-				log2[index2++] = '-';
-				log2[index2++] = 'O';
-				log2[index2++] = '\n';
-				linesLog2++;
-			}
-		}
-		else{
-			addPieceChar(piece);
-			if(pawnCapture == 1){
-				if(whoseTurn == 0){
-					log1[index1++] = col;
-				}
-				else{
-					log2[index2++] = col;
-				}
-			}
-			
-			if(whoseTurn==0){
-					if(capture == 1){
-						log1[index1++]='x';
-					}
-					log1[index1++]=letraF;
-					log1[index1++]=nroF;
-					log1[index1++]='\n';
-			}else{
-					if(capture == 1){
-						log2[index2++]='x';
-					}
-					log2[index2++]=letraF;
-					log2[index2++]=nroF;
-					log2[index2++]='\n';
-					linesLog2++;
-			}
-		}
-		if(pawnCapture == 2){
-			if(whoseTurn == 0){
-					index1--;
-					log1[index1++] = '=';
-					log1[index1++] = col;
-					log1[index1++]='\n';
-				}
-				else{
-					index2--;
-					log2[index2++] = '=';
-					log2[index2++] = col;
-					log2[index2++]='\n';
-					linesLog2++;
-				}
-		}
-		
-		whoseTurn = (whoseTurn == 0)? 1:0;
-		logsOnScreen();
-		
-		
+		logs(piece, letraF, nroF);
 	}
 	error = 0;
 	capture = 0;
@@ -433,11 +354,6 @@ static void addPieceChar(int number){
     default:
         break;
     }
-}
-
-
-static void noPiece(){	
-	error = 1;
 }
 
 static char changePiece(int x, int y){
@@ -984,8 +900,91 @@ static void userGuide(){
 	printColor("Press 'U' to go back to game",YELLOW,BLACK);
 }
 
+static void logs(int piece, char letraF, char nroF){
+	if(castling == 2){
+		if(whoseTurn == 0){
+			log1[index1++] = 'O';
+			log1[index1++] = '-';
+			log1[index1++] = 'O';
+			log1[index1++] = '\n';
+		}
+		else{
+			log2[index2++] = 'O';
+			log2[index2++] = '-';
+			log2[index2++] = 'O';
+			log2[index2++] = '\n';
+			linesLog2++;
+		}
+	}
+	else if(castling == 1){
+		if(whoseTurn == 0){
+			log1[index1++] = 'O';
+			log1[index1++] = '-';
+			log1[index1++] = 'O';
+			log1[index1++] = '-';
+			log1[index1++] = 'O';
+			log1[index1++] = '\n';
+		}
+		else{
+			log2[index2++] = 'O';
+			log2[index2++] = '-';
+			log2[index2++] = 'O';
+			log2[index2++] = '-';
+			log2[index2++] = 'O';
+			log2[index2++] = '\n';
+			linesLog2++;
+		}
+	}
+	else{
+		addPieceChar(piece);
+		if(pawnCapture == 1){
+			if(whoseTurn == 0){
+				log1[index1++] = col;
+			}
+			else{
+				log2[index2++] = col;
+			}
+		}
+		
+		if(whoseTurn==0){
+				if(capture == 1){
+					log1[index1++]='x';
+				}
+				log1[index1++]=letraF;
+				log1[index1++]=nroF;
+				log1[index1++]='\n';
+		}else{
+				if(capture == 1){
+					log2[index2++]='x';
+				}
+				log2[index2++]=letraF;
+				log2[index2++]=nroF;
+				log2[index2++]='\n';
+				linesLog2++;
+		}
+	}
+	if(pawnCapture == 2){
+		if(whoseTurn == 0){
+				index1--;
+				log1[index1++] = '=';
+				log1[index1++] = col;
+				log1[index1++]='\n';
+			}
+			else{
+				index2--;
+				log2[index2++] = '=';
+				log2[index2++] = col;
+				log2[index2++]='\n';
+				linesLog2++;
+			}
+	}
+
+	whoseTurn = (whoseTurn == 0)? 1:0;
+	logsOnScreen();
+}
+
 static void logsOnScreen(){
-	if(linesLog2 > 3){
+	if(linesLog2 > 15 && whoseTurn == 1){
 		clearSpace(POSP1X,POSLOGSY,1023,500,BLACK);
 		int i;
 		for(i = indexToprint1; log1[i]!='\n'; i++){}
