@@ -105,6 +105,7 @@ void printIntOnPos(int num, uint64_t f_color, uint64_t bg_color, uint32_t posX, 
     printColorOnPos(buff,f_color,bg_color,posX,posY);
 }
 
+//hay que borrarla
 void printTimer(uint64_t seconds,uint64_t posX, uint64_t posY, uint64_t f_color, uint64_t bg_color){
     int h = (seconds/3600); 
 	int m = (seconds -(3600*h))/60;	
