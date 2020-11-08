@@ -18,7 +18,6 @@ static char* dataRegisters[] = {"R15: ", "R14: ", "R13: ", "R12: ", "R11: ", "R1
                         "RAX: ", "RIP: ", "RSP: "};
 
 void exceptionDispatcher(int exception, uint64_t * registers) {
-	printInt(exception);
 	switch (exception){
 	case ZERO_EXCEPTION:
 		zero_division();
