@@ -802,7 +802,6 @@ static void initNewGame(){
 	index1=0;
 	index2=0;
 	whoseTurn = 0;		// 0 es el turno de las blancas, 1 es el turno de las negras
-	error;
 	index1=0,index2=0;
 	segundosW = 0;
 	segundosB = 0;
@@ -985,7 +984,7 @@ static void logs(int piece, char letraF, char nroF){
 }
 
 static void logsOnScreen(){
-	if(linesLog2 > 3){
+	if(linesLog2 > 3 && whoseTurn == 1){
 		clearSpace(POSP1X,POSLOGSY,1023,500,BLACK);
 		int i;
 		for(i = indexToprint1; log1[i]!='\n'; i++){}
