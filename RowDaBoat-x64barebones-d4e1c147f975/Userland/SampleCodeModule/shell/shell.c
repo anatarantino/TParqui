@@ -117,9 +117,6 @@ static void applyCommand(int command_num,char *arguments[],int totArgs){
     case TIME:
         time(totArgs,arguments);
         break;
-    case CHESS:
-        chess(totArgs,arguments);
-        break;
     case HELP:
         help(totArgs,arguments);
         break;
@@ -131,6 +128,9 @@ static void applyCommand(int command_num,char *arguments[],int totArgs){
         break;
     case OPCODE:
         opCodeException(totArgs,arguments);
+        break;
+    case CHESS:
+        chess(totArgs,arguments);
         break;
     }
 

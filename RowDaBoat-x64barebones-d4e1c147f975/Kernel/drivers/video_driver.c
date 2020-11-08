@@ -113,7 +113,7 @@ void printCharOnScreen(char c, uint64_t f_color, uint64_t bg_color,uint32_t posX
 	
 }
 
-void deleteChar(uint64_t bg_color){  //falta corregir que si hay un '\n' y se borra que vuelva a la ultima pos
+void deleteChar(uint64_t bg_color){
 	if(sc.current_x == 0 && sc.current_y == 0){
 		return;
 	}

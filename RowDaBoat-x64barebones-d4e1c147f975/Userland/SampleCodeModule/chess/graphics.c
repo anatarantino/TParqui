@@ -20,7 +20,6 @@
 void drawPixel(int x, int y, int color){
     syscalls(DRAW,0,0,color,0,x,y);
 }
-//(w>=STARTX && w<=STARTX+SQUARESIZE) && (h>=STARTY && h<=STARTY+SQUARESIZE) 
 
 void drawBoard(int matrix[][8],uint64_t color1, uint64_t color2, int rotation){
     int currentLetter = 6;

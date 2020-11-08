@@ -483,7 +483,7 @@ static int rook(int x0, int y0, int xf, int yf){
 	return move;
 }
 	
-// HORSE
+// KNIGHT
 static int knight(int x0, int y0, int xf, int yf){
 	int move=0;
 	if((xf==x0+2 && (yf==y0+1 || yf == y0-1)) 	||	(xf==x0-2 && (yf==y0+1 || yf == y0-1)) 
