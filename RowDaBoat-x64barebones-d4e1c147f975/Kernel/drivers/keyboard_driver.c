@@ -113,20 +113,20 @@ void keyboard_handler(uint64_t rsp){ // 0 0 0 0 80
 char getChar(){
     char c = 0;
     while (c==0){
-        _hlt();//Espera a que haya una interrupcion
         if(index>0){
             c = buffer[--index];
         }
+        _hlt();//Espera a que haya una interrupcion //abajo del if porque si hay algo en el buffer no tengo que hacer el hlt
     }
     return c;
 }
 
 char waitCharInterruption(){
     char c=0;
-    _hlt();
     if(index>0){
         c = buffer[--index];
     }
+    _hlt(); //abajo del if porque si hay algo en el buffer no tengo que hacer el hlt
     return c;
 }
 

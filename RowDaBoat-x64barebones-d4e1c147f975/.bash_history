@@ -1,8 +1,3 @@
-make clean
-make -s
-make clean
-make -s
-make clean
 make -s
 make clean
 make -s
@@ -497,4 +492,9 @@ cd ..
 make all
 make clean
 make all
+exit
+cd root/
+make clean
+cd Toolchain/
+make clean
 exit
